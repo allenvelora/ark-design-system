@@ -163,6 +163,7 @@ const storybookStoryIds: Record<string, string> = {
                           loading="lazy"
                           title={`${component.name} preview`}
                           sandbox="allow-scripts allow-same-origin"
+                          data-storybook-id={storybookStoryIds[component.id]}
                         />
                         <div class="preview-overlay"></div>
                       </div>
@@ -299,6 +300,21 @@ const storybookStoryIds: Record<string, string> = {
     
     observer.observe(quickStartSection);
   }
+  
+  // Update Storybook iframes when brand changes
+  const STORYBOOK_IFRAME_BASE = 'https://aplos-software.github.io/velora-ui/iframe.html';
+  
+  document.addEventListener('ark-brand-change', ((e: CustomEvent) => {
+    const brand = e.detail.brand;
+    const iframes = document.querySelectorAll<HTMLIFrameElement>('iframe[data-storybook-id]');
+    iframes.forEach(iframe => {
+      const storyId = iframe.dataset.storybookId;
+      if (storyId) {
+        const newSrc = `${STORYBOOK_IFRAME_BASE}?id=${storyId}&viewMode=story&shortcuts=false&singleStory=true&globals=brand:${brand}`;
+        iframe.src = newSrc;
+      }
+    });
+  }) as EventListener);
 </script>
 
 <style>
@@ -649,7 +665,7 @@ const storybookStoryIds: Record<string, string> = {
   }
   
   .card-preview {
-    height: 120px;
+    height: 140px;
     background: #ffffff;
     display: flex;
     align-items: center;
@@ -667,15 +683,23 @@ const storybookStoryIds: Record<string, string> = {
     height: 100%;
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .preview-storybook iframe {
-    width: 200%;
-    height: 200%;
+    width: 300%;
+    height: 300%;
     border: none;
-    transform: scale(0.5);
-    transform-origin: top left;
+    transform: scale(0.333);
+    transform-origin: center center;
     pointer-events: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -150%;
+    margin-left: -150%;
   }
 
   .preview-overlay {

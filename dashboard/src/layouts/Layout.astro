@@ -522,6 +522,9 @@ const { brands } = brandsData;
         brandOptions.forEach(opt => {
           opt.classList.toggle('active', opt.getAttribute('data-brand') === brand);
         });
+        
+        // Notify child pages about brand change so they can update Storybook iframes
+        document.dispatchEvent(new CustomEvent('ark-brand-change', { detail: { brand } }));
       }
     </script>
   </body>

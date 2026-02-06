@@ -31,6 +31,13 @@ const statusColors = {
 };
 
 const status = statusColors[component.status] || statusColors.draft;
+
+// Storybook embed helpers
+const STORYBOOK_BASE = 'https://aplos-software.github.io/velora-ui';
+const STORYBOOK_IFRAME = `${STORYBOOK_BASE}/iframe.html`;
+const defaultStoryId = component.storybook_stories?.[0]
+  ? `react-${component.id}--${component.storybook_stories[0]}`
+  : null;
 ---
 
 <Layout title={`${component.name} | Components`}>
@@ -87,7 +94,7 @@ const status = statusColors[component.status] || statusColors.draft;
               </a>
             )}
             {component.storybook && (
-              <a href={`https://aplos-software.github.io/velora-ui/${component.storybook}`} class="resource-link compact-link storybook-link" target="_blank" rel="noopener">
+              <a href={`${STORYBOOK_BASE}/${component.storybook}`} class="resource-link compact-link storybook-link" target="_blank" rel="noopener">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M16.34 2.004l-.354-1.953-.01-.001a.498.498 0 0 0-.553.428l-.247 1.489-1.084-.126a.5.5 0 0 0-.116.993l1.02.119-.36 2.169a.5.5 0 0 0 .985.163l.396-2.388L20.4 3.52a.502.502 0 0 0 .415-.572.5.5 0 0 0-.572-.415l-3.903-.529zM14.5 8.5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4.5 4.5c0 4.418-3.582 8-8 8s-8-3.582-8-8c0-4.418 3.582-8 8-8a7.96 7.96 0 0 1 4.897 1.688l-.003.003A7.963 7.963 0 0 1 19 13z"/>
                 </svg>
@@ -132,7 +139,7 @@ const status = statusColors[component.status] || statusColors.draft;
           </a>
         )}
         {component.storybook && (
-          <a href={`https://aplos-software.github.io/velora-ui/${component.storybook}`} class="resource-link storybook-link" target="_blank" rel="noopener">
+          <a href={`${STORYBOOK_BASE}/${component.storybook}`} class="resource-link storybook-link" target="_blank" rel="noopener">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path d="M16.34 2.004l-.354-1.953-.01-.001a.498.498 0 0 0-.553.428l-.247 1.489-1.084-.126a.5.5 0 0 0-.116.993l1.02.119-.36 2.169a.5.5 0 0 0 .985.163l.396-2.388L20.4 3.52a.502.502 0 0 0 .415-.572.5.5 0 0 0-.572-.415l-3.903-.529zM14.5 8.5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4.5 4.5c0 4.418-3.582 8-8 8s-8-3.582-8-8c0-4.418 3.582-8 8-8a7.96 7.96 0 0 1 4.897 1.688l-.003.003A7.963 7.963 0 0 1 19 13z"/>
             </svg>
@@ -163,32 +170,46 @@ const status = statusColors[component.status] || statusColors.draft;
       )}
     </section>
     
-    <!-- Storybook Stories Section -->
-    {component.storybook_stories && component.storybook_stories.length > 0 && (
+    <!-- Live Storybook Embed Section -->
+    {defaultStoryId && (
       <section id="storybook" class="section">
         <h2>
           <span style="display: inline-flex; align-items: center; gap: 8px;">
-            Live Examples
-            <a href={`https://aplos-software.github.io/velora-ui/${component.storybook}`} target="_blank" rel="noopener" style="font-size: 0.5em; font-weight: 500; padding: 3px 10px; background: #ff4785; color: white; border-radius: 99px; text-decoration: none; letter-spacing: 0.02em;">
-              Open in Storybook &rarr;
+            Live Preview
+            <a href={`${STORYBOOK_BASE}/${component.storybook}`} target="_blank" rel="noopener" class="storybook-pill-link">
+              Open in Storybook
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" style="opacity: 0.8;">
+                <path d="M3.5 1.5H1.5V10.5H10.5V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M5.5 6.5L10.5 1.5M10.5 1.5H7M10.5 1.5V5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
             </a>
           </span>
         </h2>
-        <p class="section-intro">Interactive examples available in Storybook. Click any story to view it live with controls.</p>
-        <div class="storybook-stories-grid">
-          {component.storybook_stories.map((story: string) => {
-            const storyUrl = `https://aplos-software.github.io/velora-ui/?path=/story/react-${component.id}--${story}`;
-            const storyLabel = story.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
-            return (
-              <a href={storyUrl} class="storybook-story-card" target="_blank" rel="noopener">
-                <span class="story-name">{storyLabel}</span>
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="opacity: 0.4; flex-shrink: 0;">
-                  <path d="M3.5 1.5H1.5V10.5H10.5V8.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M5.5 6.5L10.5 1.5M10.5 1.5H7M10.5 1.5V5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </a>
-            );
-          })}
+        
+        {component.storybook_stories && component.storybook_stories.length > 1 && (
+          <div class="story-selector" id="story-selector">
+            {component.storybook_stories.map((story: string, i: number) => {
+              const storyLabel = story.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
+              return (
+                <button
+                  class={`story-pill ${i === 0 ? 'active' : ''}`}
+                  data-story-id={`react-${component.id}--${story}`}
+                >
+                  {storyLabel}
+                </button>
+              );
+            })}
+          </div>
+        )}
+        
+        <div class="storybook-embed">
+          <iframe
+            id="storybook-iframe"
+            src={`${STORYBOOK_IFRAME}?id=${defaultStoryId}&viewMode=story&shortcuts=false&singleStory=true`}
+            title={`${component.name} live preview`}
+            data-storybook-id={defaultStoryId}
+            data-component-id={component.id}
+          />
         </div>
       </section>
     )}
@@ -233,13 +254,6 @@ const status = statusColors[component.status] || statusColors.draft;
       <section id="anatomy" class="section">
         <h2>Anatomy</h2>
         <p class="section-intro">{component.anatomy.description}</p>
-        
-        <div class="anatomy-diagram">
-          <div class="anatomy-placeholder">
-            <span>Component Diagram</span>
-            <small>Visual anatomy coming soon</small>
-          </div>
-        </div>
         
         <div class="anatomy-parts">
           {component.anatomy.parts.map((part: any, index: number) => (
@@ -869,7 +883,7 @@ const status = statusColors[component.status] || statusColors.draft;
   
   /* Section Styles */
   .section {
-    margin-bottom: 3rem;
+    margin-bottom: 2.25rem;
   }
   
   .section h2 {
@@ -971,32 +985,6 @@ const status = statusColors[component.status] || statusColors.draft;
   }
   
   /* Anatomy */
-  .anatomy-diagram {
-    background: var(--color-surface-secondary, #fafafa);
-    border-radius: 12px;
-    padding: 3rem;
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 200px;
-  }
-  
-  .anatomy-placeholder {
-    text-align: center;
-    color: var(--color-text-muted, #a1a1aa);
-  }
-  
-  .anatomy-placeholder span {
-    display: block;
-    font-size: 1rem;
-    margin-bottom: 0.25rem;
-  }
-  
-  .anatomy-placeholder small {
-    font-size: 0.75rem;
-  }
-  
   .anatomy-parts {
     display: flex;
     flex-direction: column;
@@ -1066,16 +1054,17 @@ const status = statusColors[component.status] || statusColors.draft;
   
   .variant-preview {
     background: var(--color-surface-secondary, #fafafa);
-    padding: 2rem;
+    padding: 1.25rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100px;
+    min-height: 60px;
   }
   
   .variant-placeholder {
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     color: var(--color-text-muted, #a1a1aa);
+    font-weight: 500;
   }
   
   .variant-content {
@@ -1371,46 +1360,94 @@ const status = statusColors[component.status] || statusColors.draft;
     border-color: #ff4785 !important;
   }
 
-  /* Storybook Stories Grid */
-  .storybook-stories-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 0.5rem;
-    margin-top: 1rem;
-  }
-
-  .storybook-story-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-    padding: 0.625rem 0.875rem;
-    border: 1px solid var(--color-border-default, #e4e4e7);
-    border-radius: 8px;
-    background: var(--color-surface-primary, #fff);
-    text-decoration: none;
-    color: var(--color-text-primary, #18181b);
-    font-size: 0.8125rem;
+  /* Storybook Pill Link */
+  .storybook-pill-link {
+    font-size: 0.5em;
     font-weight: 500;
+    padding: 3px 10px;
+    background: #ff4785;
+    color: white !important;
+    border-radius: 99px;
+    text-decoration: none !important;
+    letter-spacing: 0.02em;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: background 0.15s ease;
+  }
+  .storybook-pill-link:hover {
+    background: #e5306e;
+    text-decoration: none !important;
+  }
+  
+  /* Story Selector Pills */
+  .story-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .story-pill {
+    padding: 0.3125rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 99px;
+    background: var(--color-surface-primary, #fff);
+    color: var(--color-text-secondary, #52525b);
+    cursor: pointer;
     transition: all 0.15s ease;
-  }
-
-  .storybook-story-card:hover {
-    border-color: #ff4785;
-    background: #fff0f5;
-    text-decoration: none;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(255, 71, 133, 0.12);
-  }
-
-  [data-theme="dark"] .storybook-story-card:hover {
-    background: rgba(255, 71, 133, 0.1);
-  }
-
-  .story-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .story-pill:hover {
+    border-color: #ff4785;
+    color: #ff4785;
+    background: #fff0f5;
+  }
+
+  .story-pill.active {
+    background: #ff4785;
+    color: white;
+    border-color: #ff4785;
+  }
+
+  [data-theme="dark"] .story-pill {
+    background: var(--semantic-neutral-bg-medium, #191a1a);
+    border-color: var(--semantic-neutral-border-default, #2e3033);
+    color: var(--semantic-neutral-text-weak, #ffffffa6);
+  }
+  [data-theme="dark"] .story-pill:hover {
+    background: rgba(255, 71, 133, 0.15);
+    color: #ff6fa0;
+    border-color: #ff4785;
+  }
+  [data-theme="dark"] .story-pill.active {
+    background: #ff4785;
+    color: white;
+    border-color: #ff4785;
+  }
+
+  /* Storybook Embed */
+  .storybook-embed {
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 12px;
+    overflow: hidden;
+    background: #ffffff;
+    position: relative;
+  }
+
+  [data-theme="dark"] .storybook-embed {
+    background: #1a1a1a;
+    border-color: var(--semantic-neutral-border-default, #2e3033);
+  }
+
+  .storybook-embed iframe {
+    width: 100%;
+    height: 400px;
+    border: none;
+    display: block;
   }
 </style>
 
@@ -1512,4 +1549,36 @@ const status = statusColors[component.status] || statusColors.draft;
       }
     });
   });
+  
+  // Story selector: switch active story in Storybook embed
+  const storySelector = document.getElementById('story-selector');
+  const storybookIframe = document.getElementById('storybook-iframe') as HTMLIFrameElement | null;
+  const STORYBOOK_IFRAME_BASE = 'https://aplos-software.github.io/velora-ui/iframe.html';
+  
+  if (storySelector && storybookIframe) {
+    const pills = storySelector.querySelectorAll('.story-pill');
+    pills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        pills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        const storyId = pill.getAttribute('data-story-id');
+        if (storyId) {
+          const brand = document.documentElement.getAttribute('data-brand') || 'neutral';
+          storybookIframe.src = `${STORYBOOK_IFRAME_BASE}?id=${storyId}&viewMode=story&shortcuts=false&singleStory=true&globals=brand:${brand}`;
+          storybookIframe.dataset.storybookId = storyId;
+        }
+      });
+    });
+  }
+  
+  // Update Storybook embed when brand changes
+  document.addEventListener('ark-brand-change', ((e: CustomEvent) => {
+    const brand = e.detail.brand;
+    if (storybookIframe) {
+      const currentId = storybookIframe.dataset.storybookId;
+      if (currentId) {
+        storybookIframe.src = `${STORYBOOK_IFRAME_BASE}?id=${currentId}&viewMode=story&shortcuts=false&singleStory=true&globals=brand:${brand}`;
+      }
+    }
+  }) as EventListener);
 </script>
