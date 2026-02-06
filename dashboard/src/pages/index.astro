@@ -32,27 +32,29 @@ const totalComponents = componentData.components.length;
 const stableComponents = componentData.components.filter(c => c.status === 'stable').length;
 const draftComponents = componentData.components.filter(c => c.status === 'draft').length;
 
-// Storybook story IDs for live component previews
-const STORYBOOK_BASE = 'https://aplos-software.github.io/velora-ui/iframe.html';
-const storybookStoryIds: Record<string, string> = {
-  'button': 'react-button--defaults',
-  'dropdown': 'react-dropdown--default',
-  'input': 'react-input--default',
-  'checkbox': 'react-checkbox--defaults',
-  'radio': 'react-radio--defaults',
-  'radiogroup': 'react-radiogroup--defaults',
-  'typeahead-single-select': 'react-typeahead-single-select--default',
-  'typeahead-multi-select': 'react-typeahead-multi-select--default',
-  'modal': 'react-modal--default',
-  'drawer': 'react-drawer--default',
-  'details': 'react-details--default',
-  'divider': 'react-divider--default',
-  'badge': 'react-badge--default',
-  'tag': 'react-tag--interactive-example',
-  'icon': 'react-icon--families-and-variants',
-  'tooltip': 'react-tooltip--default',
-  'popover': 'react-popover--default',
-  'popup': 'react-popup--default',
+// CSS component preview types — lightweight visual representations
+const previewType: Record<string, string> = {
+  'button': 'button',
+  'dropdown': 'dropdown',
+  'input': 'input',
+  'checkbox': 'checkbox',
+  'radio': 'radio',
+  'radiogroup': 'radiogroup',
+  'typeahead-single-select': 'select',
+  'typeahead-multi-select': 'multiselect',
+  'modal': 'modal',
+  'drawer': 'drawer',
+  'details': 'details',
+  'divider': 'divider',
+  'badge': 'badge',
+  'tag': 'tag',
+  'icon': 'icon',
+  'tooltip': 'tooltip',
+  'popover': 'popover',
+  'popup': 'popup',
+  'select': 'select',
+  'toast': 'toast',
+  'toggle': 'toggle',
 };
 ---
 
@@ -155,19 +157,160 @@ const storybookStoryIds: Record<string, string> = {
               const status = statusConfig[component.status] || statusConfig.draft;
               return (
                 <a href={`/components/${component.id}`} class="component-card" data-status={component.status}>
-                  <div class="card-preview">
-                    {storybookStoryIds[component.id] ? (
-                      <div class="preview-storybook">
-                        <iframe
-                          src={`${STORYBOOK_BASE}?id=${storybookStoryIds[component.id]}&viewMode=story&shortcuts=false&singleStory=true`}
-                          title={`${component.name} preview`}
-                          data-storybook-id={storybookStoryIds[component.id]}
-                        />
-                        <div class="preview-overlay"></div>
-                      </div>
-                    ) : (
-                      <span class="preview-placeholder">{component.name[0]}</span>
-                    )}
+                  <div class="card-preview" data-preview={previewType[component.id] || 'generic'}>
+                    <div class="preview-mock">
+                      {previewType[component.id] === 'button' && (
+                        <div class="mock-button-group">
+                          <span class="mock-btn primary">Button</span>
+                          <span class="mock-btn outline">Secondary</span>
+                        </div>
+                      )}
+                      {previewType[component.id] === 'input' && (
+                        <div class="mock-input-wrap">
+                          <span class="mock-label">Label</span>
+                          <span class="mock-input">Enter value...</span>
+                        </div>
+                      )}
+                      {previewType[component.id] === 'checkbox' && (
+                        <div class="mock-check-group">
+                          <span class="mock-check checked"><span class="checkmark">✓</span> Option A</span>
+                          <span class="mock-check"><span class="checkbox"></span> Option B</span>
+                          <span class="mock-check checked"><span class="checkmark">✓</span> Option C</span>
+                        </div>
+                      )}
+                      {previewType[component.id] === 'radio' && (
+                        <div class="mock-check-group">
+                          <span class="mock-radio selected"><span class="radio-dot"></span> Choice 1</span>
+                          <span class="mock-radio"><span class="radio-empty"></span> Choice 2</span>
+                          <span class="mock-radio"><span class="radio-empty"></span> Choice 3</span>
+                        </div>
+                      )}
+                      {previewType[component.id] === 'radiogroup' && (
+                        <div class="mock-check-group">
+                          <span class="mock-radio selected"><span class="radio-dot"></span> Option A</span>
+                          <span class="mock-radio"><span class="radio-empty"></span> Option B</span>
+                        </div>
+                      )}
+                      {previewType[component.id] === 'badge' && (
+                        <div class="mock-badge-group">
+                          <span class="mock-badge green">Active</span>
+                          <span class="mock-badge blue">New</span>
+                          <span class="mock-badge amber">Pending</span>
+                          <span class="mock-badge red">Error</span>
+                        </div>
+                      )}
+                      {previewType[component.id] === 'tag' && (
+                        <div class="mock-tag-group">
+                          <span class="mock-tag">Design <span class="tag-x">&times;</span></span>
+                          <span class="mock-tag">React <span class="tag-x">&times;</span></span>
+                          <span class="mock-tag">UI <span class="tag-x">&times;</span></span>
+                        </div>
+                      )}
+                      {previewType[component.id] === 'dropdown' && (
+                        <div class="mock-dropdown">
+                          <span class="mock-btn primary">Actions <span class="caret">▾</span></span>
+                          <div class="mock-menu">
+                            <span class="mock-menu-item active">Edit</span>
+                            <span class="mock-menu-item">Duplicate</span>
+                            <span class="mock-menu-divider"></span>
+                            <span class="mock-menu-item danger">Delete</span>
+                          </div>
+                        </div>
+                      )}
+                      {(previewType[component.id] === 'select' || previewType[component.id] === 'multiselect') && (
+                        <div class="mock-input-wrap">
+                          <span class="mock-label">{previewType[component.id] === 'multiselect' ? 'Multi select' : 'Select'}</span>
+                          <span class="mock-input">Choose option... <span class="caret">▾</span></span>
+                        </div>
+                      )}
+                      {previewType[component.id] === 'modal' && (
+                        <div class="mock-modal">
+                          <div class="mock-modal-box">
+                            <span class="mock-modal-title">Confirm</span>
+                            <span class="mock-modal-body"></span>
+                            <div class="mock-modal-footer">
+                              <span class="mock-btn-sm outline">Cancel</span>
+                              <span class="mock-btn-sm primary">OK</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      {previewType[component.id] === 'drawer' && (
+                        <div class="mock-drawer">
+                          <div class="mock-drawer-backdrop"></div>
+                          <div class="mock-drawer-panel">
+                            <span class="mock-drawer-title">Panel</span>
+                            <span class="mock-drawer-line"></span>
+                            <span class="mock-drawer-line short"></span>
+                          </div>
+                        </div>
+                      )}
+                      {previewType[component.id] === 'tooltip' && (
+                        <div class="mock-tooltip-wrap">
+                          <span class="mock-tooltip-trigger">Hover me</span>
+                          <span class="mock-tooltip-bubble">Tooltip text</span>
+                        </div>
+                      )}
+                      {previewType[component.id] === 'popover' && (
+                        <div class="mock-tooltip-wrap">
+                          <span class="mock-btn-sm primary">Trigger</span>
+                          <span class="mock-popover-bubble">
+                            <span class="mock-popover-title">Popover</span>
+                            <span class="mock-drawer-line"></span>
+                          </span>
+                        </div>
+                      )}
+                      {previewType[component.id] === 'popup' && (
+                        <div class="mock-tooltip-wrap">
+                          <span class="mock-btn-sm outline">Click</span>
+                          <span class="mock-popover-bubble">
+                            <span class="mock-drawer-line"></span>
+                            <span class="mock-drawer-line short"></span>
+                          </span>
+                        </div>
+                      )}
+                      {previewType[component.id] === 'icon' && (
+                        <div class="mock-icon-group">
+                          <span class="mock-icon">★</span>
+                          <span class="mock-icon">♦</span>
+                          <span class="mock-icon">●</span>
+                          <span class="mock-icon">▲</span>
+                          <span class="mock-icon">◆</span>
+                        </div>
+                      )}
+                      {previewType[component.id] === 'divider' && (
+                        <div class="mock-divider-wrap">
+                          <span class="mock-drawer-line"></span>
+                          <span class="mock-divider-line"></span>
+                          <span class="mock-drawer-line short"></span>
+                        </div>
+                      )}
+                      {previewType[component.id] === 'details' && (
+                        <div class="mock-details">
+                          <span class="mock-details-summary">▸ Section title</span>
+                          <span class="mock-details-open">▾ Open section</span>
+                          <div class="mock-details-content">
+                            <span class="mock-drawer-line"></span>
+                            <span class="mock-drawer-line short"></span>
+                          </div>
+                        </div>
+                      )}
+                      {previewType[component.id] === 'toast' && (
+                        <div class="mock-toast">
+                          <span class="mock-toast-icon">✓</span>
+                          <span class="mock-toast-text">Success message</span>
+                        </div>
+                      )}
+                      {previewType[component.id] === 'toggle' && (
+                        <div class="mock-toggle-group">
+                          <span class="mock-toggle on"><span class="toggle-knob"></span></span>
+                          <span class="mock-toggle off"><span class="toggle-knob"></span></span>
+                        </div>
+                      )}
+                      {!previewType[component.id] && (
+                        <span class="preview-letter">{component.name[0]}</span>
+                      )}
+                    </div>
                   </div>
                   <div class="card-content">
                     <div class="card-header">
@@ -299,20 +442,6 @@ const storybookStoryIds: Record<string, string> = {
     observer.observe(quickStartSection);
   }
   
-  // Update Storybook iframes when brand changes
-  const STORYBOOK_IFRAME_BASE = 'https://aplos-software.github.io/velora-ui/iframe.html';
-  
-  document.addEventListener('ark-brand-change', ((e: CustomEvent) => {
-    const brand = e.detail.brand;
-    const iframes = document.querySelectorAll<HTMLIFrameElement>('iframe[data-storybook-id]');
-    iframes.forEach(iframe => {
-      const storyId = iframe.dataset.storybookId;
-      if (storyId) {
-        const newSrc = `${STORYBOOK_IFRAME_BASE}?id=${storyId}&viewMode=story&shortcuts=false&singleStory=true&globals=brand:${brand}`;
-        iframe.src = newSrc;
-      }
-    });
-  }) as EventListener);
 </script>
 
 <style>
@@ -663,48 +792,34 @@ const storybookStoryIds: Record<string, string> = {
   }
   
   .card-preview {
-    height: 160px;
-    background: #ffffff;
+    height: 140px;
+    background: var(--color-surface-secondary, #fafafa);
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
+    border-bottom: 1px solid var(--color-border-default, #e4e4e7);
   }
 
   [data-theme="dark"] .card-preview {
-    background: #1a1a1a;
+    background: #111113;
+    border-bottom-color: #27272a;
   }
 
-  .preview-storybook {
+  .preview-mock {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
     width: 100%;
     height: 100%;
-    position: relative;
-    overflow: hidden;
   }
 
-  .preview-storybook iframe {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 600px;
-    height: 400px;
-    border: none;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
-
-  .preview-overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    cursor: pointer;
-  }
-
-  .preview-placeholder {
+  .preview-letter {
     width: 44px;
     height: 44px;
-    background: var(--color-surface-tertiary, #f4f4f5);
+    background: var(--color-surface-tertiary, #e4e4e7);
     color: var(--color-text-muted, #a1a1aa);
     border-radius: var(--brand-radius-card, 12px);
     display: flex;
@@ -713,6 +828,220 @@ const storybookStoryIds: Record<string, string> = {
     font-size: 1.25rem;
     font-weight: 700;
   }
+
+  /* ── Mock component styles ── */
+  .mock-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 6px 16px; border-radius: var(--brand-radius-button, 8px);
+    font-size: 0.75rem; font-weight: 600; white-space: nowrap;
+  }
+  .mock-btn.primary {
+    background: var(--brand-primary, #18181b); color: #fff;
+  }
+  .mock-btn.outline {
+    background: transparent; color: var(--color-text-primary, #18181b);
+    border: 1.5px solid var(--color-border-default, #d4d4d8);
+  }
+  .mock-button-group { display: flex; gap: 8px; align-items: center; }
+  .mock-btn-sm {
+    display: inline-flex; align-items: center; gap: 3px;
+    padding: 3px 10px; border-radius: var(--brand-radius-button, 6px);
+    font-size: 0.625rem; font-weight: 600; white-space: nowrap;
+  }
+  .mock-btn-sm.primary { background: var(--brand-primary, #18181b); color: #fff; }
+  .mock-btn-sm.outline {
+    background: transparent; color: var(--color-text-secondary, #52525b);
+    border: 1px solid var(--color-border-default, #d4d4d8);
+  }
+  .caret { font-size: 0.6em; margin-left: 2px; opacity: 0.7; }
+
+  /* Input */
+  .mock-input-wrap { display: flex; flex-direction: column; gap: 4px; width: 180px; }
+  .mock-label { font-size: 0.6875rem; font-weight: 600; color: var(--color-text-secondary, #52525b); }
+  .mock-input {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 6px 10px; border: 1.5px solid var(--color-border-default, #d4d4d8);
+    border-radius: var(--brand-radius-button, 8px); font-size: 0.6875rem;
+    color: var(--color-text-muted, #a1a1aa); background: var(--color-surface-primary, #fff);
+  }
+  [data-theme="dark"] .mock-input { background: #1a1a1e; border-color: #333; }
+
+  /* Checkbox */
+  .mock-check-group { display: flex; flex-direction: column; gap: 6px; }
+  .mock-check, .mock-radio {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.6875rem; color: var(--color-text-primary, #18181b);
+  }
+  .checkmark {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 14px; height: 14px; border-radius: 3px;
+    background: var(--brand-primary, #18181b); color: #fff;
+    font-size: 0.5rem; font-weight: 700;
+  }
+  .checkbox {
+    display: inline-block; width: 14px; height: 14px;
+    border: 1.5px solid var(--color-border-default, #d4d4d8); border-radius: 3px;
+  }
+
+  /* Radio */
+  .radio-dot {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 1.5px solid var(--brand-primary, #18181b);
+  }
+  .radio-dot::after {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--brand-primary, #18181b);
+  }
+  .radio-empty {
+    display: inline-block; width: 14px; height: 14px;
+    border: 1.5px solid var(--color-border-default, #d4d4d8); border-radius: 50%;
+  }
+
+  /* Badge */
+  .mock-badge-group { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+  .mock-badge {
+    padding: 2px 8px; border-radius: 99px; font-size: 0.625rem;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em;
+  }
+  .mock-badge.green { background: #dcfce7; color: #166534; }
+  .mock-badge.blue { background: #dbeafe; color: #1e40af; }
+  .mock-badge.amber { background: #fef3c7; color: #92400e; }
+  .mock-badge.red { background: #fee2e2; color: #991b1b; }
+
+  /* Tag */
+  .mock-tag-group { display: flex; gap: 6px; }
+  .mock-tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 8px; border-radius: 6px; font-size: 0.6875rem; font-weight: 500;
+    background: var(--color-surface-tertiary, #f4f4f5); color: var(--color-text-primary, #18181b);
+  }
+  .tag-x { opacity: 0.4; font-size: 0.8em; cursor: pointer; }
+  [data-theme="dark"] .mock-tag { background: #27272a; color: #e4e4e7; }
+
+  /* Dropdown */
+  .mock-dropdown { position: relative; display: flex; flex-direction: column; align-items: flex-start; }
+  .mock-menu {
+    display: flex; flex-direction: column; margin-top: 4px;
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 8px; overflow: hidden; background: var(--color-surface-primary, #fff);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); min-width: 120px;
+  }
+  [data-theme="dark"] .mock-menu { background: #1a1a1e; border-color: #333; }
+  .mock-menu-item {
+    padding: 5px 10px; font-size: 0.6875rem; color: var(--color-text-primary, #18181b);
+  }
+  .mock-menu-item.active { background: var(--color-surface-secondary, #f4f4f5); }
+  .mock-menu-item.danger { color: #dc2626; }
+  .mock-menu-divider { height: 1px; background: var(--color-border-default, #e4e4e7); }
+  [data-theme="dark"] .mock-menu-item.active { background: #252527; }
+
+  /* Modal */
+  .mock-modal { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+  .mock-modal::before {
+    content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.15); border-radius: 0;
+  }
+  .mock-modal-box {
+    position: relative; background: var(--color-surface-primary, #fff);
+    border-radius: 10px; padding: 10px; width: 160px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12); display: flex; flex-direction: column; gap: 6px;
+  }
+  [data-theme="dark"] .mock-modal-box { background: #1e1e22; }
+  .mock-modal-title { font-size: 0.75rem; font-weight: 700; color: var(--color-text-primary, #18181b); }
+  .mock-modal-body { height: 16px; border-radius: 4px; background: var(--color-surface-secondary, #f4f4f5); }
+  .mock-modal-footer { display: flex; gap: 4px; justify-content: flex-end; }
+
+  /* Drawer */
+  .mock-drawer {
+    position: relative; width: 100%; height: 100%;
+    display: flex; overflow: hidden;
+  }
+  .mock-drawer-backdrop { flex: 1; background: rgba(0,0,0,0.08); }
+  .mock-drawer-panel {
+    width: 120px; background: var(--color-surface-primary, #fff);
+    border-left: 1px solid var(--color-border-default, #e4e4e7);
+    padding: 12px; display: flex; flex-direction: column; gap: 8px;
+  }
+  [data-theme="dark"] .mock-drawer-panel { background: #1e1e22; border-color: #333; }
+  .mock-drawer-title { font-size: 0.6875rem; font-weight: 700; color: var(--color-text-primary, #18181b); }
+  .mock-drawer-line {
+    height: 6px; border-radius: 3px; background: var(--color-surface-tertiary, #e4e4e7);
+  }
+  .mock-drawer-line.short { width: 60%; }
+  [data-theme="dark"] .mock-drawer-line { background: #333; }
+
+  /* Tooltip */
+  .mock-tooltip-wrap {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+  }
+  .mock-tooltip-trigger {
+    font-size: 0.6875rem; color: var(--color-text-secondary, #52525b);
+    border-bottom: 1px dashed var(--color-border-default, #d4d4d8);
+    padding-bottom: 1px;
+  }
+  .mock-tooltip-bubble {
+    padding: 4px 10px; border-radius: 6px; font-size: 0.625rem;
+    background: #18181b; color: #fff; white-space: nowrap;
+  }
+  .mock-popover-bubble {
+    padding: 8px 10px; border-radius: 8px; font-size: 0.625rem;
+    background: var(--color-surface-primary, #fff); color: var(--color-text-primary, #18181b);
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: flex; flex-direction: column; gap: 4px;
+    min-width: 100px;
+  }
+  [data-theme="dark"] .mock-popover-bubble { background: #1e1e22; border-color: #333; }
+  .mock-popover-title { font-size: 0.6875rem; font-weight: 700; }
+
+  /* Icon */
+  .mock-icon-group { display: flex; gap: 12px; align-items: center; }
+  .mock-icon {
+    font-size: 1.25rem; color: var(--brand-primary, #18181b); opacity: 0.7;
+  }
+
+  /* Divider */
+  .mock-divider-wrap { display: flex; flex-direction: column; gap: 8px; width: 160px; align-items: stretch; }
+  .mock-divider-line { height: 1.5px; background: var(--color-border-default, #d4d4d8); }
+
+  /* Details */
+  .mock-details { display: flex; flex-direction: column; gap: 4px; width: 180px; }
+  .mock-details-summary {
+    font-size: 0.6875rem; font-weight: 600; color: var(--color-text-secondary, #52525b);
+    padding: 4px 0; border-bottom: 1px solid var(--color-border-default, #e4e4e7);
+  }
+  .mock-details-open {
+    font-size: 0.6875rem; font-weight: 600; color: var(--brand-primary, #18181b);
+    padding: 4px 0;
+  }
+  .mock-details-content {
+    display: flex; flex-direction: column; gap: 4px; padding-left: 12px;
+  }
+
+  /* Toast */
+  .mock-toast {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 14px; border-radius: 8px;
+    background: #166534; color: #fff; font-size: 0.6875rem; font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  }
+  .mock-toast-icon { font-size: 0.75rem; }
+
+  /* Toggle */
+  .mock-toggle-group { display: flex; gap: 12px; align-items: center; }
+  .mock-toggle {
+    width: 36px; height: 20px; border-radius: 99px; position: relative;
+    transition: background 0.2s;
+  }
+  .mock-toggle.on { background: var(--brand-primary, #18181b); }
+  .mock-toggle.off { background: var(--color-border-default, #d4d4d8); }
+  .toggle-knob {
+    position: absolute; top: 2px; width: 16px; height: 16px;
+    border-radius: 50%; background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    transition: left 0.2s;
+  }
+  .mock-toggle.on .toggle-knob { left: 18px; }
+  .mock-toggle.off .toggle-knob { left: 2px; }
   
   .card-content {
     padding: 1rem;
