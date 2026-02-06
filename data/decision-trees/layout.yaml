@@ -1,0 +1,313 @@
+# Layout Decision Tree
+# Edit this file to change decision logic - no code changes needed
+# Dashboard parses this at runtime - edit, refresh, done
+
+id: layout-decision
+title: "When you need to structure content"
+description: "Guides you to the right layout patterns and spacing tokens"
+category: Layout
+lastUpdated: "2026-02-03"
+
+steps:
+  - id: layout-context
+    question: "What are you laying out?"
+    helpText: "Start with the highest-level container you're working on"
+    options:
+      - id: page
+        label: "Entire page structure"
+        next: page-layout-path
+      
+      - id: section
+        label: "Section within a page"
+        next: section-layout-path
+      
+      - id: component
+        label: "Content within a component"
+        next: component-layout-path
+      
+      - id: list
+        label: "List of items"
+        next: list-layout-path
+
+  - id: page-layout-path
+    question: "What type of page is this?"
+    options:
+      - id: content
+        label: "Content page (article, documentation)"
+        outcome:
+          type: tokens
+          tokens:
+            maxWidth: "spacing.layout.page.maxWidth"
+            padding: "spacing.layout.page.padding"
+            sectionGap: "spacing.layout.section.gap"
+          guidance: |
+            Use centered content column with max-width.
+            Apply page padding on all sides.
+            Separate major sections with section gap.
+          pattern: |
+            <main style="max-width: var(--spacing-layout-page-max-width); 
+                         padding: var(--spacing-layout-page-padding);
+                         margin: 0 auto;">
+              <section style="margin-bottom: var(--spacing-layout-section-gap)">
+                ...
+              </section>
+            </main>
+      
+      - id: dashboard
+        label: "Dashboard (widgets, data)"
+        outcome:
+          type: tokens
+          tokens:
+            padding: "spacing.layout.page.padding"
+            gridGap: "spacing.layout.stack.md"
+          guidance: |
+            Use full-width layout with grid or flex for widgets.
+            Apply page padding but no max-width.
+          pattern: |
+            <main style="padding: var(--spacing-layout-page-padding);">
+              <div style="display: grid; gap: var(--spacing-layout-stack-md);">
+                ...
+              </div>
+            </main>
+      
+      - id: form
+        label: "Form page (settings, creation)"
+        outcome:
+          type: tokens
+          tokens:
+            maxWidth: "768px"
+            padding: "spacing.layout.page.padding"
+            fieldGap: "spacing.layout.stack.md"
+          guidance: |
+            Use narrower max-width for form readability.
+            Stack form fields with consistent gap.
+          pattern: |
+            <form style="max-width: 768px; 
+                         padding: var(--spacing-layout-page-padding);
+                         margin: 0 auto;">
+              ...
+            </form>
+
+  - id: section-layout-path
+    question: "How should items in this section flow?"
+    options:
+      - id: vertical
+        label: "Stacked vertically"
+        next: vertical-spacing-path
+      
+      - id: horizontal
+        label: "Side by side"
+        next: horizontal-spacing-path
+      
+      - id: grid
+        label: "Grid layout"
+        next: grid-layout-path
+
+  - id: vertical-spacing-path
+    question: "How related are the items?"
+    helpText: "Tighter spacing for closely related items"
+    options:
+      - id: tight
+        label: "Very related (form label + input)"
+        outcome:
+          type: tokens
+          tokens:
+            gap: "spacing.layout.stack.xs"
+          guidance: |
+            Use extra-small stack spacing.
+            Items should feel like a single unit.
+          pattern: "gap: var(--spacing-layout-stack-xs)"
+      
+      - id: related
+        label: "Related (items in a list, form fields)"
+        outcome:
+          type: tokens
+          tokens:
+            gap: "spacing.layout.stack.sm"
+          guidance: |
+            Use small stack spacing.
+            Items are distinct but clearly grouped.
+          pattern: "gap: var(--spacing-layout-stack-sm)"
+      
+      - id: separate
+        label: "Separate concepts (different form sections)"
+        outcome:
+          type: tokens
+          tokens:
+            gap: "spacing.layout.stack.lg"
+          guidance: |
+            Use large stack spacing.
+            Creates visual separation between groups.
+          pattern: "gap: var(--spacing-layout-stack-lg)"
+
+  - id: horizontal-spacing-path
+    question: "What's the relationship between items?"
+    options:
+      - id: inline
+        label: "Inline elements (icon + text, badge + label)"
+        outcome:
+          type: tokens
+          tokens:
+            gap: "spacing.component.gap.sm"
+          guidance: |
+            Use small inline spacing.
+            Items should feel connected.
+          pattern: |
+            display: flex; 
+            align-items: center; 
+            gap: var(--spacing-component-gap-sm)
+      
+      - id: actions
+        label: "Action buttons (Cancel + Submit)"
+        outcome:
+          type: tokens
+          tokens:
+            gap: "spacing.layout.inline.sm"
+          guidance: |
+            Use small inline layout spacing.
+            Primary action should be rightmost.
+          pattern: |
+            display: flex; 
+            justify-content: flex-end; 
+            gap: var(--spacing-layout-inline-sm)
+      
+      - id: distributed
+        label: "Distributed items (navigation, tabs)"
+        outcome:
+          type: tokens
+          tokens:
+            gap: "spacing.layout.inline.md"
+          guidance: |
+            Use medium inline spacing.
+            Consider space-between for edge-to-edge distribution.
+          pattern: |
+            display: flex; 
+            gap: var(--spacing-layout-inline-md)
+
+  - id: grid-layout-path
+    question: "How should the grid behave?"
+    options:
+      - id: fixed
+        label: "Fixed columns (always 3 columns)"
+        outcome:
+          type: tokens
+          tokens:
+            gap: "spacing.layout.stack.md"
+          guidance: |
+            Use CSS Grid with fixed column count.
+            Consider responsiveness with media queries.
+          pattern: |
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-layout-stack-md)
+      
+      - id: auto
+        label: "Auto-fit (as many as will fit)"
+        outcome:
+          type: tokens
+          tokens:
+            gap: "spacing.layout.stack.md"
+            minItemWidth: "250px"
+          guidance: |
+            Use CSS Grid auto-fit for responsive grids.
+            Items wrap automatically based on container width.
+          pattern: |
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-layout-stack-md)
+
+  - id: component-layout-path
+    question: "What's inside the component?"
+    options:
+      - id: card
+        label: "Card content (image, title, description)"
+        outcome:
+          type: tokens
+          tokens:
+            padding: "spacing.component.padding.md"
+            gap: "spacing.component.gap.md"
+            borderRadius: "radius.component.card"
+            background: "color.surface.primary"
+            border: "color.border.default"
+          guidance: |
+            Use medium component padding and gap.
+            Stack content vertically within card.
+          pattern: |
+            padding: var(--spacing-component-padding-md);
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-component-gap-md)
+      
+      - id: button
+        label: "Button content (icon + label)"
+        outcome:
+          type: tokens
+          tokens:
+            paddingX: "spacing.component.padding.md"
+            paddingY: "spacing.component.padding.sm"
+            gap: "spacing.component.gap.sm"
+          guidance: |
+            Use asymmetric padding (more horizontal).
+            Small gap between icon and text.
+          pattern: |
+            padding: var(--spacing-component-padding-sm) var(--spacing-component-padding-md);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-component-gap-sm)
+      
+      - id: input
+        label: "Input field (icon, text, clear button)"
+        outcome:
+          type: tokens
+          tokens:
+            paddingX: "spacing.component.padding.sm"
+            paddingY: "spacing.component.padding.xs"
+            gap: "spacing.component.gap.sm"
+          guidance: |
+            Use small padding with vertical compression.
+            Small gap between elements.
+
+  - id: list-layout-path
+    question: "What type of list?"
+    options:
+      - id: simple
+        label: "Simple list (text items)"
+        outcome:
+          type: tokens
+          tokens:
+            gap: "spacing.layout.stack.xs"
+          guidance: |
+            Use extra-small gap between items.
+            Consistent vertical rhythm.
+          pattern: |
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-layout-stack-xs)
+      
+      - id: complex
+        label: "Complex list (cards, multi-line items)"
+        outcome:
+          type: tokens
+          tokens:
+            gap: "spacing.layout.stack.sm"
+          guidance: |
+            Use small gap between items.
+            Each item has visual boundaries.
+          pattern: |
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-layout-stack-sm)
+      
+      - id: grid-list
+        label: "Grid list (thumbnails, products)"
+        outcome:
+          type: tokens
+          tokens:
+            gap: "spacing.layout.stack.md"
+          guidance: |
+            Use medium gap in a grid layout.
+            Consider auto-fit for responsiveness.
+          pattern: |
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-layout-stack-md)

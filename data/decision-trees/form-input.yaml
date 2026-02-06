@@ -1,0 +1,291 @@
+# Form Input Decision Tree
+# Edit this file to change decision logic - no code changes needed
+# Dashboard parses this at runtime - edit, refresh, done
+
+id: form-input-decision
+title: "When you need user input"
+description: "Guides you to the right input type and tokens"
+category: Forms
+lastUpdated: "2026-02-03"
+
+steps:
+  - id: input-type
+    question: "What type of data are you collecting?"
+    helpText: "Choose based on the expected input, not the visual preference"
+    options:
+      - id: text-short
+        label: "Short text (name, email, title)"
+        next: short-text-path
+      
+      - id: text-long
+        label: "Long text (description, message, notes)"
+        next: long-text-path
+      
+      - id: selection
+        label: "Selection from options"
+        next: selection-path
+      
+      - id: date-time
+        label: "Date or time"
+        next: date-path
+      
+      - id: file
+        label: "File upload"
+        next: file-path
+      
+      - id: toggle
+        label: "On/off or yes/no"
+        next: toggle-path
+
+  - id: short-text-path
+    question: "Is this a specific data format?"
+    options:
+      - id: email
+        label: "Email address"
+        outcome:
+          type: tokens
+          tokens:
+            background: "color.surface.primary"
+            border: "color.border.default"
+            borderFocus: "color.border.focus"
+            text: "color.text.primary"
+            placeholder: "color.text.muted"
+            borderRadius: "radius.component.input"
+          guidance: |
+            Use type="email" for keyboard optimization and basic validation.
+            Consider showing validation state inline.
+          component: "@ark/input type='email'"
+          accessibilityNote: "Include visible label, not just placeholder"
+      
+      - id: password
+        label: "Password"
+        outcome:
+          type: tokens
+          tokens:
+            background: "color.surface.primary"
+            border: "color.border.default"
+            borderFocus: "color.border.focus"
+            text: "color.text.primary"
+            borderRadius: "radius.component.input"
+          guidance: |
+            Use type="password" with show/hide toggle.
+            Consider password strength indicator for new passwords.
+          component: "@ark/input type='password'"
+          accessibilityNote: "Announce password visibility changes to screen readers"
+      
+      - id: generic
+        label: "Generic text"
+        outcome:
+          type: tokens
+          tokens:
+            background: "color.surface.primary"
+            border: "color.border.default"
+            borderFocus: "color.border.focus"
+            text: "color.text.primary"
+            placeholder: "color.text.muted"
+            label: "color.text.secondary"
+            borderRadius: "radius.component.input"
+          guidance: |
+            Standard single-line text input.
+            Always include a visible label.
+            Use placeholder for example, not as label replacement.
+          component: "@ark/input type='text'"
+
+  - id: long-text-path
+    question: "How much text is expected?"
+    options:
+      - id: paragraph
+        label: "A paragraph or two (comments, descriptions)"
+        outcome:
+          type: tokens
+          tokens:
+            background: "color.surface.primary"
+            border: "color.border.default"
+            borderFocus: "color.border.focus"
+            text: "color.text.primary"
+            borderRadius: "radius.component.input"
+          guidance: |
+            Use textarea with 3-5 rows visible.
+            Consider character count if there's a limit.
+          component: "@ark/textarea rows='4'"
+      
+      - id: rich
+        label: "Extended content with formatting (blog posts, articles)"
+        outcome:
+          type: recommendation
+          guidance: |
+            Consider a rich text editor.
+            This may require divergence from standard components.
+            Document in divergence log if using custom solution.
+          logDivergence: true
+          suggestedReview: true
+
+  - id: selection-path
+    question: "How many options are there?"
+    options:
+      - id: few
+        label: "2-5 options"
+        next: few-options-path
+      
+      - id: many
+        label: "6-15 options"
+        outcome:
+          type: tokens
+          tokens:
+            background: "color.surface.primary"
+            border: "color.border.default"
+            text: "color.text.primary"
+            borderRadius: "radius.component.input"
+          guidance: |
+            Use a select/dropdown.
+            Group options if logical grouping exists.
+          component: "@ark/select"
+      
+      - id: lots
+        label: "15+ options"
+        outcome:
+          type: tokens
+          tokens:
+            background: "color.surface.primary"
+            border: "color.border.default"
+            text: "color.text.primary"
+            borderRadius: "radius.component.input"
+          guidance: |
+            Use searchable select/combobox.
+            Consider async loading for very large lists.
+          component: "@ark/combobox"
+
+  - id: few-options-path
+    question: "Should all options be visible at once?"
+    options:
+      - id: visible
+        label: "Yes, show all options"
+        outcome:
+          type: tokens
+          tokens:
+            background: "color.surface.primary"
+            borderSelected: "color.action.primary.default"
+            text: "color.text.primary"
+          guidance: |
+            Use radio buttons (single select) or checkboxes (multi-select).
+            Stack vertically for easier scanning.
+          component: "@ark/radio-group or @ark/checkbox-group"
+      
+      - id: compact
+        label: "No, compact is better"
+        outcome:
+          type: tokens
+          tokens:
+            background: "color.surface.primary"
+            border: "color.border.default"
+            text: "color.text.primary"
+            borderRadius: "radius.component.input"
+          guidance: |
+            Use a select/dropdown.
+            Good for space-constrained layouts.
+          component: "@ark/select"
+
+  - id: date-path
+    question: "What type of date/time input?"
+    options:
+      - id: date-single
+        label: "Single date"
+        outcome:
+          type: tokens
+          tokens:
+            background: "color.surface.primary"
+            border: "color.border.default"
+            text: "color.text.primary"
+            borderRadius: "radius.component.input"
+          guidance: |
+            Use date picker with calendar popover.
+            Allow manual text entry as alternative.
+          component: "@ark/date-picker"
+      
+      - id: date-range
+        label: "Date range"
+        outcome:
+          type: tokens
+          tokens:
+            background: "color.surface.primary"
+            border: "color.border.default"
+            text: "color.text.primary"
+            borderRadius: "radius.component.input"
+          guidance: |
+            Use date range picker.
+            Show both start and end clearly.
+          component: "@ark/date-range-picker"
+      
+      - id: time
+        label: "Time only"
+        outcome:
+          type: tokens
+          tokens:
+            background: "color.surface.primary"
+            border: "color.border.default"
+            text: "color.text.primary"
+            borderRadius: "radius.component.input"
+          guidance: |
+            Use time picker or simple text input with format hint.
+            Consider timezone implications.
+          component: "@ark/time-picker"
+
+  - id: toggle-path
+    question: "Is this for a setting or a form field?"
+    options:
+      - id: setting
+        label: "Setting/preference (persists immediately)"
+        outcome:
+          type: tokens
+          tokens:
+            trackOff: "color.surface.tertiary"
+            trackOn: "color.action.primary.default"
+            thumb: "color.surface.primary"
+          guidance: |
+            Use a toggle/switch.
+            Changes should apply immediately (no submit button).
+          component: "@ark/switch"
+      
+      - id: form
+        label: "Form field (submitted with other data)"
+        outcome:
+          type: tokens
+          tokens:
+            background: "color.surface.primary"
+            borderChecked: "color.action.primary.default"
+            checkmark: "color.surface.primary"
+          guidance: |
+            Use a checkbox.
+            Part of form submission flow.
+          component: "@ark/checkbox"
+
+  - id: file-path
+    question: "How many files?"
+    options:
+      - id: single
+        label: "Single file"
+        outcome:
+          type: tokens
+          tokens:
+            dropzoneBg: "color.surface.secondary"
+            dropzoneBorder: "color.border.default"
+            dropzoneBorderActive: "color.action.primary.default"
+            text: "color.text.secondary"
+          guidance: |
+            Use file input with drag-and-drop zone.
+            Show file type restrictions clearly.
+          component: "@ark/file-upload"
+      
+      - id: multiple
+        label: "Multiple files"
+        outcome:
+          type: tokens
+          tokens:
+            dropzoneBg: "color.surface.secondary"
+            dropzoneBorder: "color.border.default"
+            dropzoneBorderActive: "color.action.primary.default"
+            text: "color.text.secondary"
+          guidance: |
+            Use multi-file upload with preview/list.
+            Show progress for each file.
+          component: "@ark/file-upload multiple"

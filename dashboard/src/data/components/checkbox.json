@@ -1,0 +1,120 @@
+{
+  "id": "checkbox",
+  "name": "Checkbox",
+  "description": "Checkboxes allow users to select one or more items from a set, or to turn an option on or off. They provide a clear visual indication of the current state.",
+  "status": "stable",
+  "version": "1.0.0",
+  
+  "overview": {
+    "purpose": "Checkboxes are used for making selections from a list, confirming agreement to terms, or toggling features on and off.",
+    "principles": [
+      "Users should be able to select each item independently",
+      "The visual state should clearly communicate selected vs unselected",
+      "Labels should be clickable to toggle the checkbox",
+      "Use positive framing for labels when possible"
+    ]
+  },
+  
+  "whenToUse": [
+    "Selecting multiple items from a list",
+    "Toggling a single option on/off (like terms acceptance)",
+    "Enabling/disabling features in settings",
+    "Filtering options in search interfaces"
+  ],
+  
+  "whenNotToUse": [
+    "For mutually exclusive choices - use Radio instead",
+    "For on/off with immediate effect - use Toggle/Switch",
+    "For selecting from a long list - use MultiSelect",
+    "For single binary choices with clear on/off states - use Toggle"
+  ],
+  
+  "anatomy": {
+    "description": "A checkbox consists of a visual indicator and associated label.",
+    "parts": [
+      {"name": "Box", "description": "The square container that shows checked state", "required": true},
+      {"name": "Check Mark", "description": "Icon shown when checkbox is checked", "required": true},
+      {"name": "Label", "description": "Text describing the option", "required": true},
+      {"name": "Description", "description": "Optional secondary text providing more context", "required": false}
+    ]
+  },
+  
+  "variants": [
+    {"name": "Default", "description": "Standard checkbox with label", "useCase": "Most form contexts"},
+    {"name": "With Description", "description": "Checkbox with secondary helper text", "useCase": "Options needing more explanation"},
+    {"name": "Card", "description": "Checkbox within a selectable card container", "useCase": "Feature selection, pricing plans"}
+  ],
+  
+  "states": [
+    {"name": "Unchecked", "description": "Default unselected state"},
+    {"name": "Checked", "description": "Selected state with check mark"},
+    {"name": "Indeterminate", "description": "Partial selection (for parent checkboxes)"},
+    {"name": "Hover", "description": "Cursor over the checkbox"},
+    {"name": "Focus", "description": "Keyboard focus visible"},
+    {"name": "Disabled", "description": "Cannot be interacted with"},
+    {"name": "Error", "description": "Validation error (e.g., required but unchecked)"}
+  ],
+  
+  "props": [
+    {"name": "checked", "type": "boolean", "default": "false", "description": "Whether the checkbox is checked"},
+    {"name": "indeterminate", "type": "boolean", "default": "false", "description": "Shows indeterminate state"},
+    {"name": "onChange", "type": "(checked: boolean) => void", "default": "undefined", "description": "Handler when state changes"},
+    {"name": "label", "type": "string | ReactNode", "default": "undefined", "description": "Label for the checkbox"},
+    {"name": "description", "type": "string", "default": "undefined", "description": "Secondary description text"},
+    {"name": "disabled", "type": "boolean", "default": "false", "description": "Disable the checkbox"},
+    {"name": "error", "type": "boolean", "default": "false", "description": "Show error state"},
+    {"name": "name", "type": "string", "default": "undefined", "description": "Form field name"},
+    {"name": "value", "type": "string", "default": "undefined", "description": "Value when used in forms"}
+  ],
+  
+  "tokens": {
+    "description": "Design tokens for Checkbox",
+    "categories": [
+      {
+        "name": "Colors",
+        "tokens": [
+          {"name": "--color-checkbox-border", "value": "#d4d4d8", "usage": "Unchecked border"},
+          {"name": "--color-checkbox-checked", "value": "#6138d8", "usage": "Checked background"},
+          {"name": "--color-checkbox-check", "value": "#ffffff", "usage": "Check mark color"}
+        ]
+      },
+      {
+        "name": "Shape",
+        "tokens": [
+          {"name": "--radius-checkbox", "value": "4px", "usage": "Checkbox border radius"},
+          {"name": "--size-checkbox", "value": "20px", "usage": "Checkbox dimensions"}
+        ]
+      }
+    ]
+  },
+  
+  "accessibility": {
+    "description": "Checkboxes must be keyboard accessible and properly labeled.",
+    "guidelines": [
+      {"title": "Keyboard", "description": "Space to toggle, focus visible"},
+      {"title": "Labels", "description": "Always associate label with input"},
+      {"title": "Groups", "description": "Use fieldset/legend for checkbox groups"}
+    ],
+    "wcagCriteria": ["1.3.1", "2.1.1", "4.1.2"]
+  },
+  
+  "bestPractices": {
+    "do": [
+      "Use positive phrasing for labels",
+      "Make labels clickable",
+      "Group related checkboxes with fieldset",
+      "Provide clear indication of selected state"
+    ],
+    "dont": [
+      "Don't use for mutually exclusive options",
+      "Don't use double negatives in labels",
+      "Don't rely on color alone to show state"
+    ]
+  },
+  
+  "relatedComponents": [
+    {"name": "Radio", "description": "For mutually exclusive selection", "url": "/components/radio"},
+    {"name": "Toggle", "description": "For on/off with immediate effect", "url": "/components/toggle"},
+    {"name": "CheckboxGroup", "description": "For managing multiple checkboxes", "url": "/components/checkbox-group"}
+  ]
+}

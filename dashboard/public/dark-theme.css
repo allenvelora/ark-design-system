@@ -1,0 +1,292 @@
+/* Dark Theme Overrides
+   Activated when [data-theme="dark"] is set on the HTML element
+   ============================================================ */
+
+[data-theme="dark"] {
+  /* Neutral Text */
+  --semantic-neutral-text-default: #ffffffd9;
+  --semantic-neutral-text-weak: #ffffffa6;
+  --semantic-neutral-text-weak-hover: #ffffffbf;
+  --semantic-neutral-text-disabled: #ffffff73;
+  --semantic-neutral-text-foreground: #ffffff;
+  
+  /* Neutral Background */
+  --semantic-neutral-bg-default: #000000;
+  --semantic-neutral-bg-weak: #111418;
+  --semantic-neutral-bg-medium: #191a1a;
+  --semantic-neutral-bg-hover: #252626;
+  --semantic-neutral-bg-active: #252626;
+  --semantic-neutral-bg-strong: #2e3033;
+  --semantic-neutral-bg-disabled: #252626;
+  
+  /* Neutral Border */
+  --semantic-neutral-border-default: #2e3033;
+  --semantic-neutral-border-hover: #36343a;
+  --semantic-neutral-border-active: #403e44;
+  --semantic-neutral-border-strong: #514d57;
+  --semantic-neutral-border-strong-hover: #716d78;
+  --semantic-neutral-border-disabled: #716d78;
+  --semantic-neutral-border-weak: #7e7a86;
+  
+  /* Primary Text */
+  --semantic-primary-text-default: #bbaeff;
+  --semantic-primary-text-hover: #6c57d9;
+  --semantic-primary-text-strong: #000000;
+  
+  /* Primary Background */
+  --semantic-primary-bg-default: #11171f;
+  --semantic-primary-bg-hover: #1b222c;
+  --semantic-primary-bg-active: #30334b;
+  --semantic-primary-bg-strong: #9370fa;
+  --semantic-primary-bg-strong-hover: #6c57d9;
+  
+  /* Primary Border */
+  --semantic-primary-border-default: #1b222c;
+  --semantic-primary-border-hover: #444472;
+  --semantic-primary-border-active: #6150b2;
+  --semantic-primary-border-strong: #444472;
+  --semantic-primary-border-strong-hover: #6c57d9;
+  
+  /* Danger */
+  --semantic-danger-text-default: #f2555a;
+  --semantic-danger-text-hover: #ff8084;
+  --semantic-danger-bg-default: #3c181a;
+  --semantic-danger-bg-weak: #1f1315;
+  --semantic-danger-bg-strong: #db3030;
+  --semantic-danger-border-default: #541b1f;
+  --semantic-danger-border-strong: #aa2429;
+  
+  /* Success */
+  --semantic-success-text-default: #87cc27;
+  --semantic-success-bg-default: #1a260d;
+  --semantic-success-bg-strong: #8ed52a;
+  --semantic-success-border-default: #243711;
+  
+  /* Warning */
+  --semantic-warning-text-default: #ffcb47;
+  --semantic-warning-bg-default: #341c00;
+  --semantic-warning-bg-strong: #ffb224;
+  --semantic-warning-border-default: #4a2900;
+  
+  /* Button */
+  --semantic-btn-bg-primary: #6138d8;
+  --semantic-btn-bg-secondary: #111724;
+  --semantic-btn-bg-primary-hover: #9370fa;
+  --semantic-btn-bg-secondary-hover: #30334b;
+  --semantic-btn-bg-disabled: #aba8b2;
+  --semantic-btn-text-primary: #ffffff;
+  --semantic-btn-text-secondary: #f5f4f6;
+  --semantic-btn-text-disabled: #403e44;
+  --semantic-btn-border-secondary: #6150b2;
+  
+  /* Navigation */
+  --semantic-nav-bg-default: #111724;
+  --semantic-nav-bg-hover: #30334b;
+  --semantic-nav-bg-strong: #444472;
+  
+  /* Accent */
+  --semantic-accent-1-text-default: #f65cda;
+  --semantic-accent-1-bg-default: #3a1834;
+  --semantic-accent-1-bg-strong: #a7188d;
+  
+  --semantic-accent-2-text-default: #70d8e1;
+  --semantic-accent-2-bg-default: #03353a;
+  --semantic-accent-2-bg-strong: #70d8e1;
+  
+  /* Skeleton */
+  --semantic-skeleton-10: #ffffff26;
+  --semantic-skeleton-05: #ffffff1a;
+  --semantic-skeleton-07: #ffffff1f;
+  
+  /* Chart */
+  --semantic-chart-01: #4f23cf;
+  --semantic-chart-02: #8b63f7;
+  --semantic-chart-03: #c2affa;
+  --semantic-chart-cartesian-grid: #efedf2;
+  
+  /* Legacy color aliases for backward compatibility */
+  --color-surface-primary: #000000;
+  --color-surface-secondary: #111418;
+  --color-surface-tertiary: #191a1a;
+  --color-text-primary: #ffffffd9;
+  --color-text-secondary: #ffffffa6;
+  --color-text-muted: #ffffff73;
+  --color-border-default: #2e3033;
+  --color-border-strong: #514d57;
+  --color-border-focus: #6150b2;
+  --color-action-primary-default: #9370fa;
+  --color-action-primary-subtle: #30334b;
+}
+
+/* Dark mode component adjustments */
+[data-theme="dark"] .header {
+  background: #111418;
+  border-color: #2e3033;
+}
+
+[data-theme="dark"] .footer {
+  background: #111418;
+  border-color: #2e3033;
+}
+
+[data-theme="dark"] .theme-toggle {
+  background: #252626;
+  border-color: #36343a;
+  color: #ffffffa6;
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+  background: #2e3033;
+  border-color: #403e44;
+  color: #ffffffd9;
+}
+
+[data-theme="dark"] .brand-trigger {
+  background: #252626;
+  border-color: #36343a;
+  color: #ffffffd9;
+}
+
+[data-theme="dark"] .brand-trigger:hover {
+  background: #2e3033;
+  border-color: #403e44;
+}
+
+[data-theme="dark"] .brand-dropdown {
+  background: #111418;
+  border-color: #2e3033;
+}
+
+[data-theme="dark"] .brand-dropdown-header {
+  color: #ffffffa6;
+  border-color: #2e3033;
+}
+
+[data-theme="dark"] .brand-option:hover {
+  background: #252626;
+}
+
+[data-theme="dark"] .brand-option.active {
+  background: #1b222c;
+}
+
+[data-theme="dark"] .brand-option-name {
+  color: #ffffffd9;
+}
+
+[data-theme="dark"] .brand-option-tagline {
+  color: #ffffffa6;
+}
+
+[data-theme="dark"] .brand-dropdown-footer {
+  background: #191a1a;
+  border-color: #2e3033;
+}
+
+[data-theme="dark"] code {
+  background: #252626;
+  color: #bbaeff;
+}
+
+[data-theme="dark"] a {
+  color: #bbaeff;
+}
+
+/* Token Browser dark mode */
+[data-theme="dark"] .search-input {
+  background: #111418;
+  border-color: #2e3033;
+  color: #ffffffd9;
+}
+
+[data-theme="dark"] .search-input::placeholder {
+  color: #ffffffa6;
+}
+
+[data-theme="dark"] .search-input:focus {
+  border-color: #6150b2;
+  box-shadow: 0 0 0 3px rgba(97, 56, 216, 0.2);
+}
+
+[data-theme="dark"] .filter-tabs {
+  background: #191a1a;
+}
+
+[data-theme="dark"] .tab {
+  color: #ffffffa6;
+  background: transparent;
+}
+
+[data-theme="dark"] .tab:hover:not(.active) {
+  color: #ffffffd9;
+  background: #2e3033;
+}
+
+[data-theme="dark"] .tab.active {
+  background: #252626;
+  color: #ffffffd9;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .chip {
+  border-color: #36343a;
+  color: #ffffffa6;
+}
+
+[data-theme="dark"] .chip:hover {
+  background: #252626;
+  border-color: #403e44;
+}
+
+[data-theme="dark"] .chip.active {
+  background: #30334b;
+  border-color: #6150b2;
+  color: #bbaeff;
+}
+
+[data-theme="dark"] .chip-count {
+  background: #2e3033;
+  color: #ffffffa6;
+}
+
+[data-theme="dark"] .chip.active .chip-count {
+  background: rgba(97, 56, 216, 0.3);
+  color: #bbaeff;
+}
+
+[data-theme="dark"] .category-count {
+  background: #2e3033;
+  color: #ffffffa6;
+}
+
+[data-theme="dark"] .token-card {
+  background: #111418;
+  border-color: #2e3033;
+}
+
+[data-theme="dark"] .token-card:hover {
+  border-color: #403e44;
+}
+
+[data-theme="dark"] .token-swatch {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .copy-button {
+  background: #252626;
+  border-color: #36343a;
+  color: #ffffffa6;
+}
+
+[data-theme="dark"] .copy-button:hover {
+  background: #2e3033;
+  border-color: #403e44;
+}
+
+[data-theme="dark"] .empty-state {
+  background: #111418;
+}
+
+[data-theme="dark"] .empty-state pre {
+  background: #191a1a;
+}

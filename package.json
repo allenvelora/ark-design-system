@@ -1,0 +1,25 @@
+{
+  "name": "ark-design-system",
+  "version": "0.1.0",
+  "description": "Cross-Product Design System Operating Model",
+  "private": true,
+  "workspaces": [
+    "tokens",
+    "dashboard",
+    "examples/*"
+  ],
+  "scripts": {
+    "tokens:build": "npm run build -w @ark/tokens",
+    "tokens:watch": "npm run watch -w @ark/tokens",
+    "dashboard:dev": "npm run dev -w @ark/dashboard",
+    "dashboard:build": "npm run build -w @ark/dashboard",
+    "setup": "npm install && npm run tokens:build",
+    "dev": "npm run tokens:build && npm run dashboard:dev"
+  },
+  "keywords": [
+    "design-system",
+    "design-tokens",
+    "style-dictionary"
+  ],
+  "license": "MIT"
+}

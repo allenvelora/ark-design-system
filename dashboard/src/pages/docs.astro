@@ -1,0 +1,373 @@
+---
+import Layout from '../layouts/Layout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Simple markdown renderer for server-side use
+function renderMarkdown(content: string): string {
+  if (!content) return '';
+  
+  // Escape HTML
+  let html = content
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+  
+  // Headers
+  html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+  html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+  html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+  
+  // Horizontal rules
+  html = html.replace(/^---$/gim, '<hr />');
+  
+  // Bold
+  html = html.replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>');
+  
+  // Italic
+  html = html.replace(/\*(.*?)\*/gim, '<em>$1</em>');
+  
+  // Code blocks (must come before inline code)
+  html = html.replace(/```[\w]*\n([\s\S]*?)```/gim, '<pre><code>$1</code></pre>');
+  
+  // Inline code
+  html = html.replace(/`([^`\n]+)`/gim, '<code>$1</code>');
+  
+  // Line breaks to paragraphs
+  html = html.split(/\n\n+/).map(block => {
+    block = block.trim();
+    if (!block) return '';
+    if (block.startsWith('<h') || block.startsWith('<pre') || block.startsWith('<ul') || block.startsWith('<hr')) {
+      return block;
+    }
+    return `<p>${block.replace(/\n/g, '<br />')}</p>`;
+  }).join('\n');
+  
+  return html;
+}
+
+// Load documentation files
+const docsPath = path.join(process.cwd(), '..', 'docs');
+
+function getDocFiles(dir: string, prefix = ''): { path: string; name: string; content: string }[] {
+  const files: { path: string; name: string; content: string }[] = [];
+  
+  try {
+    const items = fs.readdirSync(dir);
+    
+    for (const item of items) {
+      const fullPath = path.join(dir, item);
+      const stat = fs.statSync(fullPath);
+      
+      if (stat.isDirectory()) {
+        files.push(...getDocFiles(fullPath, `${prefix}${item}/`));
+      } else if (item.endsWith('.md')) {
+        const content = fs.readFileSync(fullPath, 'utf-8');
+        const name = item.replace('.md', '');
+        files.push({
+          path: `${prefix}${name}`,
+          name: name.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase()),
+          content
+        });
+      }
+    }
+  } catch (e) {
+    console.warn('Could not read docs directory');
+  }
+  
+  return files;
+}
+
+const docFiles = getDocFiles(docsPath);
+
+// Organize by section
+const sections: Record<string, typeof docFiles> = {};
+docFiles.forEach(doc => {
+  const parts = doc.path.split('/');
+  const section = parts.length > 1 ? parts[0] : 'general';
+  if (!sections[section]) {
+    sections[section] = [];
+  }
+  sections[section].push(doc);
+});
+---
+
+<Layout title="Documentation">
+  <div class="docs-page">
+    <header class="page-header">
+      <h1>Documentation</h1>
+      <p class="subtitle">Governance, principles, and guides • Edit files in <code>docs/</code></p>
+    </header>
+    
+    <div class="docs-layout">
+      <!-- Sidebar Navigation -->
+      <aside class="docs-sidebar">
+        <nav class="docs-nav">
+          {Object.entries(sections).map(([section, docs]) => (
+            <div class="nav-section">
+              <h3 class="nav-section-title">
+                {section.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase())}
+              </h3>
+              <ul class="nav-list">
+                {docs.map(doc => (
+                  <li>
+                    <a 
+                      href={`#${doc.path.replace(/\//g, '-')}`}
+                      class="nav-link"
+                    >
+                      {doc.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </nav>
+      </aside>
+      
+      <!-- Main Content -->
+      <main class="docs-content">
+        {Object.entries(sections).map(([section, docs]) => (
+          <section class="content-section">
+            <h2 class="section-heading" id={section}>
+              {section.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase())}
+            </h2>
+            
+            {docs.map(doc => (
+              <article class="doc-article" id={doc.path.replace(/\//g, '-')}>
+                <div class="doc-header">
+                  <h3>{doc.name}</h3>
+                  <span class="doc-path">docs/{doc.path}.md</span>
+                </div>
+                <div class="doc-content markdown-body" set:html={renderMarkdown(doc.content)} />
+              </article>
+            ))}
+          </section>
+        ))}
+      </main>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // Simple markdown-like rendering (basic)
+  // In production, you'd use a proper markdown parser
+</script>
+
+<style>
+  .docs-page {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .page-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+  
+  .subtitle {
+    color: var(--color-text-muted, #a1a1aa);
+    font-size: 0.875rem;
+  }
+  
+  .docs-layout {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 3rem;
+  }
+  
+  @media (max-width: 900px) {
+    .docs-layout {
+      grid-template-columns: 1fr;
+    }
+    
+    .docs-sidebar {
+      display: none;
+    }
+  }
+  
+  /* Sidebar */
+  .docs-sidebar {
+    position: sticky;
+    top: 100px;
+    align-self: start;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+  }
+  
+  .nav-section {
+    margin-bottom: 1.5rem;
+  }
+  
+  .nav-section-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--color-text-muted, #a1a1aa);
+    margin-bottom: 0.5rem;
+  }
+  
+  .nav-list {
+    list-style: none;
+  }
+  
+  .nav-link {
+    display: block;
+    padding: 0.375rem 0;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #52525b);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    padding-left: 0.75rem;
+  }
+  
+  .nav-link:hover {
+    color: var(--color-text-primary, #18181b);
+    border-left-color: var(--color-border-strong, #d4d4d8);
+  }
+  
+  /* Content */
+  .docs-content {
+    min-width: 0;
+  }
+  
+  .content-section {
+    margin-bottom: 3rem;
+  }
+  
+  .section-heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--color-border-default, #e4e4e7);
+    text-transform: capitalize;
+  }
+  
+  .doc-article {
+    background: var(--color-surface-primary, #fff);
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+  
+  .doc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: var(--color-surface-secondary, #fafafa);
+    border-bottom: 1px solid var(--color-border-default, #e4e4e7);
+  }
+  
+  .doc-header h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+  
+  .doc-path {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-muted, #a1a1aa);
+  }
+  
+  .doc-content {
+    padding: 1.5rem;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+  
+  /* Markdown styling */
+  .markdown-body {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--color-text-secondary, #52525b);
+  }
+  
+  .markdown-body h1,
+  .markdown-body h2,
+  .markdown-body h3 {
+    color: var(--color-text-primary, #18181b);
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+  }
+  
+  .markdown-body h1 { font-size: 1.5rem; }
+  .markdown-body h2 { font-size: 1.25rem; }
+  .markdown-body h3 { font-size: 1rem; }
+  
+  .markdown-body p {
+    margin-bottom: 1em;
+  }
+  
+  .markdown-body ul,
+  .markdown-body ol {
+    margin-bottom: 1em;
+    padding-left: 1.5em;
+  }
+  
+  .markdown-body li {
+    margin-bottom: 0.25em;
+  }
+  
+  .markdown-body code {
+    background: var(--color-surface-tertiary, #f4f4f5);
+    padding: 0.125em 0.375em;
+    border-radius: 4px;
+    font-size: 0.875em;
+  }
+  
+  .markdown-body pre {
+    background: var(--color-surface-tertiary, #f4f4f5);
+    padding: 1rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin-bottom: 1em;
+  }
+  
+  .markdown-body pre code {
+    background: none;
+    padding: 0;
+  }
+  
+  .markdown-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1em;
+  }
+  
+  .markdown-body th,
+  .markdown-body td {
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    padding: 0.5rem;
+    text-align: left;
+  }
+  
+  .markdown-body th {
+    background: var(--color-surface-secondary, #fafafa);
+    font-weight: 600;
+  }
+  
+  .markdown-body blockquote {
+    border-left: 3px solid var(--color-border-strong, #d4d4d8);
+    padding-left: 1rem;
+    margin-left: 0;
+    color: var(--color-text-muted, #a1a1aa);
+    margin-bottom: 1em;
+  }
+  
+  .markdown-body hr {
+    border: none;
+    border-top: 1px solid var(--color-border-default, #e4e4e7);
+    margin: 2em 0;
+  }
+  
+  .markdown-body strong {
+    color: var(--color-text-primary, #18181b);
+    font-weight: 600;
+  }
+</style>
+

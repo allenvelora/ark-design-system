@@ -1,0 +1,1359 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+export async function getStaticPaths() {
+  const componentsDir = path.join(process.cwd(), 'src', 'data', 'components');
+  const files = fs.readdirSync(componentsDir).filter(f => f.endsWith('.json') && f !== 'index.json');
+  
+  return files.map(file => ({
+    params: { slug: file.replace('.json', '') }
+  }));
+}
+
+const { slug } = Astro.params;
+const componentPath = path.join(process.cwd(), 'src', 'data', 'components', `${slug}.json`);
+
+let component;
+try {
+  component = JSON.parse(fs.readFileSync(componentPath, 'utf-8'));
+} catch (e) {
+  return Astro.redirect('/404');
+}
+
+// Status badge colors
+const statusColors = {
+  stable: { bg: '#dcfce7', text: '#166534', label: 'Stable' },
+  beta: { bg: '#fef3c7', text: '#92400e', label: 'Beta' },
+  draft: { bg: '#e0e7ff', text: '#3730a3', label: 'Draft' },
+  deprecated: { bg: '#fee2e2', text: '#991b1b', label: 'Deprecated' }
+};
+
+const status = statusColors[component.status] || statusColors.draft;
+---
+
+<Layout title={`${component.name} | Components`}>
+  <!-- Sticky Header (Full Width) -->
+  <div class="sticky-header-wrapper" id="sticky-header">
+    <div class="sticky-header-inner">
+      <!-- Top Row: Breadcrumb + Collapse Toggle -->
+      <div class="sticky-header-top">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Components</a>
+          <span class="separator">/</span>
+          <span class="current">{component.name}</span>
+        </nav>
+        <button class="collapse-toggle" id="collapse-toggle" aria-label="Toggle navigation" title="Collapse/Expand">
+          <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Collapsible Content: TOC + Resource Links -->
+      <div class="sticky-header-content" id="sticky-content">
+        <div class="quick-nav-row">
+          <nav class="quick-nav">
+            <span class="nav-label">Jump to:</span>
+            <a href="#overview">Overview</a>
+            <a href="#usage">Usage</a>
+            {component.anatomy && <a href="#anatomy">Anatomy</a>}
+            {component.variants && <a href="#variants">Variants</a>}
+            {component.props && <a href="#props">Props</a>}
+            {component.tokens && <a href="#tokens">Tokens</a>}
+            {component.accessibility && <a href="#accessibility">Accessibility</a>}
+            {component.bestPractices && <a href="#best-practices">Best Practices</a>}
+            {component.examples && <a href="#examples">Examples</a>}
+          </nav>
+          <div class="quick-nav-links">
+            {component.figmaUrl && (
+              <a href={component.figmaUrl} class="resource-link compact-link" target="_blank" rel="noopener">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M5.5 8.5a3 3 0 0 1 3-3h3v6h-3a3 3 0 0 1-3-3zM8.5 2a3 3 0 0 0-3 3v3.5a3 3 0 0 0 3 3h3V2h-3z"/>
+                  <path d="M11.5 2v9.5h3a3 3 0 0 0 0-6h-3V2zM11.5 14.5v3a3 3 0 1 0 3-3h-3z"/>
+                  <circle cx="17.5" cy="8.5" r="3"/>
+                </svg>
+                Figma
+              </a>
+            )}
+            {component.githubUrl && (
+              <a href={component.githubUrl} class="resource-link compact-link" target="_blank" rel="noopener">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.605-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+                GitHub
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="component-page">
+    
+    <!-- Full Header (hidden when sticky) -->
+    <header class="page-header" id="full-header">
+      <div class="header-top">
+        <h1>{component.name}</h1>
+        <span class="status-badge" style={`background: ${status.bg}; color: ${status.text}`}>
+          {status.label}
+        </span>
+      </div>
+      <p class="description">{component.description}</p>
+      
+      <div class="header-links">
+        {component.figmaUrl && (
+          <a href={component.figmaUrl} class="resource-link" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M5.5 8.5a3 3 0 0 1 3-3h3v6h-3a3 3 0 0 1-3-3zM8.5 2a3 3 0 0 0-3 3v3.5a3 3 0 0 0 3 3h3V2h-3z"/>
+              <path d="M11.5 2v9.5h3a3 3 0 0 0 0-6h-3V2zM11.5 14.5v3a3 3 0 1 0 3-3h-3z"/>
+              <circle cx="17.5" cy="8.5" r="3"/>
+            </svg>
+            Figma
+          </a>
+        )}
+        {component.githubUrl && (
+          <a href={component.githubUrl} class="resource-link" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.605-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            GitHub
+          </a>
+        )}
+      </div>
+    </header>
+    
+    <!-- Overview Section -->
+    <section id="overview" class="section">
+      <h2>Overview</h2>
+      {component.overview && (
+        <>
+          <p class="section-intro">{component.overview.purpose}</p>
+          
+          {component.overview.principles && (
+            <div class="principles">
+              <h3>Design Principles</h3>
+              <ul>
+                {component.overview.principles.map((p: string) => (
+                  <li>{p}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </>
+      )}
+    </section>
+    
+    <!-- Usage Section -->
+    <section id="usage" class="section">
+      <h2>Usage Guidelines</h2>
+      
+      <div class="usage-grid">
+        {component.whenToUse && (
+          <div class="usage-card do">
+            <h3>
+              <span class="icon">✓</span>
+              When to use
+            </h3>
+            <ul>
+              {component.whenToUse.map((item: string) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        
+        {component.whenNotToUse && (
+          <div class="usage-card dont">
+            <h3>
+              <span class="icon">✗</span>
+              When not to use
+            </h3>
+            <ul>
+              {component.whenNotToUse.map((item: string) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </section>
+    
+    <!-- Anatomy Section -->
+    {component.anatomy && (
+      <section id="anatomy" class="section">
+        <h2>Anatomy</h2>
+        <p class="section-intro">{component.anatomy.description}</p>
+        
+        <div class="anatomy-diagram">
+          <div class="anatomy-placeholder">
+            <span>Component Diagram</span>
+            <small>Visual anatomy coming soon</small>
+          </div>
+        </div>
+        
+        <div class="anatomy-parts">
+          {component.anatomy.parts.map((part: any, index: number) => (
+            <div class="anatomy-part">
+              <div class="part-number">{index + 1}</div>
+              <div class="part-content">
+                <h4>
+                  {part.name}
+                  {part.required && <span class="required-badge">Required</span>}
+                </h4>
+                <p>{part.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+    
+    <!-- Variants Section -->
+    {component.variants && (
+      <section id="variants" class="section">
+        <h2>Variants</h2>
+        
+        <div class="variants-grid">
+          {component.variants.map((variant: any) => (
+            <div class="variant-card">
+              <div class="variant-preview">
+                <span class="variant-placeholder">{variant.name}</span>
+              </div>
+              <div class="variant-content">
+                <h3>{variant.name}</h3>
+                <p>{variant.description}</p>
+                <div class="variant-meta">
+                  <span class="meta-label">Use case:</span>
+                  <span>{variant.useCase}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+    
+    <!-- Sizes Section -->
+    {component.sizes && (
+      <section id="sizes" class="section">
+        <h2>Sizes</h2>
+        
+        <div class="sizes-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Size</th>
+                <th>Height</th>
+                <th>Use Case</th>
+              </tr>
+            </thead>
+            <tbody>
+              {component.sizes.map((size: any) => (
+                <tr>
+                  <td><code>{size.name}</code></td>
+                  <td>{size.height || size.padding}</td>
+                  <td>{size.useCase}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    )}
+    
+    <!-- States Section -->
+    {component.states && (
+      <section id="states" class="section">
+        <h2>States</h2>
+        
+        <div class="states-grid">
+          {component.states.map((state: any) => (
+            <div class="state-card">
+              <h4>{state.name}</h4>
+              <p>{state.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+    
+    <!-- Props Section -->
+    {component.props && (
+      <section id="props" class="section">
+        <h2>Props / API</h2>
+        <p class="section-intro">Configure the component using these properties.</p>
+        
+        <div class="props-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Prop</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              {component.props.map((prop: any) => (
+                <tr>
+                  <td><code class="prop-name">{prop.name}</code></td>
+                  <td><code class="prop-type">{prop.type}</code></td>
+                  <td><code class="prop-default">{prop.default}</code></td>
+                  <td>{prop.description}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    )}
+    
+    <!-- Tokens Section -->
+    {component.tokens && (
+      <section id="tokens" class="section">
+        <h2>Design Tokens</h2>
+        <p class="section-intro">{component.tokens.description}</p>
+        
+        {component.tokens.categories.map((category: any) => (
+          <div class="token-category">
+            <h3>{category.name}</h3>
+            <div class="token-list">
+              {category.tokens.map((token: any) => (
+                <div class="token-item">
+                  <div class="token-preview">
+                    {token.name.includes('color') && (
+                      <span class="token-swatch" style={`background: ${token.value}`}></span>
+                    )}
+                    <code>{token.name}</code>
+                  </div>
+                  <div class="token-value">
+                    <code>{token.value}</code>
+                  </div>
+                  <div class="token-usage">{token.usage}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </section>
+    )}
+    
+    <!-- Accessibility Section -->
+    {component.accessibility && (
+      <section id="accessibility" class="section">
+        <h2>Accessibility</h2>
+        <p class="section-intro">{component.accessibility.description}</p>
+        
+        <div class="a11y-guidelines">
+          {component.accessibility.guidelines.map((guide: any) => (
+            <div class="a11y-item">
+              <h4>{guide.title}</h4>
+              <p>{guide.description}</p>
+            </div>
+          ))}
+        </div>
+        
+        {component.accessibility.wcagCriteria && (
+          <div class="wcag-criteria">
+            <h4>WCAG Criteria</h4>
+            <div class="criteria-list">
+              {component.accessibility.wcagCriteria.map((criterion: string) => (
+                <a href={`https://www.w3.org/WAI/WCAG21/Understanding/${criterion.replace('.', '')}`} class="criterion-badge" target="_blank" rel="noopener">
+                  {criterion}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </section>
+    )}
+    
+    <!-- Best Practices Section -->
+    {component.bestPractices && (
+      <section id="best-practices" class="section">
+        <h2>Best Practices</h2>
+        
+        <div class="practices-grid">
+          <div class="practice-card do">
+            <h3>
+              <span class="icon">✓</span>
+              Do
+            </h3>
+            <ul>
+              {component.bestPractices.do.map((item: string) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+          
+          <div class="practice-card dont">
+            <h3>
+              <span class="icon">✗</span>
+              Don't
+            </h3>
+            <ul>
+              {component.bestPractices.dont.map((item: string) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+    )}
+    
+    <!-- Examples Section -->
+    {component.examples && (
+      <section id="examples" class="section">
+        <h2>Examples</h2>
+        
+        <div class="examples-list">
+          {component.examples.map((example: any) => (
+            <div class="example-card">
+              <div class="example-header">
+                <h3>{example.title}</h3>
+                <p>{example.description}</p>
+              </div>
+              <div class="example-code">
+                <pre><code>{example.code}</code></pre>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+    
+    <!-- Related Components Section -->
+    {component.relatedComponents && (
+      <section id="related" class="section">
+        <h2>Related Components</h2>
+        
+        <div class="related-grid">
+          {component.relatedComponents.map((related: any) => (
+            <a href={related.url} class="related-card">
+              <h4>{related.name}</h4>
+              <p>{related.description}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+</Layout>
+
+<style>
+  .component-page {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  /* ==========================================================================
+     STICKY HEADER SYSTEM (Full-Width, Airbnb-style)
+     ========================================================================== */
+  
+  .sticky-header-wrapper {
+    position: sticky;
+    top: 68px; /* Below main header */
+    z-index: 90;
+    background: var(--color-surface-primary, #fff);
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    padding-left: calc(50vw - 50%);
+    padding-right: calc(50vw - 50%);
+    transition: all 0.25s ease;
+  }
+  
+  .sticky-header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0;
+  }
+  
+  .sticky-header-wrapper.is-stuck {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid var(--color-border-default, #e4e4e7);
+  }
+  
+  [data-theme="dark"] .sticky-header-wrapper {
+    background: var(--semantic-neutral-bg-default, #000);
+  }
+  
+  [data-theme="dark"] .sticky-header-wrapper.is-stuck {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    border-bottom-color: var(--semantic-neutral-border-default, #2e3033);
+  }
+  
+  /* Top Row with Breadcrumb and Toggle */
+  .sticky-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+  }
+  
+  .sticky-header-wrapper.is-stuck .sticky-header-top {
+    padding: 0.5rem 0 0.25rem 0;
+  }
+  
+  /* Collapse Toggle Button */
+  .collapse-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background: var(--color-surface-secondary, #f4f4f5);
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 6px;
+    color: var(--color-text-secondary, #52525b);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  
+  .sticky-header-wrapper.is-stuck .collapse-toggle {
+    display: flex;
+  }
+  
+  .collapse-toggle:hover {
+    background: var(--color-surface-tertiary, #e4e4e7);
+    color: var(--color-text-primary, #18181b);
+  }
+  
+  .collapse-toggle .chevron-icon {
+    transition: transform 0.2s ease;
+  }
+  
+  .sticky-header-wrapper.is-collapsed .collapse-toggle .chevron-icon {
+    transform: rotate(180deg);
+  }
+  
+  [data-theme="dark"] .collapse-toggle {
+    background: var(--semantic-neutral-bg-medium, #191a1a);
+    border-color: var(--semantic-neutral-border-default, #2e3033);
+    color: var(--semantic-neutral-text-weak, #ffffffa6);
+  }
+  
+  [data-theme="dark"] .collapse-toggle:hover {
+    background: var(--semantic-neutral-bg-hover, #252626);
+    color: var(--semantic-neutral-text-default, #ffffffd9);
+  }
+  
+  /* Collapsible Content */
+  .sticky-header-content {
+    max-height: 500px;
+    overflow: hidden;
+    transition: max-height 0.25s ease, opacity 0.2s ease;
+  }
+  
+  .sticky-header-wrapper.is-collapsed .sticky-header-content {
+    max-height: 0;
+    opacity: 0;
+  }
+  
+  /* Quick Nav Row (TOC + Resource Links) */
+  .quick-nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  
+  .quick-nav-links {
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+  
+  .sticky-header-wrapper.is-stuck .quick-nav-links {
+    display: flex;
+  }
+  
+  .compact-link {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  /* Breadcrumb */
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-text-muted, #71717a);
+    margin: 0;
+    transition: all 0.2s ease;
+  }
+  
+  .sticky-header-wrapper.is-stuck .breadcrumb {
+    font-size: 0.75rem;
+  }
+  
+  .breadcrumb a {
+    color: var(--color-text-secondary, #52525b);
+    text-decoration: none;
+  }
+  
+  .breadcrumb a:hover {
+    color: var(--brand-primary, #18181b);
+  }
+  
+  .breadcrumb .separator {
+    color: var(--color-text-muted, #a1a1aa);
+  }
+  
+  .breadcrumb .current {
+    color: var(--color-text-primary, #18181b);
+    font-weight: 500;
+  }
+  
+  [data-theme="dark"] .breadcrumb .current {
+    color: var(--semantic-neutral-text-default, #ffffffd9);
+  }
+  
+  /* Quick Navigation (Table of Contents) */
+  .quick-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--color-surface-secondary, #fafafa);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    flex: 1;
+  }
+  
+  .sticky-header-wrapper.is-stuck .quick-nav {
+    background: transparent;
+    padding: 0.375rem 0;
+    border-radius: 0;
+  }
+  
+  .sticky-header-wrapper.is-stuck .quick-nav-row {
+    border-top: 1px solid var(--color-border-default, #e4e4e7);
+    padding-top: 0.5rem;
+    padding-bottom: 0.25rem;
+  }
+  
+  [data-theme="dark"] .sticky-header-wrapper.is-stuck .quick-nav-row {
+    border-top-color: var(--semantic-neutral-border-default, #2e3033);
+  }
+  
+  [data-theme="dark"] .quick-nav {
+    background: var(--semantic-neutral-bg-medium, #191a1a);
+  }
+  
+  [data-theme="dark"] .sticky-header-wrapper.is-stuck .quick-nav {
+    background: transparent;
+    border-top-color: var(--semantic-neutral-border-default, #2e3033);
+  }
+  
+  .nav-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-muted, #71717a);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .sticky-header-wrapper.is-stuck .nav-label {
+    display: none;
+  }
+  
+  .quick-nav a {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #52525b);
+    text-decoration: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: all 0.15s ease;
+  }
+  
+  .sticky-header-wrapper.is-stuck .quick-nav a {
+    font-size: 0.8125rem;
+    padding: 0.25rem 0.375rem;
+  }
+  
+  .quick-nav a:hover {
+    background: var(--color-surface-tertiary, #f4f4f5);
+    color: var(--brand-primary, #18181b);
+  }
+  
+  .quick-nav a.active {
+    background: var(--brand-primary-light, #f4f4f5);
+    color: var(--brand-primary, #18181b);
+    font-weight: 500;
+  }
+  
+  [data-theme="dark"] .quick-nav a {
+    color: var(--semantic-neutral-text-weak, #ffffffa6);
+  }
+  
+  [data-theme="dark"] .quick-nav a:hover {
+    background: var(--semantic-neutral-bg-hover, #252626);
+    color: var(--semantic-neutral-text-default, #ffffffd9);
+  }
+  
+  /* ==========================================================================
+     FULL HEADER (Hidden in sticky state)
+     ========================================================================== */
+  
+  .page-header {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border-default, #e4e4e7);
+    transition: opacity 0.2s ease, max-height 0.3s ease;
+  }
+  
+  .sticky-header-wrapper.is-stuck ~ .component-page .page-header {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+  
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .page-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0;
+  }
+  
+  .status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+  }
+  
+  .description {
+    font-size: 1.125rem;
+    color: var(--color-text-secondary, #52525b);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  
+  .header-links {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  /* Resource links use shared styles from shared-styles.css */
+  /* Local overrides only */
+  .compact-link {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  .compact-link svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  /* Section Styles */
+  .section {
+    margin-bottom: 3rem;
+  }
+  
+  .section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border-default, #e4e4e7);
+  }
+  
+  .section h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+  
+  .section-intro {
+    color: var(--color-text-secondary, #52525b);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+  
+  /* Principles */
+  .principles ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .principles li {
+    padding-left: 1.5rem;
+    position: relative;
+  }
+  
+  .principles li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--brand-primary, #18181b);
+  }
+  
+  /* Usage Grid */
+  .usage-grid, .practices-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  
+  @media (max-width: 640px) {
+    .usage-grid, .practices-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .usage-card, .practice-card {
+    padding: 1.25rem;
+    border-radius: 12px;
+  }
+  
+  .usage-card.do, .practice-card.do {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+  }
+  
+  .usage-card.dont, .practice-card.dont {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+  }
+  
+  .usage-card h3, .practice-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .usage-card.do h3, .practice-card.do h3 { color: #166534; }
+  .usage-card.dont h3, .practice-card.dont h3 { color: #991b1b; }
+  
+  .usage-card .icon, .practice-card .icon {
+    font-size: 1rem;
+  }
+  
+  .usage-card ul, .practice-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .usage-card li, .practice-card li {
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--color-text-secondary, #52525b);
+  }
+  
+  /* Anatomy */
+  .anatomy-diagram {
+    background: var(--color-surface-secondary, #fafafa);
+    border-radius: 12px;
+    padding: 3rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+  }
+  
+  .anatomy-placeholder {
+    text-align: center;
+    color: var(--color-text-muted, #a1a1aa);
+  }
+  
+  .anatomy-placeholder span {
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .anatomy-placeholder small {
+    font-size: 0.75rem;
+  }
+  
+  .anatomy-parts {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .anatomy-part {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--color-surface-primary, #fff);
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 8px;
+  }
+  
+  .part-number {
+    width: 28px;
+    height: 28px;
+    background: var(--brand-primary, #18181b);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  
+  .part-content h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .required-badge {
+    font-size: 0.6875rem;
+    padding: 0.125rem 0.375rem;
+    background: var(--brand-primary-light, #f4f4f5);
+    color: var(--brand-primary, #18181b);
+    border-radius: 4px;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+  
+  .part-content p {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #52525b);
+    margin: 0;
+  }
+  
+  /* Variants Grid */
+  .variants-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+  
+  .variant-card {
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  .variant-preview {
+    background: var(--color-surface-secondary, #fafafa);
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100px;
+  }
+  
+  .variant-placeholder {
+    font-size: 0.875rem;
+    color: var(--color-text-muted, #a1a1aa);
+  }
+  
+  .variant-content {
+    padding: 1rem;
+  }
+  
+  .variant-content h3 {
+    font-size: 1rem;
+    margin-bottom: 0.375rem;
+  }
+  
+  .variant-content p {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #52525b);
+    margin-bottom: 0.75rem;
+  }
+  
+  .variant-meta {
+    font-size: 0.75rem;
+    color: var(--color-text-muted, #71717a);
+  }
+  
+  .meta-label {
+    font-weight: 600;
+  }
+  
+  /* Tables */
+  .sizes-table, .props-table {
+    overflow-x: auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+  
+  th, td {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--color-border-default, #e4e4e7);
+  }
+  
+  th {
+    font-weight: 600;
+    background: var(--color-surface-secondary, #fafafa);
+    color: var(--color-text-secondary, #52525b);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .prop-name {
+    color: var(--brand-primary, #18181b);
+    font-weight: 500;
+  }
+  
+  .prop-type {
+    color: var(--color-text-muted, #71717a);
+    font-size: 0.8125rem;
+  }
+  
+  .prop-default {
+    color: var(--color-text-secondary, #52525b);
+  }
+  
+  /* States Grid */
+  .states-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .state-card {
+    padding: 1rem;
+    background: var(--color-surface-secondary, #fafafa);
+    border-radius: 8px;
+  }
+  
+  .state-card h4 {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    margin-bottom: 0.375rem;
+  }
+  
+  .state-card p {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary, #52525b);
+    margin: 0;
+  }
+  
+  /* Tokens */
+  .token-category {
+    margin-bottom: 1.5rem;
+  }
+  
+  .token-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .token-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: var(--color-surface-secondary, #fafafa);
+    border-radius: 8px;
+  }
+  
+  .token-preview {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  .token-swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+  }
+  
+  .token-preview code {
+    font-size: 0.8125rem;
+    color: var(--brand-primary, #18181b);
+  }
+  
+  .token-value code {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary, #52525b);
+  }
+  
+  .token-usage {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted, #71717a);
+  }
+  
+  /* Accessibility */
+  .a11y-guidelines {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .a11y-item {
+    padding: 1rem;
+    background: var(--color-surface-secondary, #fafafa);
+    border-radius: 8px;
+  }
+  
+  .a11y-item h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.375rem;
+  }
+  
+  .a11y-item p {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #52525b);
+    margin: 0;
+  }
+  
+  .wcag-criteria {
+    padding: 1rem;
+    background: #eff6ff;
+    border-radius: 8px;
+    border: 1px solid #bfdbfe;
+  }
+  
+  .wcag-criteria h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #1e40af;
+  }
+  
+  .criteria-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .criterion-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    background: white;
+    border: 1px solid #bfdbfe;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #1e40af;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  
+  .criterion-badge:hover {
+    background: #1e40af;
+    color: white;
+  }
+  
+  /* Examples */
+  .examples-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .example-card {
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  .example-header {
+    padding: 1rem 1.25rem;
+    background: var(--color-surface-secondary, #fafafa);
+    border-bottom: 1px solid var(--color-border-default, #e4e4e7);
+  }
+  
+  .example-header h3 {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .example-header p {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #52525b);
+    margin: 0;
+  }
+  
+  .example-code {
+    padding: 1.25rem;
+    overflow-x: auto;
+  }
+  
+  .example-code pre {
+    margin: 0;
+  }
+  
+  .example-code code {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--color-text-primary, #18181b);
+  }
+  
+  /* Related Components */
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .related-card {
+    display: block;
+    padding: 1rem;
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  
+  .related-card:hover {
+    border-color: var(--brand-primary, #18181b);
+    box-shadow: var(--brand-shadow-card, 0 2px 8px rgba(0, 0, 0, 0.08));
+  }
+  
+  .related-card h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary, #18181b);
+    margin-bottom: 0.25rem;
+  }
+  
+  .related-card p {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary, #52525b);
+    margin: 0;
+  }
+</style>
+
+<script>
+  // Sticky Header Behavior (Full-width, Airbnb-style)
+  const stickyHeader = document.getElementById('sticky-header');
+  const fullHeader = document.getElementById('full-header');
+  const collapseToggle = document.getElementById('collapse-toggle');
+  const stickyContent = document.getElementById('sticky-content');
+  const quickNavLinks = document.querySelectorAll('.quick-nav a');
+  const sections = document.querySelectorAll('.section[id]');
+  
+  // Sticky state detection
+  if (stickyHeader && fullHeader) {
+    const headerObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) {
+            stickyHeader.classList.add('is-stuck');
+          } else {
+            stickyHeader.classList.remove('is-stuck');
+            // Reset collapsed state when returning to top
+            stickyHeader.classList.remove('is-collapsed');
+          }
+        });
+      },
+      {
+        rootMargin: '-68px 0px 0px 0px',
+        threshold: 0
+      }
+    );
+    
+    headerObserver.observe(fullHeader);
+  }
+  
+  // Collapse/Expand Toggle
+  if (collapseToggle && stickyHeader) {
+    // Load saved preference
+    const savedCollapsed = localStorage.getItem('component-nav-collapsed');
+    if (savedCollapsed === 'true') {
+      stickyHeader.classList.add('is-collapsed');
+    }
+    
+    collapseToggle.addEventListener('click', () => {
+      const isCollapsed = stickyHeader.classList.toggle('is-collapsed');
+      localStorage.setItem('component-nav-collapsed', isCollapsed.toString());
+    });
+  }
+  
+  // Highlight active section in table of contents
+  if (sections.length > 0 && quickNavLinks.length > 0) {
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.getAttribute('id');
+            
+            quickNavLinks.forEach(link => link.classList.remove('active'));
+            
+            const activeLink = document.querySelector(`.quick-nav a[href="#${id}"]`);
+            if (activeLink) {
+              activeLink.classList.add('active');
+            }
+          }
+        });
+      },
+      {
+        rootMargin: '-150px 0px -60% 0px',
+        threshold: 0
+      }
+    );
+    
+    sections.forEach(section => sectionObserver.observe(section));
+  }
+  
+  // Smooth scroll for quick nav links
+  quickNavLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href')?.slice(1);
+      const targetSection = document.getElementById(targetId || '');
+      
+      if (targetSection) {
+        // Expand if collapsed when clicking a link
+        if (stickyHeader?.classList.contains('is-collapsed')) {
+          stickyHeader.classList.remove('is-collapsed');
+          localStorage.setItem('component-nav-collapsed', 'false');
+        }
+        
+        // Calculate offset based on whether we're in sticky state
+        const isStuck = stickyHeader?.classList.contains('is-stuck');
+        const offset = isStuck ? 160 : 200;
+        const targetPosition = targetSection.getBoundingClientRect().top + window.pageYOffset - offset;
+        
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
+</script>

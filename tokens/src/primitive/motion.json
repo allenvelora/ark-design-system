@@ -1,0 +1,75 @@
+{
+  "primitive": {
+    "duration": {
+      "$description": "Animation duration scale",
+      "instant": {
+        "$value": "0ms",
+        "$type": "duration",
+        "$description": "No animation"
+      },
+      "fast": {
+        "$value": "100ms",
+        "$type": "duration",
+        "$description": "Micro-interactions, tooltips"
+      },
+      "normal": {
+        "$value": "200ms",
+        "$type": "duration",
+        "$description": "Default transitions"
+      },
+      "slow": {
+        "$value": "300ms",
+        "$type": "duration",
+        "$description": "Expanding content, modals"
+      },
+      "slower": {
+        "$value": "400ms",
+        "$type": "duration",
+        "$description": "Complex animations"
+      },
+      "slowest": {
+        "$value": "500ms",
+        "$type": "duration",
+        "$description": "Page transitions"
+      }
+    },
+    "easing": {
+      "$description": "Animation easing functions",
+      "linear": {
+        "$value": [0, 0, 1, 1],
+        "$type": "cubicBezier",
+        "$description": "Linear motion - use for opacity changes"
+      },
+      "ease": {
+        "$value": [0.25, 0.1, 0.25, 1],
+        "$type": "cubicBezier",
+        "$description": "Default ease - subtle acceleration/deceleration"
+      },
+      "easeIn": {
+        "$value": [0.42, 0, 1, 1],
+        "$type": "cubicBezier",
+        "$description": "Ease in - elements exiting view"
+      },
+      "easeOut": {
+        "$value": [0, 0, 0.58, 1],
+        "$type": "cubicBezier",
+        "$description": "Ease out - elements entering view"
+      },
+      "easeInOut": {
+        "$value": [0.42, 0, 0.58, 1],
+        "$type": "cubicBezier",
+        "$description": "Ease in-out - elements moving within view"
+      },
+      "spring": {
+        "$value": [0.175, 0.885, 0.32, 1.275],
+        "$type": "cubicBezier",
+        "$description": "Spring - bouncy feel for emphasis"
+      },
+      "bounce": {
+        "$value": [0.68, -0.55, 0.265, 1.55],
+        "$type": "cubicBezier",
+        "$description": "Bounce - playful interactions"
+      }
+    }
+  }
+}

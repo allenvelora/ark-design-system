@@ -1,0 +1,199 @@
+/**
+ * Brand Override System
+ * Maps semantic primary tokens to brand-specific values
+ * This file provides the "magic" that makes switching brands work
+ */
+
+/* ==========================================================================
+   NEUTRAL (White Label) - Colorless, professional foundation
+   Uses only neutral grays - no brand color
+   ========================================================================== */
+[data-brand="neutral"] {
+  /* Neutral uses grayscale - no vibrant brand color */
+  --brand-primary: #18181b;
+  --brand-primary-hover: #27272a;
+  --brand-primary-light: #f4f4f5;
+  --brand-primary-text: #18181b;
+  --brand-accent: #52525b;
+  --brand-accent-light: #fafafa;
+  
+  /* Visual characteristics - balanced, professional */
+  --brand-radius-button: 8px;
+  --brand-radius-card: 12px;
+  --brand-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --brand-transition-duration: 200ms;
+  --brand-transition-easing: ease;
+  
+  /* Override semantic tokens to neutral */
+  --semantic-primary-bg-strong: var(--brand-primary);
+  --semantic-primary-bg-strong-hover: var(--brand-primary-hover);
+  --semantic-primary-bg-default: var(--brand-primary-light);
+  --semantic-primary-text-default: var(--brand-primary-text);
+  --semantic-btn-bg-primary: var(--brand-primary);
+  --semantic-btn-bg-primary-hover: var(--brand-primary-hover);
+  --semantic-nav-bg-strong: var(--brand-primary);
+  --semantic-focus-ring-primary: rgba(24, 24, 27, 0.15);
+}
+
+/* ==========================================================================
+   APLOS - Formal, Professional, Serious
+   Characteristics: Minimal radius, crisp shadows, structured typography
+   ========================================================================== */
+[data-brand="aplos"] {
+  /* Primary: Teal/Cyan - conveys trust and professionalism */
+  --brand-primary: #006c9b;
+  --brand-primary-hover: #005580;
+  --brand-primary-light: #edf5fa;
+  --brand-primary-text: #006c9b;
+  --brand-accent: #73ba2c;
+  --brand-accent-light: #f6fcf0;
+  
+  /* Visual characteristics - minimal, structured */
+  --brand-radius-button: 4px;
+  --brand-radius-card: 8px;
+  --brand-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --brand-transition-duration: 150ms;
+  --brand-transition-easing: cubic-bezier(0.25, 0.1, 0.25, 1);
+  
+  /* Override semantic primary tokens */
+  --semantic-primary-bg-strong: var(--brand-primary);
+  --semantic-primary-bg-strong-hover: var(--brand-primary-hover);
+  --semantic-primary-bg-default: var(--brand-primary-light);
+  --semantic-primary-text-default: var(--brand-primary-text);
+  --semantic-btn-bg-primary: var(--brand-primary);
+  --semantic-btn-bg-primary-hover: var(--brand-primary-hover);
+  --semantic-nav-bg-strong: var(--brand-primary);
+  --semantic-focus-ring-primary: rgba(0, 108, 155, 0.2);
+}
+
+/* ==========================================================================
+   KEELA - Nurturing, Supportive, Warm, Balanced
+   Characteristics: Soft radius, warm shadows, friendly typography
+   ========================================================================== */
+[data-brand="keela"] {
+  /* Primary: Purple - conveys creativity and warmth */
+  --brand-primary: #6f3dc4;
+  --brand-primary-hover: #5c32a5;
+  --brand-primary-light: #f6f4fe;
+  --brand-primary-text: #6f3dc4;
+  --brand-accent: #22c55e;
+  --brand-accent-light: #f0fdf4;
+  
+  /* Visual characteristics - soft, warm */
+  --brand-radius-button: 8px;
+  --brand-radius-card: 12px;
+  --brand-shadow-card: 0 4px 12px rgba(111, 61, 196, 0.08);
+  --brand-transition-duration: 200ms;
+  --brand-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Override semantic primary tokens */
+  --semantic-primary-bg-strong: var(--brand-primary);
+  --semantic-primary-bg-strong-hover: var(--brand-primary-hover);
+  --semantic-primary-bg-default: var(--brand-primary-light);
+  --semantic-primary-text-default: var(--brand-primary-text);
+  --semantic-btn-bg-primary: var(--brand-primary);
+  --semantic-btn-bg-primary-hover: var(--brand-primary-hover);
+  --semantic-nav-bg-strong: var(--brand-primary);
+  --semantic-focus-ring-primary: rgba(111, 61, 196, 0.2);
+}
+
+/* ==========================================================================
+   RAISELY - Playful, Emotional, Delightful, Creative
+   Characteristics: Rounded/pill radius, playful shadows, dynamic typography
+   ========================================================================== */
+[data-brand="raisely"] {
+  /* Primary: Vibrant Purple - conveys creativity and energy */
+  --brand-primary: #6138d8;
+  --brand-primary-hover: #4d26bf;
+  --brand-primary-light: #f5f2ff;
+  --brand-primary-text: #6138d8;
+  --brand-accent: #fa60de;
+  --brand-accent-light: #ffebfd;
+  
+  /* Visual characteristics - playful, expressive */
+  --brand-radius-button: 9999px;
+  --brand-radius-card: 16px;
+  --brand-shadow-card: 0 8px 24px rgba(97, 56, 216, 0.12);
+  --brand-transition-duration: 250ms;
+  --brand-transition-easing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  
+  /* Override semantic primary tokens */
+  --semantic-primary-bg-strong: var(--brand-primary);
+  --semantic-primary-bg-strong-hover: var(--brand-primary-hover);
+  --semantic-primary-bg-default: var(--brand-primary-light);
+  --semantic-primary-text-default: var(--brand-primary-text);
+  --semantic-btn-bg-primary: var(--brand-primary);
+  --semantic-btn-bg-primary-hover: var(--brand-primary-hover);
+  --semantic-nav-bg-strong: var(--brand-primary);
+  --semantic-focus-ring-primary: rgba(97, 56, 216, 0.25);
+}
+
+/* ==========================================================================
+   COMPONENT OVERRIDES - Apply brand characteristics to components
+   ========================================================================== */
+
+/* Buttons */
+.btn-primary,
+button[data-variant="primary"],
+.button-primary {
+  background: var(--brand-primary);
+  border-radius: var(--brand-radius-button);
+  transition: all var(--brand-transition-duration) var(--brand-transition-easing);
+}
+
+.btn-primary:hover,
+button[data-variant="primary"]:hover,
+.button-primary:hover {
+  background: var(--brand-primary-hover);
+}
+
+/* Cards */
+.card,
+[data-component="card"] {
+  border-radius: var(--brand-radius-card);
+  box-shadow: var(--brand-shadow-card);
+  transition: all var(--brand-transition-duration) var(--brand-transition-easing);
+}
+
+/* Links and interactive elements */
+/* Note: .resource-link has its own styling in shared-styles.css */
+/* Note: .contribution-btn.primary has white text on dark background */
+a:not(.nav-link):not(.logo):not(.resource-link):not(.contribution-btn) {
+  color: var(--brand-primary-text);
+}
+
+/* Focus states */
+:focus-visible {
+  outline: 2px solid var(--brand-primary);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   BRAND-SPECIFIC TYPOGRAPHY ADJUSTMENTS
+   These only affect content areas, not global navigation
+   ========================================================================== */
+
+/* Aplos: More structured, formal */
+[data-brand="aplos"] {
+  --semantic-text-heading-h1-letter-spacing: -0.01em;
+}
+
+[data-brand="aplos"] h1,
+[data-brand="aplos"] h2,
+[data-brand="aplos"] h3 {
+  letter-spacing: -0.01em;
+}
+
+/* Keela: Slightly warmer, friendlier */
+[data-brand="keela"] {
+  --semantic-text-body-base-line-height: 1.6;
+}
+
+/* Raisely: More dynamic, expressive */
+[data-brand="raisely"] {
+  --semantic-text-heading-h1-letter-spacing: -0.03em;
+}
+
+[data-brand="raisely"] h1 {
+  letter-spacing: -0.03em;
+}

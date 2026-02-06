@@ -1,0 +1,54 @@
+/* Global styles using ARK Design System tokens */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-primitive-family-sans, 'Inter', sans-serif);
+  font-size: var(--typography-body-default-font-size, 16px);
+  line-height: var(--typography-body-default-line-height, 1.5);
+  color: var(--color-text-primary, #18181b);
+  background: var(--color-surface-primary, #fff);
+}
+
+/* Typography using semantic tokens */
+h1, h2, h3, h4 {
+  font-weight: var(--typography-heading-lg-font-weight, 600);
+  line-height: var(--typography-heading-lg-line-height, 1.25);
+  color: var(--color-text-primary, #18181b);
+}
+
+h1 {
+  font-size: var(--typography-heading-xl-font-size, 36px);
+}
+
+h2 {
+  font-size: var(--typography-heading-lg-font-size, 24px);
+}
+
+h3 {
+  font-size: var(--typography-heading-md-font-size, 20px);
+}
+
+p {
+  margin-bottom: var(--spacing-layout-stack-sm, 16px);
+  color: var(--color-text-secondary, #52525b);
+}
+
+a {
+  color: var(--color-text-link, #2563eb);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Focus states */
+:focus-visible {
+  outline: 2px solid var(--color-border-focus, #3b82f6);
+  outline-offset: 2px;
+}

@@ -1,0 +1,117 @@
+{
+  "id": "badge",
+  "name": "Badge",
+  "description": "Badges are small status indicators that highlight important information or draw attention to new content. They communicate status, count, or category at a glance.",
+  "status": "stable",
+  "version": "1.0.0",
+  
+  "overview": {
+    "purpose": "Badges provide compact visual indicators that quickly communicate status, category, or count without requiring additional interaction.",
+    "principles": [
+      "Badges should be instantly recognizable",
+      "Use consistent colors for similar meanings",
+      "Keep text short (1-2 words or numbers)",
+      "Don't overuse - too many badges create noise"
+    ]
+  },
+  
+  "whenToUse": [
+    "Showing status (active, pending, draft)",
+    "Indicating counts (notifications, unread messages)",
+    "Categorizing content (tags, labels)",
+    "Highlighting new or updated items"
+  ],
+  
+  "whenNotToUse": [
+    "For actionable items - use Button",
+    "For detailed status - use Alert",
+    "For user-generated tags - use Tag component",
+    "When the information needs more context"
+  ],
+  
+  "anatomy": {
+    "description": "Badges are simple elements with optional icon and text.",
+    "parts": [
+      {"name": "Container", "description": "The pill or rounded container", "required": true},
+      {"name": "Label", "description": "Short text or number", "required": true},
+      {"name": "Icon", "description": "Optional leading icon", "required": false},
+      {"name": "Dot", "description": "Status dot indicator variant", "required": false}
+    ]
+  },
+  
+  "variants": [
+    {"name": "Default", "description": "Neutral gray badge", "useCase": "General labels"},
+    {"name": "Primary", "description": "Brand-colored badge", "useCase": "Featured items, CTAs"},
+    {"name": "Success", "description": "Green badge", "useCase": "Active, complete, published"},
+    {"name": "Warning", "description": "Amber badge", "useCase": "Pending, needs attention"},
+    {"name": "Error", "description": "Red badge", "useCase": "Failed, rejected, critical"},
+    {"name": "Dot", "description": "Small circular indicator", "useCase": "Presence, notification dots"}
+  ],
+  
+  "sizes": [
+    {"name": "Small", "height": "20px", "fontSize": "11px", "useCase": "Compact UIs, tables"},
+    {"name": "Medium", "height": "24px", "fontSize": "12px", "useCase": "Default usage"},
+    {"name": "Large", "height": "28px", "fontSize": "14px", "useCase": "Prominent badges"}
+  ],
+  
+  "props": [
+    {"name": "variant", "type": "'default' | 'primary' | 'success' | 'warning' | 'error'", "default": "'default'", "description": "Visual style"},
+    {"name": "size", "type": "'sm' | 'md' | 'lg'", "default": "'md'", "description": "Badge size"},
+    {"name": "children", "type": "ReactNode", "default": "undefined", "description": "Badge content"},
+    {"name": "icon", "type": "ReactNode", "default": "undefined", "description": "Leading icon"},
+    {"name": "dot", "type": "boolean", "default": "false", "description": "Show as dot only"}
+  ],
+  
+  "tokens": {
+    "description": "Design tokens for Badge",
+    "categories": [
+      {
+        "name": "Colors",
+        "tokens": [
+          {"name": "--color-badge-default-bg", "value": "#f4f4f5", "usage": "Default background"},
+          {"name": "--color-badge-default-text", "value": "#52525b", "usage": "Default text"},
+          {"name": "--color-badge-success-bg", "value": "#dcfce7", "usage": "Success background"},
+          {"name": "--color-badge-success-text", "value": "#166534", "usage": "Success text"},
+          {"name": "--color-badge-error-bg", "value": "#fee2e2", "usage": "Error background"},
+          {"name": "--color-badge-error-text", "value": "#991b1b", "usage": "Error text"}
+        ]
+      },
+      {
+        "name": "Shape",
+        "tokens": [
+          {"name": "--radius-badge", "value": "9999px", "usage": "Pill shape radius"}
+        ]
+      }
+    ]
+  },
+  
+  "accessibility": {
+    "description": "Badges should not rely on color alone to convey meaning.",
+    "guidelines": [
+      {"title": "Color + Text", "description": "Use text labels, not just color"},
+      {"title": "Screen Readers", "description": "Include descriptive text for icons"},
+      {"title": "Contrast", "description": "Ensure text meets contrast requirements"}
+    ],
+    "wcagCriteria": ["1.4.1", "1.4.3"]
+  },
+  
+  "bestPractices": {
+    "do": [
+      "Use consistent colors for status across the app",
+      "Keep badge text very short",
+      "Position badges consistently",
+      "Use text + color, not color alone"
+    ],
+    "dont": [
+      "Don't use badges for primary actions",
+      "Don't overuse - creates visual noise",
+      "Don't use long text in badges"
+    ]
+  },
+  
+  "relatedComponents": [
+    {"name": "Tag", "description": "For user-editable labels", "url": "/components/tag"},
+    {"name": "Chip", "description": "For interactive selections", "url": "/components/chip"},
+    {"name": "Avatar", "description": "Often paired with badge for status", "url": "/components/avatar"}
+  ]
+}

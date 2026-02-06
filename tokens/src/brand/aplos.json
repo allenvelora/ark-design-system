@@ -1,0 +1,42 @@
+{
+  "brand": {
+    "aplos": {
+      "$description": "Aplos brand colors - Green/Blue theme",
+      "color": {
+        "primary": {
+          "$value": "#006c9b",
+          "$type": "color",
+          "$description": "Primary brand color"
+        },
+        "primary-hover": {
+          "$value": "#005580",
+          "$type": "color"
+        },
+        "primary-light": {
+          "$value": "#edf5fa",
+          "$type": "color"
+        },
+        "primary-dark": {
+          "$value": "#021019",
+          "$type": "color"
+        },
+        "accent": {
+          "$value": "#73ba2c",
+          "$type": "color",
+          "$description": "Accent color - Green"
+        },
+        "accent-light": {
+          "$value": "#f6fcf0",
+          "$type": "color"
+        }
+      },
+      "button": {
+        "radius": {
+          "$value": "6px",
+          "$type": "dimension",
+          "$description": "Slightly rounded buttons"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,766 @@
+{
+  "semantic": {
+    "neutral": {
+      "text": {
+        "default": {
+          "$value": "#ffffffd9",
+          "$type": "color"
+        },
+        "weak": {
+          "$value": "#ffffffa6",
+          "$type": "color"
+        },
+        "weak-hover": {
+          "$value": "#ffffffbf",
+          "$type": "color"
+        },
+        "disabled": {
+          "$value": "#ffffff73",
+          "$type": "color"
+        },
+        "foreground": {
+          "$value": "#ffffff",
+          "$type": "color"
+        }
+      },
+      "bg": {
+        "default": {
+          "$value": "#000000",
+          "$type": "color"
+        },
+        "weak": {
+          "$value": "#111418",
+          "$type": "color"
+        },
+        "medium": {
+          "$value": "#191a1a",
+          "$type": "color"
+        },
+        "hover": {
+          "$value": "#252626",
+          "$type": "color"
+        },
+        "active": {
+          "$value": "#252626",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#2e3033",
+          "$type": "color"
+        },
+        "disabled": {
+          "$value": "#252626",
+          "$type": "color"
+        }
+      },
+      "border": {
+        "default": {
+          "$value": "#2e3033",
+          "$type": "color"
+        },
+        "hover": {
+          "$value": "#36343a",
+          "$type": "color"
+        },
+        "active": {
+          "$value": "#403e44",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#514d57",
+          "$type": "color"
+        },
+        "strong-hover": {
+          "$value": "#716d78",
+          "$type": "color"
+        },
+        "disabled": {
+          "$value": "#716d78",
+          "$type": "color"
+        },
+        "weak": {
+          "$value": "#7e7a86",
+          "$type": "color"
+        }
+      },
+      "overlay": {
+        "$value": "#20134b",
+        "$type": "color"
+      }
+    },
+    "primary": {
+      "text": {
+        "default": {
+          "$value": "#bbaeff",
+          "$type": "color"
+        },
+        "hover": {
+          "$value": "#6c57d9",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#000000",
+          "$type": "color"
+        }
+      },
+      "bg": {
+        "default": {
+          "$value": "#11171f",
+          "$type": "color"
+        },
+        "hover": {
+          "$value": "#1b222c",
+          "$type": "color"
+        },
+        "active": {
+          "$value": "#30334b",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#9370fa",
+          "$type": "color"
+        },
+        "strong-hover": {
+          "$value": "#6c57d9",
+          "$type": "color"
+        }
+      },
+      "border": {
+        "default": {
+          "$value": "#1b222c",
+          "$type": "color"
+        },
+        "hover": {
+          "$value": "#444472",
+          "$type": "color"
+        },
+        "active": {
+          "$value": "#6150b2",
+          "$type": "color",
+          "$description": "Focus states"
+        },
+        "strong": {
+          "$value": "#444472",
+          "$type": "color"
+        },
+        "strong-hover": {
+          "$value": "#6c57d9",
+          "$type": "color"
+        }
+      }
+    },
+    "accent-1": {
+      "text": {
+        "default": {
+          "$value": "#f65cda",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#feebfb",
+          "$type": "color"
+        }
+      },
+      "bg": {
+        "default": {
+          "$value": "#3a1834",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#a7188d",
+          "$type": "color"
+        },
+        "medium": {
+          "$value": "#601d54",
+          "$type": "color"
+        }
+      },
+      "border": {
+        "default": {
+          "$value": "#501b46",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#a7188d",
+          "$type": "color"
+        },
+        "strong-hover": {
+          "$value": "#f65cda",
+          "$type": "color"
+        }
+      },
+      "icon": {
+        "default": {
+          "$value": "#fa60de",
+          "$type": "color"
+        },
+        "icon-hover": {
+          "$value": "#e04ac5",
+          "$type": "color"
+        }
+      }
+    },
+    "danger": {
+      "text": {
+        "default": {
+          "$value": "#f2555a",
+          "$type": "color"
+        },
+        "hover": {
+          "$value": "#ff8084",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#000000",
+          "$type": "color"
+        }
+      },
+      "bg": {
+        "default": {
+          "$value": "#3c181a",
+          "$type": "color"
+        },
+        "default-hover": {
+          "$value": "#671e22",
+          "$type": "color"
+        },
+        "weak": {
+          "$value": "#1f1315",
+          "$type": "color"
+        },
+        "weak-hover": {
+          "$value": "#3c181a",
+          "$type": "color"
+        },
+        "weak-active": {
+          "$value": "#481a1d",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#db3030",
+          "$type": "color"
+        },
+        "strong-hover": {
+          "$value": "#f2555a",
+          "$type": "color"
+        },
+        "strong-active": {
+          "$value": "#ff8084",
+          "$type": "color"
+        }
+      },
+      "border": {
+        "default": {
+          "$value": "#541b1f",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#aa2429",
+          "$type": "color"
+        },
+        "strong-hover": {
+          "$value": "#db3030",
+          "$type": "color"
+        },
+        "strong-active": {
+          "$value": "#f2555a",
+          "$type": "color"
+        }
+      }
+    },
+    "success": {
+      "text": {
+        "default": {
+          "$value": "#87cc27",
+          "$type": "color"
+        },
+        "hover": {
+          "$value": "#ecfbdd",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#1f2e0f",
+          "$type": "color"
+        }
+      },
+      "bg": {
+        "default": {
+          "$value": "#1a260d",
+          "$type": "color"
+        },
+        "hover": {
+          "$value": "#1f2e0f",
+          "$type": "color"
+        },
+        "active": {
+          "$value": "#243711",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#8ed52a",
+          "$type": "color"
+        }
+      },
+      "border": {
+        "default": {
+          "$value": "#243711",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#2e6716",
+          "$type": "color"
+        }
+      },
+      "icon": {
+        "strong": {
+          "$value": "#8ed52a",
+          "$type": "color"
+        }
+      }
+    },
+    "warning": {
+      "text": {
+        "default": {
+          "$value": "#ffcb47",
+          "$type": "color"
+        },
+        "hover": {
+          "$value": "#f1a10d",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#4a2900",
+          "$type": "color"
+        }
+      },
+      "bg": {
+        "default": {
+          "$value": "#341c00",
+          "$type": "color"
+        },
+        "hover": {
+          "$value": "#3f2200",
+          "$type": "color"
+        },
+        "active": {
+          "$value": "#4a2900",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#ffb224",
+          "$type": "color"
+        },
+        "strong-hover": {
+          "$value": "#f1a10d",
+          "$type": "color"
+        },
+        "strong-active": {
+          "$value": "#f1a10d",
+          "$type": "color"
+        }
+      },
+      "border": {
+        "default": {
+          "$value": "#4a2900",
+          "$type": "color"
+        },
+        "hover": {
+          "$value": "#573300",
+          "$type": "color"
+        },
+        "active": {
+          "$value": "#693f05",
+          "$type": "color"
+        },
+        "weak": {
+          "$value": "#341c00",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#824e00",
+          "$type": "color"
+        }
+      }
+    },
+    "accent-2": {
+      "text": {
+        "default": {
+          "$value": "#70d8e1",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#03353a",
+          "$type": "color"
+        },
+        "weak": {
+          "$value": "#70d8e1",
+          "$type": "color"
+        }
+      },
+      "bg": {
+        "default": {
+          "$value": "#03353a",
+          "$type": "color"
+        },
+        "weak": {
+          "$value": "#052629",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#70d8e1",
+          "$type": "color"
+        }
+      },
+      "border": {
+        "default": {
+          "$value": "#004f56",
+          "$type": "color"
+        },
+        "weak": {
+          "$value": "#03353a",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#00646d",
+          "$type": "color"
+        }
+      }
+    },
+    "nav": {
+      "bg-default": {
+        "$value": "#111724",
+        "$type": "color"
+      },
+      "bg-hover": {
+        "$value": "#30334b",
+        "$type": "color"
+      },
+      "bg-strong": {
+        "$value": "#444472",
+        "$type": "color"
+      },
+      "global-icon-strong": {
+        "$value": "#f1eefe",
+        "$type": "color"
+      },
+      "bg-strong-hover": {
+        "$value": "#6150b2",
+        "$type": "color"
+      }
+    },
+    "btn": {
+      "bg": {
+        "primary": {
+          "$value": "#6138d8",
+          "$type": "color"
+        },
+        "secondary": {
+          "$value": "#111724",
+          "$type": "color"
+        },
+        "primary-hover": {
+          "$value": "#9370fa",
+          "$type": "color"
+        },
+        "secondary-hover": {
+          "$value": "#30334b",
+          "$type": "color"
+        },
+        "disabled": {
+          "$value": "#aba8b2",
+          "$type": "color"
+        },
+        "danger": {
+          "$value": "#1f1315",
+          "$type": "color"
+        },
+        "danger-hover": {
+          "$value": "#3c181a",
+          "$type": "color"
+        },
+        "secondary-mono-hover": {
+          "$value": "#252626",
+          "$type": "color"
+        },
+        "plain-hover": {
+          "$value": "#36343a",
+          "$type": "color"
+        }
+      },
+      "text": {
+        "primary": {
+          "$value": "#ffffff",
+          "$type": "color"
+        },
+        "secondary": {
+          "$value": "#f5f4f6",
+          "$type": "color"
+        },
+        "disabled": {
+          "$value": "#403e44",
+          "$type": "color"
+        },
+        "danger": {
+          "$value": "#ff8084",
+          "$type": "color"
+        },
+        "danger-hover": {
+          "$value": "#db3030",
+          "$type": "color"
+        }
+      },
+      "border": {
+        "secondary": {
+          "$value": "#6150b2",
+          "$type": "color"
+        },
+        "secondary-mono": {
+          "$value": "#716d78",
+          "$type": "color"
+        },
+        "danger": {
+          "$value": "#f2555a",
+          "$type": "color"
+        },
+        "danger-hover": {
+          "$value": "#db3030",
+          "$type": "color"
+        }
+      },
+      "icon": {
+        "secondary": {
+          "$value": "#6c57d9",
+          "$type": "color"
+        }
+      },
+      "borderradius": {
+        "default": {
+          "$value": 1600,
+          "$type": "dimension"
+        }
+      }
+    },
+    "tooltip": {
+      "bg": {
+        "default": {
+          "$value": "#20134b",
+          "$type": "color"
+        }
+      },
+      "border": {
+        "default": {
+          "$value": "#444472",
+          "$type": "color"
+        }
+      }
+    },
+    "illustration": {
+      "outline": {
+        "$value": "#4d26bf",
+        "$type": "color"
+      },
+      "cyan": {
+        "outline": {
+          "$value": "#03353a",
+          "$type": "color"
+        },
+        "light": {
+          "$value": "#6ad2db",
+          "$type": "color"
+        },
+        "mid": {
+          "$value": "#40b9c4",
+          "$type": "color"
+        },
+        "strongest": {
+          "$value": "#093034",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#00646d",
+          "$type": "color"
+        }
+      },
+      "amber": {
+        "mid": {
+          "$value": "#f3ba63",
+          "$type": "color"
+        },
+        "outline": {
+          "$value": "#421b07",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#ee9d2b",
+          "$type": "color"
+        },
+        "light": {
+          "$value": "#ffe3a2",
+          "$type": "color"
+        }
+      },
+      "pink": {
+        "outline": {
+          "$value": "#3b0a32",
+          "$type": "color"
+        },
+        "mid": {
+          "$value": "#fa60de",
+          "$type": "color"
+        },
+        "light": {
+          "$value": "#ffacf4",
+          "$type": "color"
+        }
+      },
+      "green": {
+        "strong": {
+          "$value": "#80c225",
+          "$type": "color"
+        },
+        "light": {
+          "$value": "#9dd16a",
+          "$type": "color"
+        },
+        "outline": {
+          "$value": "#263209",
+          "$type": "color"
+        },
+        "mid": {
+          "$value": "#73ba2c",
+          "$type": "color"
+        }
+      },
+      "red": {
+        "outline": {
+          "$value": "#381316",
+          "$type": "color"
+        },
+        "light": {
+          "$value": "#f3aeaf",
+          "$type": "color"
+        },
+        "mid": {
+          "$value": "#db3030",
+          "$type": "color"
+        }
+      },
+      "purple": {
+        "light": {
+          "$value": "#bbaeff",
+          "$type": "color"
+        },
+        "outline": {
+          "$value": "#20134b",
+          "$type": "color"
+        },
+        "mid": {
+          "$value": "#d3c9ff",
+          "$type": "color"
+        },
+        "strong": {
+          "$value": "#6138d8",
+          "$type": "color"
+        }
+      },
+      "neutral": {
+        "light": {
+          "$value": "#ffffff",
+          "$type": "color"
+        }
+      }
+    },
+    "skeleton": {
+      "10": {
+        "$value": "#ffffff26",
+        "$type": "color"
+      },
+      "05": {
+        "$value": "#ffffff1a",
+        "$type": "color"
+      },
+      "07": {
+        "$value": "#ffffff1f",
+        "$type": "color"
+      }
+    },
+    "focus-ring": {
+      "primary": {
+        "$value": "#e1d7fe",
+        "$type": "color",
+        "$description": "Drop-shadow"
+      },
+      "danger": {
+        "$value": "#f9c6c6",
+        "$type": "color"
+      },
+      "interactive": {
+        "$value": "#ffd9fb",
+        "$type": "color"
+      },
+      "focus-ring": {
+        "4px": {
+          "$value": 4,
+          "$type": "number"
+        },
+        "3px": {
+          "$value": 3,
+          "$type": "number"
+        }
+      }
+    },
+    "chart": {
+      "10": {
+        "$value": "#79e5ef",
+        "$type": "color"
+      },
+      "01": {
+        "$value": "#4f23cf",
+        "$type": "color"
+      },
+      "02": {
+        "$value": "#8b63f7",
+        "$type": "color"
+      },
+      "03": {
+        "$value": "#c2affa",
+        "$type": "color"
+      },
+      "04": {
+        "$value": "#e6e0ff",
+        "$type": "color"
+      },
+      "05": {
+        "$value": "#ea594e",
+        "$type": "color"
+      },
+      "06": {
+        "$value": "#f9a813",
+        "$type": "color"
+      },
+      "07": {
+        "$value": "#ffd25f",
+        "$type": "color"
+      },
+      "08": {
+        "$value": "#019dab",
+        "$type": "color"
+      },
+      "09": {
+        "$value": "#2dc8d6",
+        "$type": "color"
+      },
+      "cartesian-grid": {
+        "$value": "#efedf2",
+        "$type": "color"
+      },
+      "comparison": {
+        "$value": "#888888",
+        "$type": "color"
+      },
+      "axis": {
+        "$value": "#d6d4d9",
+        "$type": "color"
+      }
+    }
+  }
+}

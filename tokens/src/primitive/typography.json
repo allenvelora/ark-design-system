@@ -1,0 +1,171 @@
+{
+  "primitive": {
+    "font": {
+      "family": {
+        "$description": "Font family definitions",
+        "sans": {
+          "$value": ["Work Sans", "system-ui", "-apple-system", "sans-serif"],
+          "$type": "fontFamily",
+          "$description": "Primary sans-serif font stack"
+        },
+        "serif": {
+          "$value": ["Georgia", "Times New Roman", "serif"],
+          "$type": "fontFamily",
+          "$description": "Serif font stack for editorial content"
+        },
+        "mono": {
+          "$value": ["SFMono-Regular", "Consolas", "Liberation Mono", "Menlo", "monospace"],
+          "$type": "fontFamily",
+          "$description": "Monospace font stack for code"
+        }
+      },
+      "size": {
+        "$description": "Font size scale",
+        "xs": {
+          "$value": "12px",
+          "$type": "dimension",
+          "$description": "Extra small - captions, labels"
+        },
+        "sm": {
+          "$value": "14px",
+          "$type": "dimension",
+          "$description": "Small - secondary text"
+        },
+        "base": {
+          "$value": "15px",
+          "$type": "dimension",
+          "$description": "Base body text size"
+        },
+        "md": {
+          "$value": "16px",
+          "$type": "dimension",
+          "$description": "Medium - emphasized body"
+        },
+        "lg": {
+          "$value": "18px",
+          "$type": "dimension",
+          "$description": "Large - lead paragraphs"
+        },
+        "xl": {
+          "$value": "20px",
+          "$type": "dimension",
+          "$description": "Extra large - subheadings"
+        },
+        "2xl": {
+          "$value": "24px",
+          "$type": "dimension",
+          "$description": "Heading 4"
+        },
+        "3xl": {
+          "$value": "28px",
+          "$type": "dimension",
+          "$description": "Heading 3"
+        },
+        "4xl": {
+          "$value": "36px",
+          "$type": "dimension",
+          "$description": "Heading 2"
+        },
+        "5xl": {
+          "$value": "48px",
+          "$type": "dimension",
+          "$description": "Heading 1"
+        },
+        "6xl": {
+          "$value": "60px",
+          "$type": "dimension",
+          "$description": "Display heading"
+        }
+      },
+      "weight": {
+        "$description": "Font weight scale",
+        "regular": {
+          "$value": 400,
+          "$type": "fontWeight",
+          "$description": "Normal body text"
+        },
+        "medium": {
+          "$value": 500,
+          "$type": "fontWeight",
+          "$description": "Emphasized text"
+        },
+        "semibold": {
+          "$value": 600,
+          "$type": "fontWeight",
+          "$description": "Headings and buttons"
+        },
+        "bold": {
+          "$value": 700,
+          "$type": "fontWeight",
+          "$description": "Strong emphasis"
+        }
+      },
+      "lineHeight": {
+        "$description": "Line height scale",
+        "none": {
+          "$value": 1,
+          "$type": "number",
+          "$description": "No leading - use sparingly"
+        },
+        "tight": {
+          "$value": 1.25,
+          "$type": "number",
+          "$description": "Tight leading - headings"
+        },
+        "snug": {
+          "$value": 1.375,
+          "$type": "number",
+          "$description": "Snug leading - subheadings"
+        },
+        "normal": {
+          "$value": 1.5,
+          "$type": "number",
+          "$description": "Normal leading - body text"
+        },
+        "relaxed": {
+          "$value": 1.625,
+          "$type": "number",
+          "$description": "Relaxed leading - long form"
+        },
+        "loose": {
+          "$value": 2,
+          "$type": "number",
+          "$description": "Loose leading - spacious text"
+        }
+      },
+      "letterSpacing": {
+        "$description": "Letter spacing scale",
+        "tighter": {
+          "$value": "-0.05em",
+          "$type": "dimension",
+          "$description": "Tighter tracking - large headings"
+        },
+        "tight": {
+          "$value": "-0.025em",
+          "$type": "dimension",
+          "$description": "Tight tracking - headings"
+        },
+        "normal": {
+          "$value": "0em",
+          "$type": "dimension",
+          "$description": "Normal tracking"
+        },
+        "wide": {
+          "$value": "0.025em",
+          "$type": "dimension",
+          "$description": "Wide tracking - small caps"
+        },
+        "wider": {
+          "$value": "0.05em",
+          "$type": "dimension",
+          "$description": "Wider tracking - labels"
+        },
+        "widest": {
+          "$value": "0.1em",
+          "$type": "dimension",
+          "$description": "Widest tracking - all caps labels"
+        }
+      }
+    }
+  }
+}

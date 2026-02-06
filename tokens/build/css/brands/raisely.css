@@ -1,0 +1,421 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+[data-brand="raisely"] {
+  --primitive-color-white: #ffffff;
+  --primitive-color-black: #000000;
+  --primitive-color-neutral-50: #fafafa;
+  --primitive-color-neutral-100: #f4f4f5;
+  --primitive-color-neutral-200: #e4e4e7;
+  --primitive-color-neutral-300: #d4d4d8;
+  --primitive-color-neutral-400: #a1a1aa;
+  --primitive-color-neutral-500: #71717a;
+  --primitive-color-neutral-600: #52525b;
+  --primitive-color-neutral-700: #3f3f46;
+  --primitive-color-neutral-800: #27272a;
+  --primitive-color-neutral-900: #18181b;
+  --primitive-color-neutral-950: #09090b;
+  --primitive-color-purple-50: #faf5ff;
+  --primitive-color-purple-100: #f3e8ff;
+  --primitive-color-purple-200: #e9d5ff;
+  --primitive-color-purple-300: #d8b4fe;
+  --primitive-color-purple-400: #c084fc;
+  --primitive-color-purple-500: #a855f7;
+  --primitive-color-purple-600: #9333ea;
+  --primitive-color-purple-700: #7c3aed;
+  --primitive-color-purple-800: #6138d8;
+  --primitive-color-purple-900: #4d26bf;
+  --primitive-color-purple-950: #3b1a9b;
+  --primitive-color-green-50: #f0fdf4;
+  --primitive-color-green-100: #dcfce7;
+  --primitive-color-green-200: #bbf7d0;
+  --primitive-color-green-500: #22c55e;
+  --primitive-color-green-600: #16a34a;
+  --primitive-color-green-700: #15803d;
+  --primitive-color-green-900: #14532d;
+  --primitive-color-red-50: #fef2f2;
+  --primitive-color-red-100: #fee2e2;
+  --primitive-color-red-200: #fecaca;
+  --primitive-color-red-500: #ef4444;
+  --primitive-color-red-600: #dc2626;
+  --primitive-color-red-700: #b91c1c;
+  --primitive-color-red-900: #7f1d1d;
+  --primitive-color-amber-50: #fffbeb;
+  --primitive-color-amber-100: #fef3c7;
+  --primitive-color-amber-200: #fde68a;
+  --primitive-color-amber-500: #f59e0b;
+  --primitive-color-amber-600: #d97706;
+  --primitive-color-amber-700: #b45309;
+  --primitive-color-amber-900: #78350f;
+  --primitive-color-blue-50: #eff6ff;
+  --primitive-color-blue-100: #dbeafe;
+  --primitive-color-blue-200: #bfdbfe;
+  --primitive-color-blue-500: #3b82f6;
+  --primitive-color-blue-600: #2563eb;
+  --primitive-color-blue-700: #1d4ed8;
+  --primitive-color-blue-900: #1e3a8a;
+  --primitive-duration-instant: 0ms; /** No animation */
+  --primitive-duration-fast: 100ms; /** Micro-interactions, tooltips */
+  --primitive-duration-normal: 200ms; /** Default transitions */
+  --primitive-duration-slow: 300ms; /** Expanding content, modals */
+  --primitive-duration-slower: 400ms; /** Complex animations */
+  --primitive-duration-slowest: 500ms; /** Page transitions */
+  --primitive-easing-linear: cubic-bezier(0, 0, 1, 1); /** Linear motion - use for opacity changes */
+  --primitive-easing-ease: cubic-bezier(0.25, 0.1, 0.25, 1); /** Default ease - subtle acceleration/deceleration */
+  --primitive-easing-ease-in: cubic-bezier(0.42, 0, 1, 1); /** Ease in - elements exiting view */
+  --primitive-easing-ease-out: cubic-bezier(0, 0, 0.58, 1); /** Ease out - elements entering view */
+  --primitive-easing-ease-in-out: cubic-bezier(0.42, 0, 0.58, 1); /** Ease in-out - elements moving within view */
+  --primitive-easing-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275); /** Spring - bouncy feel for emphasis */
+  --primitive-easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55); /** Bounce - playful interactions */
+  --primitive-shadow-none: none; /** No shadow */
+  --primitive-shadow-xs: 0px 1px 2px 0px #0000000d; /** Subtle shadow - cards on hover */
+  --primitive-shadow-sm: 0px 1px 3px 0px #0000001a; /** Small shadow - buttons, inputs */
+  --primitive-shadow-md: 0px 4px 6px -1px #0000001a; /** Medium shadow - cards, dropdowns */
+  --primitive-shadow-lg: 0px 10px 15px -3px #0000001a; /** Large shadow - popovers, floating elements */
+  --primitive-shadow-xl: 0px 20px 25px -5px #0000001a; /** Extra large shadow - modals */
+  --primitive-shadow-2xl: 0px 25px 50px -12px #00000040; /** Largest shadow - dialogs, notifications */
+  --primitive-shadow-inner: inset 0px 2px 4px 0px #0000000d; /** Inner shadow - pressed states, wells */
+  --primitive-spacing-0: 0px; /** No spacing */
+  --primitive-spacing-1: 2px; /** 2px - Micro spacing */
+  --primitive-spacing-2: 4px; /** 4px - Tight spacing */
+  --primitive-spacing-3: 6px;
+  --primitive-spacing-4: 8px; /** 8px - Default small spacing */
+  --primitive-spacing-5: 10px;
+  --primitive-spacing-6: 12px; /** 12px - Component padding */
+  --primitive-spacing-7: 14px;
+  --primitive-spacing-8: 16px; /** 16px - Base spacing unit */
+  --primitive-spacing-9: 18px;
+  --primitive-spacing-10: 20px;
+  --primitive-spacing-12: 24px; /** 24px - Section spacing */
+  --primitive-spacing-16: 32px;
+  --primitive-spacing-20: 40px;
+  --primitive-spacing-24: 48px; /** 48px - Large section spacing */
+  --primitive-spacing-32: 64px;
+  --primitive-spacing-40: 80px;
+  --primitive-spacing-48: 96px;
+  --primitive-spacing-80: 160px; /** 160px - Hero/page spacing */
+  --primitive-radius-none: 0px; /** No rounding */
+  --primitive-radius-xs: 4px; /** Extra small radius */
+  --primitive-radius-sm: 6px; /** Small radius */
+  --primitive-radius-md: 8px; /** Medium radius - default for cards */
+  --primitive-radius-lg: 12px; /** Large radius */
+  --primitive-radius-xl: 16px; /** Extra large radius */
+  --primitive-radius-2xl: 20px;
+  --primitive-radius-3xl: 24px;
+  --primitive-radius-full: 9999px; /** Fully rounded (pill shape) */
+  --primitive-font-family-sans: 'Work Sans', system-ui, -apple-system, sans-serif; /** Primary sans-serif font stack */
+  --primitive-font-family-serif: Georgia, 'Times New Roman', serif; /** Serif font stack for editorial content */
+  --primitive-font-family-mono: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; /** Monospace font stack for code */
+  --primitive-font-size-xs: 12px; /** Extra small - captions, labels */
+  --primitive-font-size-sm: 14px; /** Small - secondary text */
+  --primitive-font-size-base: 15px; /** Base body text size */
+  --primitive-font-size-md: 16px; /** Medium - emphasized body */
+  --primitive-font-size-lg: 18px; /** Large - lead paragraphs */
+  --primitive-font-size-xl: 20px; /** Extra large - subheadings */
+  --primitive-font-size-2xl: 24px; /** Heading 4 */
+  --primitive-font-size-3xl: 28px; /** Heading 3 */
+  --primitive-font-size-4xl: 36px; /** Heading 2 */
+  --primitive-font-size-5xl: 48px; /** Heading 1 */
+  --primitive-font-size-6xl: 60px; /** Display heading */
+  --primitive-font-weight-regular: 400; /** Normal body text */
+  --primitive-font-weight-medium: 500; /** Emphasized text */
+  --primitive-font-weight-semibold: 600; /** Headings and buttons */
+  --primitive-font-weight-bold: 700; /** Strong emphasis */
+  --primitive-font-line-height-none: 1; /** No leading - use sparingly */
+  --primitive-font-line-height-tight: 1.25; /** Tight leading - headings */
+  --primitive-font-line-height-snug: 1.375; /** Snug leading - subheadings */
+  --primitive-font-line-height-normal: 1.5; /** Normal leading - body text */
+  --primitive-font-line-height-relaxed: 1.625; /** Relaxed leading - long form */
+  --primitive-font-line-height-loose: 2; /** Loose leading - spacious text */
+  --primitive-font-letter-spacing-tighter: -0.05em; /** Tighter tracking - large headings */
+  --primitive-font-letter-spacing-tight: -0.025em; /** Tight tracking - headings */
+  --primitive-font-letter-spacing-normal: 0em; /** Normal tracking */
+  --primitive-font-letter-spacing-wide: 0.025em; /** Wide tracking - small caps */
+  --primitive-font-letter-spacing-wider: 0.05em; /** Wider tracking - labels */
+  --primitive-font-letter-spacing-widest: 0.1em; /** Widest tracking - all caps labels */
+  --semantic-neutral-text-default: #20134b;
+  --semantic-neutral-text-weak: #6f6b77;
+  --semantic-neutral-text-weak-hover: #20134b;
+  --semantic-neutral-text-disabled: #6f6b77;
+  --semantic-neutral-text-foreground: #ffffff;
+  --semantic-neutral-bg-default: #ffffff;
+  --semantic-neutral-bg-weak: #fafafa;
+  --semantic-neutral-bg-medium: #f8f7fa;
+  --semantic-neutral-bg-hover: #f1eff4;
+  --semantic-neutral-bg-active: #f1eff4;
+  --semantic-neutral-bg-strong: #dfdde4;
+  --semantic-neutral-bg-disabled: #f1eff4;
+  --semantic-neutral-border-default: #eae8ef;
+  --semantic-neutral-border-hover: #e5e3ea;
+  --semantic-neutral-border-active: #dfdde4;
+  --semantic-neutral-border-strong: #c6c3cb;
+  --semantic-neutral-border-strong-hover: #8e8a96;
+  --semantic-neutral-border-disabled: #8e8a96;
+  --semantic-neutral-border-weak: #ffffff;
+  --semantic-neutral-overlay: #20134b;
+  --semantic-primary-text-default: #6138d8;
+  --semantic-primary-text-hover: #4d26bf;
+  --semantic-primary-text-strong: #ffffff;
+  --semantic-primary-bg-default: #fbfaff;
+  --semantic-primary-bg-hover: #f5f2ff;
+  --semantic-primary-bg-active: #f1ecfe;
+  --semantic-primary-bg-strong: #6138d8;
+  --semantic-primary-bg-strong-hover: #4d26bf;
+  --semantic-primary-border-default: #f1ecfe;
+  --semantic-primary-border-hover: #d3c9ff;
+  --semantic-primary-border-active: #a589fa; /** Focus states */
+  --semantic-primary-border-strong: #d3c9ff;
+  --semantic-primary-border-strong-hover: #6138d8;
+  --semantic-accent-1-text-default: #b21596;
+  --semantic-accent-1-text-strong: #3b0a32;
+  --semantic-accent-1-bg-default: #ffebfd;
+  --semantic-accent-1-bg-strong: #ff66e4;
+  --semantic-accent-1-bg-medium: #ffacf4;
+  --semantic-accent-1-border-default: #ffd9fb;
+  --semantic-accent-1-border-strong: #ff66e4;
+  --semantic-accent-1-border-strong-hover: #b21596;
+  --semantic-accent-1-icon-default: #fa60de;
+  --semantic-accent-1-icon-icon-hover: #d231b4;
+  --semantic-danger-text-default: #ba272c;
+  --semantic-danger-text-hover: #a12226;
+  --semantic-danger-text-strong: #ffffff;
+  --semantic-danger-bg-default: #ffefef;
+  --semantic-danger-bg-default-hover: #f9c6c6;
+  --semantic-danger-bg-weak: #fffcfc;
+  --semantic-danger-bg-weak-hover: #ffefef;
+  --semantic-danger-bg-weak-active: #ffe5e5;
+  --semantic-danger-bg-strong: #db3030;
+  --semantic-danger-bg-strong-hover: #ba272c;
+  --semantic-danger-bg-strong-active: #a12226;
+  --semantic-danger-border-default: #fdd8d8;
+  --semantic-danger-border-strong: #eb9091;
+  --semantic-danger-border-strong-hover: #db3030;
+  --semantic-danger-border-strong-active: #ba272c;
+  --semantic-success-text-default: #29660f;
+  --semantic-success-text-hover: #263209;
+  --semantic-success-text-strong: #263209;
+  --semantic-success-bg-default: #dff7c7;
+  --semantic-success-bg-hover: #d1f2b0;
+  --semantic-success-bg-active: #bee894;
+  --semantic-success-bg-strong: #bee894;
+  --semantic-success-border-default: #d1f2b0;
+  --semantic-success-border-strong: #8ed52a;
+  --semantic-success-icon-strong: #8ed52a;
+  --semantic-warning-text-default: #80440d;
+  --semantic-warning-text-hover: #4d2a0a;
+  --semantic-warning-text-strong: #421b07;
+  --semantic-warning-bg-default: #fff4d5;
+  --semantic-warning-bg-hover: #ffecbc;
+  --semantic-warning-bg-active: #ffe3a2;
+  --semantic-warning-bg-strong: #ffe3a2;
+  --semantic-warning-bg-strong-hover: #ffd386;
+  --semantic-warning-bg-strong-active: #f3ba63;
+  --semantic-warning-border-default: #ffe3a2;
+  --semantic-warning-border-hover: #ffd386;
+  --semantic-warning-border-active: #f3ba63;
+  --semantic-warning-border-weak: #fff4d5;
+  --semantic-warning-border-strong: #f3ba63;
+  --semantic-accent-2-text-default: #0f5a61;
+  --semantic-accent-2-text-strong: #093034;
+  --semantic-accent-2-text-weak: #6ad2db;
+  --semantic-accent-2-bg-default: #bbf4fb;
+  --semantic-accent-2-bg-weak: #e8fbfc;
+  --semantic-accent-2-bg-strong: #70d8e1;
+  --semantic-accent-2-border-default: #70d8e1;
+  --semantic-accent-2-border-weak: #bbf4fb;
+  --semantic-accent-2-border-strong: #40b9c4;
+  --semantic-nav-bg-default: #f1ecfe;
+  --semantic-nav-bg-hover: #e1d7fe;
+  --semantic-nav-bg-strong: #6138d8;
+  --semantic-nav-global-icon-strong: #fafafa;
+  --semantic-nav-bg-strong-hover: #3b1a9b;
+  --semantic-btn-bg-primary: #6138d8;
+  --semantic-btn-bg-secondary: #fbfaff;
+  --semantic-btn-bg-primary-hover: #4d26bf;
+  --semantic-btn-bg-secondary-hover: #f5f2ff;
+  --semantic-btn-bg-disabled: #f1eff4;
+  --semantic-btn-bg-danger: #fffcfc;
+  --semantic-btn-bg-danger-hover: #ffefef;
+  --semantic-btn-bg-secondary-mono-hover: rgba(241, 239, 244, 0.5);
+  --semantic-btn-bg-plain-hover: #e5e3ea;
+  --semantic-btn-text-primary: #ffffff;
+  --semantic-btn-text-secondary: #20134b;
+  --semantic-btn-text-disabled: #6f6b77;
+  --semantic-btn-text-danger: #ba272c;
+  --semantic-btn-text-danger-hover: #a12226;
+  --semantic-btn-border-secondary: #a589fa;
+  --semantic-btn-border-secondary-mono: rgba(32, 19, 75, 0.4);
+  --semantic-btn-border-danger: #eb9091;
+  --semantic-btn-border-danger-hover: #db3030;
+  --semantic-btn-icon-secondary: #a589fa;
+  --semantic-btn-borderradius-default: 1600rem;
+  --semantic-tooltip-bg-default: #20134b;
+  --semantic-tooltip-border-default: #ffffff;
+  --semantic-illustration-outline: #6138d8;
+  --semantic-illustration-cyan-outline: #e8fbfc;
+  --semantic-illustration-cyan-light: #bbf4fb;
+  --semantic-illustration-cyan-mid: #6ad2db;
+  --semantic-illustration-cyan-strongest: #093034;
+  --semantic-illustration-cyan-strong: #00646d;
+  --semantic-illustration-amber-mid: #ffd386;
+  --semantic-illustration-amber-outline: #fff4d5;
+  --semantic-illustration-amber-strong: #ee9d2b;
+  --semantic-illustration-amber-light: #fff4d5;
+  --semantic-illustration-pink-outline: #ffebfd;
+  --semantic-illustration-pink-mid: #ff66e4;
+  --semantic-illustration-pink-light: #ffacf4;
+  --semantic-illustration-green-strong: #29660f;
+  --semantic-illustration-green-light: #bee894;
+  --semantic-illustration-green-outline: #dff7c7;
+  --semantic-illustration-green-mid: #9dd16a;
+  --semantic-illustration-red-outline: #ffefef;
+  --semantic-illustration-red-light: #fdd8d8;
+  --semantic-illustration-red-mid: #db3030;
+  --semantic-illustration-purple-light: #d3c9ff;
+  --semantic-illustration-purple-outline: #f1ecfe;
+  --semantic-illustration-purple-mid: #bbaeff;
+  --semantic-illustration-purple-strong: #6138d8;
+  --semantic-illustration-neutral-light: #ffffff;
+  --semantic-skeleton-10: rgba(0, 0, 0, 0.1);
+  --semantic-skeleton-05: rgba(0, 0, 0, 0.05);
+  --semantic-skeleton-07: rgba(0, 0, 0, 0.07);
+  --semantic-focus-ring-primary: #e1d7fe; /** Drop-shadow */
+  --semantic-focus-ring-danger: #f9c6c6;
+  --semantic-focus-ring-interactive: #ffd9fb;
+  --semantic-focus-ring-focus-ring-4px: 4;
+  --semantic-focus-ring-focus-ring-3px: 3;
+  --semantic-chart-10: #79e5ef;
+  --semantic-chart-01: #3b1a9b;
+  --semantic-chart-02: #6138d8;
+  --semantic-chart-03: #a589fa;
+  --semantic-chart-04: #d3c9ff;
+  --semantic-chart-05: #ea594e;
+  --semantic-chart-06: #f9a813;
+  --semantic-chart-07: #ffd25f;
+  --semantic-chart-08: #019dab;
+  --semantic-chart-09: #2dc8d6;
+  --semantic-chart-cartesian-grid: #efedf2;
+  --semantic-chart-comparison: #888888;
+  --semantic-chart-axis: #d6d4d9;
+  --semantic-space-layout-page-max-width: 1200px; /** Maximum content width */
+  --brand-aplos-color-primary: #006c9b; /** Primary brand color */
+  --brand-aplos-color-primary-hover: #005580;
+  --brand-aplos-color-primary-light: #edf5fa;
+  --brand-aplos-color-primary-dark: #021019;
+  --brand-aplos-color-accent: #73ba2c; /** Accent color - Green */
+  --brand-aplos-color-accent-light: #f6fcf0;
+  --brand-aplos-button-radius: 6px; /** Slightly rounded buttons */
+  --brand-keela-color-primary: #6f3dc4; /** Primary brand color */
+  --brand-keela-color-primary-hover: #5c32a5;
+  --brand-keela-color-primary-light: #f6f4fe;
+  --brand-keela-color-primary-dark: #2d1a5e;
+  --brand-keela-color-accent: #0091ff; /** Accent color - Blue */
+  --brand-keela-color-accent-light: #edf5ff;
+  --brand-keela-button-radius: 8px; /** Rounded buttons */
+  --brand-raisely-color-primary: #6138d8; /** Primary brand color */
+  --brand-raisely-color-primary-hover: #4d26bf;
+  --brand-raisely-color-primary-light: #f5f2ff;
+  --brand-raisely-color-primary-dark: #20134b;
+  --brand-raisely-color-accent: #fa60de; /** Accent color - Pink */
+  --brand-raisely-color-accent-light: #ffebfd;
+  --brand-raisely-button-radius: 9999px; /** Pill-shaped buttons */
+  --semantic-text-display-large-font-size: var(--primitive-font-size-6xl);
+  --semantic-text-display-large-font-weight: var(--primitive-font-weight-bold);
+  --semantic-text-display-large-line-height: var(--primitive-font-line-height-tight);
+  --semantic-text-display-large-letter-spacing: var(--primitive-font-letter-spacing-tighter);
+  --semantic-text-display-medium-font-size: var(--primitive-font-size-5xl);
+  --semantic-text-display-medium-font-weight: var(--primitive-font-weight-bold);
+  --semantic-text-display-medium-line-height: var(--primitive-font-line-height-tight);
+  --semantic-text-display-medium-letter-spacing: var(--primitive-font-letter-spacing-tighter);
+  --semantic-text-display-small-font-size: var(--primitive-font-size-4xl);
+  --semantic-text-display-small-font-weight: var(--primitive-font-weight-semibold);
+  --semantic-text-display-small-line-height: var(--primitive-font-line-height-tight);
+  --semantic-text-display-small-letter-spacing: var(--primitive-font-letter-spacing-tight);
+  --semantic-text-heading-h1-font-size: var(--primitive-font-size-4xl);
+  --semantic-text-heading-h1-font-weight: var(--primitive-font-weight-semibold);
+  --semantic-text-heading-h1-line-height: var(--primitive-font-line-height-tight);
+  --semantic-text-heading-h1-letter-spacing: var(--primitive-font-letter-spacing-tight);
+  --semantic-text-heading-h2-font-size: var(--primitive-font-size-3xl);
+  --semantic-text-heading-h2-font-weight: var(--primitive-font-weight-semibold);
+  --semantic-text-heading-h2-line-height: var(--primitive-font-line-height-tight);
+  --semantic-text-heading-h2-letter-spacing: var(--primitive-font-letter-spacing-tight);
+  --semantic-text-heading-h3-font-size: var(--primitive-font-size-2xl);
+  --semantic-text-heading-h3-font-weight: var(--primitive-font-weight-semibold);
+  --semantic-text-heading-h3-line-height: var(--primitive-font-line-height-snug);
+  --semantic-text-heading-h4-font-size: var(--primitive-font-size-xl);
+  --semantic-text-heading-h4-font-weight: var(--primitive-font-weight-semibold);
+  --semantic-text-heading-h4-line-height: var(--primitive-font-line-height-snug);
+  --semantic-text-heading-h5-font-size: var(--primitive-font-size-lg);
+  --semantic-text-heading-h5-font-weight: var(--primitive-font-weight-medium);
+  --semantic-text-heading-h5-line-height: var(--primitive-font-line-height-snug);
+  --semantic-text-heading-h6-font-size: var(--primitive-font-size-base);
+  --semantic-text-heading-h6-font-weight: var(--primitive-font-weight-medium);
+  --semantic-text-heading-h6-line-height: var(--primitive-font-line-height-normal);
+  --semantic-text-body-large-font-size: var(--primitive-font-size-lg);
+  --semantic-text-body-large-font-weight: var(--primitive-font-weight-regular);
+  --semantic-text-body-large-line-height: var(--primitive-font-line-height-relaxed);
+  --semantic-text-body-base-font-size: var(--primitive-font-size-base);
+  --semantic-text-body-base-font-weight: var(--primitive-font-weight-regular);
+  --semantic-text-body-base-line-height: var(--primitive-font-line-height-normal);
+  --semantic-text-body-small-font-size: var(--primitive-font-size-sm);
+  --semantic-text-body-small-font-weight: var(--primitive-font-weight-regular);
+  --semantic-text-body-small-line-height: var(--primitive-font-line-height-normal);
+  --semantic-text-label-large-font-size: var(--primitive-font-size-base);
+  --semantic-text-label-large-font-weight: var(--primitive-font-weight-medium);
+  --semantic-text-label-large-line-height: var(--primitive-font-line-height-tight);
+  --semantic-text-label-base-font-size: var(--primitive-font-size-sm);
+  --semantic-text-label-base-font-weight: var(--primitive-font-weight-medium);
+  --semantic-text-label-base-line-height: var(--primitive-font-line-height-tight);
+  --semantic-text-label-small-font-size: var(--primitive-font-size-xs);
+  --semantic-text-label-small-font-weight: var(--primitive-font-weight-medium);
+  --semantic-text-label-small-line-height: var(--primitive-font-line-height-tight);
+  --semantic-text-caption-base-font-size: var(--primitive-font-size-xs);
+  --semantic-text-caption-base-font-weight: var(--primitive-font-weight-regular);
+  --semantic-text-caption-base-line-height: var(--primitive-font-line-height-normal);
+  --semantic-text-code-base-font-family: var(--primitive-font-family-mono);
+  --semantic-text-code-base-font-size: var(--primitive-font-size-sm);
+  --semantic-text-code-base-line-height: var(--primitive-font-line-height-normal);
+  --semantic-text-code-small-font-family: var(--primitive-font-family-mono);
+  --semantic-text-code-small-font-size: var(--primitive-font-size-xs);
+  --semantic-text-code-small-line-height: var(--primitive-font-line-height-normal);
+  --semantic-space-component-padding-xs: var(--primitive-spacing-2); /** 4px - Tight component padding */
+  --semantic-space-component-padding-sm: var(--primitive-spacing-4); /** 8px - Small component padding */
+  --semantic-space-component-padding-md: var(--primitive-spacing-6); /** 12px - Default component padding */
+  --semantic-space-component-padding-lg: var(--primitive-spacing-8); /** 16px - Large component padding */
+  --semantic-space-component-padding-xl: var(--primitive-spacing-12); /** 24px - Extra large padding */
+  --semantic-space-component-gap-xs: var(--primitive-spacing-1); /** 2px - Minimal gap */
+  --semantic-space-component-gap-sm: var(--primitive-spacing-2); /** 4px - Tight gap */
+  --semantic-space-component-gap-md: var(--primitive-spacing-4); /** 8px - Default gap */
+  --semantic-space-component-gap-lg: var(--primitive-spacing-6); /** 12px - Large gap */
+  --semantic-space-component-gap-xl: var(--primitive-spacing-8); /** 16px - Extra large gap */
+  --semantic-space-layout-gutter-sm: var(--primitive-spacing-8); /** 16px - Narrow gutter */
+  --semantic-space-layout-gutter-md: var(--primitive-spacing-12); /** 24px - Default gutter */
+  --semantic-space-layout-gutter-lg: var(--primitive-spacing-16); /** 32px - Wide gutter */
+  --semantic-space-layout-section-sm: var(--primitive-spacing-16); /** 32px - Small section spacing */
+  --semantic-space-layout-section-md: var(--primitive-spacing-24); /** 48px - Default section spacing */
+  --semantic-space-layout-section-lg: var(--primitive-spacing-32); /** 64px - Large section spacing */
+  --semantic-space-layout-section-xl: var(--primitive-spacing-40); /** 80px - Extra large section */
+  --semantic-space-layout-page-margin: var(--primitive-spacing-8); /** 16px - Page margin on mobile */
+  --semantic-space-inset-xs: var(--primitive-spacing-2);
+  --semantic-space-inset-sm: var(--primitive-spacing-4);
+  --semantic-space-inset-md: var(--primitive-spacing-8);
+  --semantic-space-inset-lg: var(--primitive-spacing-12);
+  --semantic-space-inset-xl: var(--primitive-spacing-16);
+  --semantic-space-stack-xs: var(--primitive-spacing-2);
+  --semantic-space-stack-sm: var(--primitive-spacing-4);
+  --semantic-space-stack-md: var(--primitive-spacing-8);
+  --semantic-space-stack-lg: var(--primitive-spacing-12);
+  --semantic-space-stack-xl: var(--primitive-spacing-16);
+  --semantic-space-inline-xs: var(--primitive-spacing-1);
+  --semantic-space-inline-sm: var(--primitive-spacing-2);
+  --semantic-space-inline-md: var(--primitive-spacing-4);
+  --semantic-space-inline-lg: var(--primitive-spacing-6);
+  --semantic-space-inline-xl: var(--primitive-spacing-8);
+  --semantic-radius-component-button: var(--primitive-radius-md); /** Button border radius */
+  --semantic-radius-component-input: var(--primitive-radius-md); /** Input field border radius */
+  --semantic-radius-component-card: var(--primitive-radius-lg); /** Card border radius */
+  --semantic-radius-component-modal: var(--primitive-radius-xl); /** Modal/dialog border radius */
+  --semantic-radius-component-badge: var(--primitive-radius-full); /** Badge/tag border radius */
+  --semantic-radius-component-avatar: var(--primitive-radius-full); /** Avatar border radius */
+}

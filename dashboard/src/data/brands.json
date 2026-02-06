@@ -1,0 +1,95 @@
+{
+  "brands": {
+    "neutral": {
+      "id": "neutral",
+      "name": "Neutral",
+      "tagline": "Universal foundation",
+      "personality": ["versatile", "balanced", "adaptable"],
+      "description": "A clean, universal foundation that works across all contexts. Professional without being cold, friendly without being casual.",
+      "primaryColor": "#18181b",
+      "icon": "●"
+    },
+    "aplos": {
+      "id": "aplos",
+      "name": "Aplos",
+      "tagline": "Clarity through simplicity",
+      "personality": ["formal", "professional", "serious", "trustworthy", "precise"],
+      "description": "For financial institutions and enterprises that prioritize trust, accuracy, and professional credibility. Clean lines, measured spacing, and a restrained color palette.",
+      "primaryColor": "#006c9b",
+      "icon": "■"
+    },
+    "keela": {
+      "id": "keela",
+      "name": "Keela",
+      "tagline": "Empowering meaningful connections",
+      "personality": ["nurturing", "supportive", "warm", "organized", "balanced"],
+      "description": "For nonprofits and mission-driven organizations that balance professionalism with approachability. Warm, supportive, and organized.",
+      "primaryColor": "#6f3dc4",
+      "icon": "●"
+    },
+    "raisely": {
+      "id": "raisely",
+      "name": "Raisely",
+      "tagline": "Fundraising made delightful",
+      "personality": ["playful", "emotional", "delightful", "creative", "energetic"],
+      "description": "For fundraisers, creators, and community builders who want to inspire action through emotional connection. Bold, expressive, and joyful.",
+      "primaryColor": "#6138d8",
+      "icon": "◆"
+    }
+  },
+  "designPrinciples": {
+    "neutral": [
+      { "name": "Balanced", "description": "Equal weight given to all elements, no single aspect dominates" },
+      { "name": "Adaptable", "description": "Works in any context without modification" },
+      { "name": "Clear", "description": "Information hierarchy is immediately apparent" }
+    ],
+    "aplos": [
+      { "name": "Precision", "description": "Every element serves a purpose with mathematical accuracy" },
+      { "name": "Trust", "description": "Visual stability that conveys reliability and security" },
+      { "name": "Clarity", "description": "Information is presented without ambiguity" },
+      { "name": "Restraint", "description": "Decorative elements are minimized in favor of content" }
+    ],
+    "keela": [
+      { "name": "Supportive", "description": "UI guides users with gentle affordances and helpful cues" },
+      { "name": "Warm", "description": "Color and typography create an inviting atmosphere" },
+      { "name": "Organized", "description": "Complex data is presented in digestible, logical groupings" },
+      { "name": "Empowering", "description": "Features that help users accomplish their mission" }
+    ],
+    "raisely": [
+      { "name": "Delightful", "description": "Micro-interactions and animations that bring joy" },
+      { "name": "Expressive", "description": "Bold typography and color that convey emotion" },
+      { "name": "Accessible", "description": "Inclusive design that welcomes everyone" },
+      { "name": "Story-driven", "description": "Every screen tells part of a larger narrative" }
+    ]
+  },
+  "visualCharacteristics": {
+    "neutral": {
+      "cornerRadius": "medium",
+      "shadows": "subtle",
+      "animations": "standard",
+      "typography": "balanced",
+      "density": "comfortable"
+    },
+    "aplos": {
+      "cornerRadius": "minimal",
+      "shadows": "crisp",
+      "animations": "minimal",
+      "typography": "structured",
+      "density": "spacious"
+    },
+    "keela": {
+      "cornerRadius": "soft",
+      "shadows": "warm",
+      "animations": "smooth",
+      "typography": "friendly",
+      "density": "comfortable"
+    },
+    "raisely": {
+      "cornerRadius": "rounded",
+      "shadows": "playful",
+      "animations": "expressive",
+      "typography": "dynamic",
+      "density": "airy"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "@ark/tokens",
+  "version": "0.1.0",
+  "description": "Semantic design tokens for the ARK Design System",
+  "type": "module",
+  "main": "build/js/tokens.js",
+  "module": "build/js/tokens.mjs",
+  "types": "build/js/tokens.d.ts",
+  "exports": {
+    ".": {
+      "import": "./build/js/tokens.mjs",
+      "require": "./build/js/tokens.js",
+      "types": "./build/js/tokens.d.ts"
+    },
+    "./css": "./build/css/variables.css",
+    "./json": "./build/json/tokens.json"
+  },
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "build": "style-dictionary build --config style-dictionary.config.js",
+    "watch": "chokidar \"src/**/*.json\" -c \"npm run build\" --initial",
+    "clean": "rm -rf build"
+  },
+  "devDependencies": {
+    "style-dictionary": "^4.0.0",
+    "chokidar-cli": "^3.0.0"
+  },
+  "keywords": [
+    "design-tokens",
+    "design-system",
+    "css-variables",
+    "style-dictionary"
+  ],
+  "license": "MIT"
+}

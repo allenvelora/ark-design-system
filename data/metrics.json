@@ -1,0 +1,70 @@
+{
+  "$schema": "./schemas/metrics.schema.json",
+  "$description": "Adoption metrics for the design system dashboard. Update this file manually or via automation.",
+  
+  "lastUpdated": "2026-02-03",
+  "updatedBy": "system",
+  
+  "summary": {
+    "totalProducts": 3,
+    "productsWithTokens": 0,
+    "averageAdoption": 0,
+    "totalDivergences": 0,
+    "trend": "baseline"
+  },
+  
+  "products": {
+    "keela": {
+      "tokenAdoption": 0,
+      "adoptionTrend": "not-started",
+      "divergenceCount": 0,
+      "lastAssessed": "2026-02-03",
+      "notes": "Token integration not yet started",
+      "milestones": [
+        {
+          "date": "2026-02-03",
+          "event": "Baseline established",
+          "adoption": 0
+        }
+      ]
+    },
+    "aplos": {
+      "tokenAdoption": 0,
+      "adoptionTrend": "not-started",
+      "divergenceCount": 0,
+      "lastAssessed": "2026-02-03",
+      "notes": "Token integration not yet started",
+      "milestones": [
+        {
+          "date": "2026-02-03",
+          "event": "Baseline established",
+          "adoption": 0
+        }
+      ]
+    },
+    "raisely": {
+      "tokenAdoption": 0,
+      "adoptionTrend": "not-started",
+      "divergenceCount": 0,
+      "lastAssessed": "2026-02-03",
+      "notes": "Token integration not yet started",
+      "milestones": [
+        {
+          "date": "2026-02-03",
+          "event": "Baseline established",
+          "adoption": 0
+        }
+      ]
+    }
+  },
+  
+  "adoptionLevels": {
+    "$description": "Reference for interpreting adoption percentages",
+    "not-started": "0% - No tokens integrated",
+    "initial": "1-25% - Token package installed, initial usage",
+    "partial": "26-50% - New features using tokens",
+    "majority": "51-75% - Most new code uses tokens",
+    "high": "76-90% - Legacy code being migrated",
+    "complete": "91-100% - Full token adoption"
+  }
+}

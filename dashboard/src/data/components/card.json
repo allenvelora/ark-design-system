@@ -1,0 +1,310 @@
+{
+  "id": "card",
+  "name": "Card",
+  "description": "Cards are surfaces that display content and actions about a single topic. They should be easy to scan for relevant information and provide clear entry points to more detail.",
+  "status": "stable",
+  "version": "1.0.0",
+  "figmaUrl": "https://www.figma.com/design/F8rMavAwnFag21a04KUV9C/ARK-Components?node-id=card",
+  
+  "overview": {
+    "purpose": "Cards group related information into flexible containers. They help users browse collections of content and take action on individual items.",
+    "principles": [
+      "Cards should contain a clear hierarchy of information",
+      "Each card should focus on a single topic or action",
+      "Cards in a collection should have consistent structure",
+      "Interactive cards should have clear affordances"
+    ]
+  },
+  
+  "whenToUse": [
+    "Displaying collections of similar content (products, articles, profiles)",
+    "Grouping related information into scannable units",
+    "Creating dashboard widgets or modules",
+    "Presenting actionable content with primary/secondary actions"
+  ],
+  
+  "whenNotToUse": [
+    "For simple lists without actions - use List component",
+    "For a single prominent content area - use Section or Panel",
+    "When content doesn't benefit from visual grouping",
+    "For navigation menus - use Menu or Navigation components"
+  ],
+  
+  "anatomy": {
+    "description": "Cards are flexible containers that can include various content types arranged in a consistent hierarchy.",
+    "parts": [
+      {
+        "name": "Container",
+        "description": "The outer surface with background, border, and optional shadow",
+        "required": true
+      },
+      {
+        "name": "Media",
+        "description": "Optional image, video, or illustration at top or side of card",
+        "required": false
+      },
+      {
+        "name": "Header",
+        "description": "Optional area for title, subtitle, and metadata",
+        "required": false
+      },
+      {
+        "name": "Content",
+        "description": "Main body area for text, data, or custom content",
+        "required": false
+      },
+      {
+        "name": "Actions",
+        "description": "Optional area for buttons, links, or interactive elements",
+        "required": false
+      },
+      {
+        "name": "Footer",
+        "description": "Optional area for secondary information or metadata",
+        "required": false
+      }
+    ]
+  },
+  
+  "variants": [
+    {
+      "name": "Elevated",
+      "description": "Card with shadow that appears raised above the surface",
+      "useCase": "Default style for most card collections",
+      "tokens": ["shadow-card-elevated", "color-bg-card"]
+    },
+    {
+      "name": "Outlined",
+      "description": "Card with border and no shadow, sitting flush with surface",
+      "useCase": "Dense layouts, nested cards, less emphasis",
+      "tokens": ["color-border-card", "color-bg-card"]
+    },
+    {
+      "name": "Filled",
+      "description": "Card with contrasting background color and no border",
+      "useCase": "Highlighting important content, dark backgrounds",
+      "tokens": ["color-bg-card-filled"]
+    },
+    {
+      "name": "Interactive",
+      "description": "Clickable card that acts as a single action trigger",
+      "useCase": "Navigation cards, selection cards",
+      "tokens": ["color-bg-card-hover", "shadow-card-hover"]
+    }
+  ],
+  
+  "sizes": [
+    {
+      "name": "Compact",
+      "padding": "12px",
+      "useCase": "Dense UIs, mobile views, sidebar widgets"
+    },
+    {
+      "name": "Default",
+      "padding": "16px",
+      "useCase": "Standard card layouts"
+    },
+    {
+      "name": "Spacious",
+      "padding": "24px",
+      "useCase": "Featured content, marketing layouts"
+    }
+  ],
+  
+  "states": [
+    {
+      "name": "Default",
+      "description": "Resting state of the card"
+    },
+    {
+      "name": "Hover",
+      "description": "For interactive cards, shows visual feedback on hover"
+    },
+    {
+      "name": "Focus",
+      "description": "For interactive cards, keyboard focus indication"
+    },
+    {
+      "name": "Selected",
+      "description": "For selectable cards, shows selected state"
+    },
+    {
+      "name": "Disabled",
+      "description": "Card content is not actionable"
+    },
+    {
+      "name": "Loading",
+      "description": "Skeleton state while content is loading"
+    }
+  ],
+  
+  "props": [
+    {
+      "name": "variant",
+      "type": "'elevated' | 'outlined' | 'filled'",
+      "default": "'elevated'",
+      "description": "The visual style of the card"
+    },
+    {
+      "name": "padding",
+      "type": "'compact' | 'default' | 'spacious' | 'none'",
+      "default": "'default'",
+      "description": "Internal padding of the card"
+    },
+    {
+      "name": "interactive",
+      "type": "boolean",
+      "default": "false",
+      "description": "Whether the entire card is clickable"
+    },
+    {
+      "name": "selected",
+      "type": "boolean",
+      "default": "false",
+      "description": "Whether the card is in selected state"
+    },
+    {
+      "name": "onClick",
+      "type": "() => void",
+      "default": "undefined",
+      "description": "Handler for interactive card clicks"
+    },
+    {
+      "name": "as",
+      "type": "'div' | 'article' | 'section' | 'a'",
+      "default": "'div'",
+      "description": "The HTML element to render as"
+    }
+  ],
+  
+  "tokens": {
+    "description": "Design tokens used by the Card component",
+    "categories": [
+      {
+        "name": "Colors",
+        "tokens": [
+          {"name": "--color-bg-card", "value": "#ffffff", "usage": "Card background color"},
+          {"name": "--color-bg-card-hover", "value": "#fafafa", "usage": "Card hover background"},
+          {"name": "--color-border-card", "value": "#e4e4e7", "usage": "Card border color"}
+        ]
+      },
+      {
+        "name": "Shadows",
+        "tokens": [
+          {"name": "--shadow-card-elevated", "value": "0 1px 3px rgba(0,0,0,0.1)", "usage": "Elevated card shadow"},
+          {"name": "--shadow-card-hover", "value": "0 4px 12px rgba(0,0,0,0.1)", "usage": "Card shadow on hover"}
+        ]
+      },
+      {
+        "name": "Spacing",
+        "tokens": [
+          {"name": "--spacing-card-compact", "value": "12px", "usage": "Compact card padding"},
+          {"name": "--spacing-card-default", "value": "16px", "usage": "Default card padding"},
+          {"name": "--spacing-card-spacious", "value": "24px", "usage": "Spacious card padding"},
+          {"name": "--spacing-card-gap", "value": "12px", "usage": "Gap between card sections"}
+        ]
+      },
+      {
+        "name": "Shape",
+        "tokens": [
+          {"name": "--radius-card", "value": "12px", "usage": "Card border radius"}
+        ]
+      }
+    ]
+  },
+  
+  "accessibility": {
+    "description": "Cards must be accessible whether they contain interactive elements or are interactive themselves.",
+    "guidelines": [
+      {
+        "title": "Semantic Structure",
+        "description": "Use appropriate semantic elements (article, section) based on content type"
+      },
+      {
+        "title": "Interactive Cards",
+        "description": "If the entire card is clickable, use a single link/button. Avoid nested interactive elements."
+      },
+      {
+        "title": "Heading Hierarchy",
+        "description": "Card titles should use appropriate heading levels within the page hierarchy"
+      },
+      {
+        "title": "Focus Management",
+        "description": "Interactive cards should be focusable and show clear focus indicators"
+      },
+      {
+        "title": "Image Alt Text",
+        "description": "Card images must have appropriate alt text or be marked decorative"
+      }
+    ],
+    "wcagCriteria": ["1.1.1", "1.3.1", "2.4.4", "2.4.6"]
+  },
+  
+  "bestPractices": {
+    "do": [
+      "Keep card content scannable and concise",
+      "Use consistent card structures within a collection",
+      "Provide clear visual hierarchy within cards",
+      "Make primary actions prominent",
+      "Use loading skeletons for async content",
+      "Ensure adequate contrast between card and background"
+    ],
+    "dont": [
+      "Don't nest too many interactive elements within a card",
+      "Don't make cards too tall - they should fit in viewport",
+      "Don't use cards for single pieces of content",
+      "Don't mix elevated and outlined cards in the same collection",
+      "Don't overcrowd cards with too much information",
+      "Don't use cards when a simple list would suffice"
+    ]
+  },
+  
+  "examples": [
+    {
+      "title": "Basic Card",
+      "description": "Simple card with title and content",
+      "code": "<Card>\n  <CardHeader>\n    <CardTitle>Card Title</CardTitle>\n  </CardHeader>\n  <CardContent>\n    <p>Card content goes here.</p>\n  </CardContent>\n</Card>"
+    },
+    {
+      "title": "Card with Media",
+      "description": "Card featuring an image header",
+      "code": "<Card>\n  <CardMedia src=\"/image.jpg\" alt=\"Description\" />\n  <CardHeader>\n    <CardTitle>Featured Item</CardTitle>\n  </CardHeader>\n  <CardContent>\n    <p>Description text</p>\n  </CardContent>\n  <CardActions>\n    <Button>Learn more</Button>\n  </CardActions>\n</Card>"
+    },
+    {
+      "title": "Interactive Card",
+      "description": "Clickable card for navigation",
+      "code": "<Card interactive onClick={() => navigate('/details')}>\n  <CardHeader>\n    <CardTitle>Click me</CardTitle>\n  </CardHeader>\n</Card>"
+    }
+  ],
+  
+  "relatedComponents": [
+    {
+      "name": "CardHeader",
+      "description": "Header section for cards",
+      "url": "/components/card-header"
+    },
+    {
+      "name": "CardContent",
+      "description": "Main content area for cards",
+      "url": "/components/card-content"
+    },
+    {
+      "name": "CardActions",
+      "description": "Action buttons area for cards",
+      "url": "/components/card-actions"
+    },
+    {
+      "name": "List",
+      "description": "For displaying items without card containers",
+      "url": "/components/list"
+    }
+  ],
+  
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-01-15",
+      "changes": ["Initial release"]
+    }
+  ]
+}

@@ -1,0 +1,378 @@
+{
+  "id": "input",
+  "name": "Input",
+  "description": "Input fields allow users to enter and edit text. They are a fundamental form element used for collecting user data, from simple text to complex structured information.",
+  "status": "stable",
+  "version": "1.0.0",
+  "figmaUrl": "https://www.figma.com/design/F8rMavAwnFag21a04KUV9C/ARK-Components?node-id=input",
+  
+  "overview": {
+    "purpose": "Inputs are the primary method for users to provide textual information. Well-designed inputs reduce errors, improve completion rates, and create confidence in the interface.",
+    "principles": [
+      "Labels should always be visible - don't rely on placeholder text alone",
+      "Provide immediate validation feedback when possible",
+      "Use appropriate input types to trigger correct mobile keyboards",
+      "Support autocomplete to reduce user effort"
+    ]
+  },
+  
+  "whenToUse": [
+    "Collecting user-provided text (names, emails, messages)",
+    "Searching or filtering content",
+    "Editing existing text values",
+    "Entering formatted data (phone numbers, dates)"
+  ],
+  
+  "whenNotToUse": [
+    "When there are fewer than 7 predefined options - use Select or Radio instead",
+    "For binary choices - use Checkbox or Toggle",
+    "For long-form content - use Textarea",
+    "When voice or other input methods are more appropriate"
+  ],
+  
+  "anatomy": {
+    "description": "An input field consists of multiple elements that provide context, guidance, and feedback.",
+    "parts": [
+      {
+        "name": "Label",
+        "description": "Descriptive text that identifies what information is expected",
+        "required": true
+      },
+      {
+        "name": "Input Container",
+        "description": "The bordered area where text is entered",
+        "required": true
+      },
+      {
+        "name": "Placeholder",
+        "description": "Hint text shown when the field is empty. Should be an example, not instruction",
+        "required": false
+      },
+      {
+        "name": "Helper Text",
+        "description": "Additional context or requirements shown below the input",
+        "required": false
+      },
+      {
+        "name": "Leading Element",
+        "description": "Icon or text prefix (like currency symbol) at the start of input",
+        "required": false
+      },
+      {
+        "name": "Trailing Element",
+        "description": "Icon, button, or text suffix at the end of input (clear button, visibility toggle)",
+        "required": false
+      },
+      {
+        "name": "Character Count",
+        "description": "Shows current/maximum characters when limits apply",
+        "required": false
+      }
+    ]
+  },
+  
+  "variants": [
+    {
+      "name": "Default",
+      "description": "Standard text input for general use",
+      "useCase": "Names, titles, general text entry",
+      "tokens": ["color-border-default", "color-bg-input"]
+    },
+    {
+      "name": "Email",
+      "description": "Input optimized for email addresses with @ keyboard on mobile",
+      "useCase": "Email address collection",
+      "tokens": ["color-border-default"]
+    },
+    {
+      "name": "Password",
+      "description": "Masked input with visibility toggle for secure entries",
+      "useCase": "Passwords, PINs, sensitive data",
+      "tokens": ["color-border-default"]
+    },
+    {
+      "name": "Search",
+      "description": "Input styled for search functionality with clear button",
+      "useCase": "Search bars, filters",
+      "tokens": ["color-bg-input-search"]
+    },
+    {
+      "name": "Number",
+      "description": "Input restricted to numeric values with optional stepper",
+      "useCase": "Quantities, amounts, numeric IDs",
+      "tokens": ["color-border-default"]
+    },
+    {
+      "name": "Phone",
+      "description": "Formatted input for phone numbers with country selector",
+      "useCase": "Phone number collection",
+      "tokens": ["color-border-default"]
+    }
+  ],
+  
+  "sizes": [
+    {
+      "name": "Small",
+      "height": "32px",
+      "fontSize": "14px",
+      "useCase": "Compact forms, table cells, dense UIs"
+    },
+    {
+      "name": "Medium",
+      "height": "40px",
+      "fontSize": "14px",
+      "useCase": "Default for most forms and contexts"
+    },
+    {
+      "name": "Large",
+      "height": "48px",
+      "fontSize": "16px",
+      "useCase": "Marketing forms, mobile-optimized inputs"
+    }
+  ],
+  
+  "states": [
+    {
+      "name": "Default",
+      "description": "Empty or filled state at rest"
+    },
+    {
+      "name": "Hover",
+      "description": "Visual feedback when cursor enters the input area"
+    },
+    {
+      "name": "Focus",
+      "description": "Active state when input has keyboard focus. Shows focus ring."
+    },
+    {
+      "name": "Filled",
+      "description": "Input contains user-entered value"
+    },
+    {
+      "name": "Disabled",
+      "description": "Input cannot be interacted with. Reduced opacity."
+    },
+    {
+      "name": "Read-only",
+      "description": "Value can be viewed and copied but not edited"
+    },
+    {
+      "name": "Error",
+      "description": "Validation failed. Shows error styling and message."
+    },
+    {
+      "name": "Success",
+      "description": "Validation passed. Optional positive feedback."
+    }
+  ],
+  
+  "props": [
+    {
+      "name": "type",
+      "type": "'text' | 'email' | 'password' | 'search' | 'number' | 'tel' | 'url'",
+      "default": "'text'",
+      "description": "The HTML input type"
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "undefined",
+      "description": "Label text for the input"
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "default": "undefined",
+      "description": "Placeholder text shown when empty"
+    },
+    {
+      "name": "helperText",
+      "type": "string",
+      "default": "undefined",
+      "description": "Help text displayed below the input"
+    },
+    {
+      "name": "error",
+      "type": "string | boolean",
+      "default": "false",
+      "description": "Error state and message"
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Whether the input is disabled"
+    },
+    {
+      "name": "readOnly",
+      "type": "boolean",
+      "default": "false",
+      "description": "Whether the input is read-only"
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "default": "false",
+      "description": "Whether the field is required"
+    },
+    {
+      "name": "maxLength",
+      "type": "number",
+      "default": "undefined",
+      "description": "Maximum character limit"
+    },
+    {
+      "name": "leadingIcon",
+      "type": "ReactNode",
+      "default": "undefined",
+      "description": "Icon displayed at the start of the input"
+    },
+    {
+      "name": "trailingIcon",
+      "type": "ReactNode",
+      "default": "undefined",
+      "description": "Icon displayed at the end of the input"
+    },
+    {
+      "name": "onChange",
+      "type": "(value: string, event: ChangeEvent) => void",
+      "default": "undefined",
+      "description": "Handler called when the value changes"
+    },
+    {
+      "name": "onBlur",
+      "type": "(event: FocusEvent) => void",
+      "default": "undefined",
+      "description": "Handler called when the input loses focus"
+    }
+  ],
+  
+  "tokens": {
+    "description": "Design tokens used by the Input component",
+    "categories": [
+      {
+        "name": "Colors",
+        "tokens": [
+          {"name": "--color-bg-input", "value": "#ffffff", "usage": "Input background color"},
+          {"name": "--color-border-default", "value": "#e4e4e7", "usage": "Default border color"},
+          {"name": "--color-border-focus", "value": "#6138d8", "usage": "Border color when focused"},
+          {"name": "--color-border-error", "value": "#dc2626", "usage": "Border color in error state"},
+          {"name": "--color-text-input", "value": "#18181b", "usage": "Input text color"},
+          {"name": "--color-text-placeholder", "value": "#a1a1aa", "usage": "Placeholder text color"},
+          {"name": "--color-text-helper", "value": "#71717a", "usage": "Helper text color"},
+          {"name": "--color-text-error", "value": "#dc2626", "usage": "Error message color"}
+        ]
+      },
+      {
+        "name": "Spacing",
+        "tokens": [
+          {"name": "--spacing-input-padding", "value": "12px", "usage": "Horizontal padding inside input"},
+          {"name": "--spacing-input-gap", "value": "8px", "usage": "Gap between label and input"}
+        ]
+      },
+      {
+        "name": "Shape",
+        "tokens": [
+          {"name": "--radius-input", "value": "8px", "usage": "Input border radius"},
+          {"name": "--border-width-input", "value": "1px", "usage": "Input border width"},
+          {"name": "--border-width-input-focus", "value": "2px", "usage": "Input border width when focused"}
+        ]
+      }
+    ]
+  },
+  
+  "accessibility": {
+    "description": "Form inputs must be accessible to all users, including those using screen readers and keyboard navigation.",
+    "guidelines": [
+      {
+        "title": "Labels",
+        "description": "Always associate labels with inputs using htmlFor/id or wrapping. Never use placeholder as sole label."
+      },
+      {
+        "title": "Error Messages",
+        "description": "Link error messages to inputs using aria-describedby. Announce errors to screen readers."
+      },
+      {
+        "title": "Required Fields",
+        "description": "Indicate required fields visually and programmatically (aria-required)"
+      },
+      {
+        "title": "Autocomplete",
+        "description": "Use autocomplete attribute to help browsers autofill common fields"
+      },
+      {
+        "title": "Input Purpose",
+        "description": "Use appropriate input types to enable browser autofill and mobile keyboards"
+      }
+    ],
+    "wcagCriteria": ["1.3.1", "1.3.5", "2.4.6", "3.3.1", "3.3.2", "4.1.2"]
+  },
+  
+  "bestPractices": {
+    "do": [
+      "Always use visible labels above the input",
+      "Provide helpful placeholder text as examples, not instructions",
+      "Show validation errors inline, near the field",
+      "Use appropriate input types (email, tel, number)",
+      "Support browser autocomplete for common fields",
+      "Show character counts for limited fields"
+    ],
+    "dont": [
+      "Don't use placeholder text as the only label",
+      "Don't validate on every keystroke - wait for blur or submit",
+      "Don't disable paste in password fields",
+      "Don't use custom validation for standard formats (email)",
+      "Don't clear the form after validation errors",
+      "Don't require specific formatting without mask/help"
+    ]
+  },
+  
+  "examples": [
+    {
+      "title": "Basic Input",
+      "description": "Standard text input with label",
+      "code": "<Input label=\"Full name\" placeholder=\"John Doe\" />"
+    },
+    {
+      "title": "Input with Helper Text",
+      "description": "Input providing additional context",
+      "code": "<Input \n  label=\"Email\" \n  type=\"email\" \n  helperText=\"We'll never share your email\" \n/>"
+    },
+    {
+      "title": "Input with Error",
+      "description": "Input showing validation error",
+      "code": "<Input \n  label=\"Password\" \n  type=\"password\" \n  error=\"Password must be at least 8 characters\" \n/>"
+    },
+    {
+      "title": "Input with Icons",
+      "description": "Input with leading search icon",
+      "code": "<Input \n  type=\"search\" \n  leadingIcon={<SearchIcon />} \n  placeholder=\"Search...\" \n/>"
+    }
+  ],
+  
+  "relatedComponents": [
+    {
+      "name": "Textarea",
+      "description": "For multi-line text input",
+      "url": "/components/textarea"
+    },
+    {
+      "name": "Select",
+      "description": "For selecting from predefined options",
+      "url": "/components/select"
+    },
+    {
+      "name": "FormField",
+      "description": "Wrapper component with label and validation",
+      "url": "/components/form-field"
+    }
+  ],
+  
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-01-15",
+      "changes": ["Initial release"]
+    }
+  ]
+}

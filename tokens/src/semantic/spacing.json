@@ -1,0 +1,77 @@
+{
+  "semantic": {
+    "space": {
+      "$description": "Semantic spacing tokens for consistent layouts",
+      "component": {
+        "$description": "Spacing within components",
+        "padding": {
+          "xs": { "$value": "{primitive.spacing.2}", "$type": "dimension", "$description": "4px - Tight component padding" },
+          "sm": { "$value": "{primitive.spacing.4}", "$type": "dimension", "$description": "8px - Small component padding" },
+          "md": { "$value": "{primitive.spacing.6}", "$type": "dimension", "$description": "12px - Default component padding" },
+          "lg": { "$value": "{primitive.spacing.8}", "$type": "dimension", "$description": "16px - Large component padding" },
+          "xl": { "$value": "{primitive.spacing.12}", "$type": "dimension", "$description": "24px - Extra large padding" }
+        },
+        "gap": {
+          "xs": { "$value": "{primitive.spacing.1}", "$type": "dimension", "$description": "2px - Minimal gap" },
+          "sm": { "$value": "{primitive.spacing.2}", "$type": "dimension", "$description": "4px - Tight gap" },
+          "md": { "$value": "{primitive.spacing.4}", "$type": "dimension", "$description": "8px - Default gap" },
+          "lg": { "$value": "{primitive.spacing.6}", "$type": "dimension", "$description": "12px - Large gap" },
+          "xl": { "$value": "{primitive.spacing.8}", "$type": "dimension", "$description": "16px - Extra large gap" }
+        }
+      },
+      "layout": {
+        "$description": "Spacing for page layouts",
+        "gutter": {
+          "sm": { "$value": "{primitive.spacing.8}", "$type": "dimension", "$description": "16px - Narrow gutter" },
+          "md": { "$value": "{primitive.spacing.12}", "$type": "dimension", "$description": "24px - Default gutter" },
+          "lg": { "$value": "{primitive.spacing.16}", "$type": "dimension", "$description": "32px - Wide gutter" }
+        },
+        "section": {
+          "sm": { "$value": "{primitive.spacing.16}", "$type": "dimension", "$description": "32px - Small section spacing" },
+          "md": { "$value": "{primitive.spacing.24}", "$type": "dimension", "$description": "48px - Default section spacing" },
+          "lg": { "$value": "{primitive.spacing.32}", "$type": "dimension", "$description": "64px - Large section spacing" },
+          "xl": { "$value": "{primitive.spacing.40}", "$type": "dimension", "$description": "80px - Extra large section" }
+        },
+        "page": {
+          "margin": { "$value": "{primitive.spacing.8}", "$type": "dimension", "$description": "16px - Page margin on mobile" },
+          "maxWidth": { "$value": "1200px", "$type": "dimension", "$description": "Maximum content width" }
+        }
+      },
+      "inset": {
+        "$description": "Inset spacing for containers",
+        "xs": { "$value": "{primitive.spacing.2}", "$type": "dimension" },
+        "sm": { "$value": "{primitive.spacing.4}", "$type": "dimension" },
+        "md": { "$value": "{primitive.spacing.8}", "$type": "dimension" },
+        "lg": { "$value": "{primitive.spacing.12}", "$type": "dimension" },
+        "xl": { "$value": "{primitive.spacing.16}", "$type": "dimension" }
+      },
+      "stack": {
+        "$description": "Vertical spacing between stacked elements",
+        "xs": { "$value": "{primitive.spacing.2}", "$type": "dimension" },
+        "sm": { "$value": "{primitive.spacing.4}", "$type": "dimension" },
+        "md": { "$value": "{primitive.spacing.8}", "$type": "dimension" },
+        "lg": { "$value": "{primitive.spacing.12}", "$type": "dimension" },
+        "xl": { "$value": "{primitive.spacing.16}", "$type": "dimension" }
+      },
+      "inline": {
+        "$description": "Horizontal spacing between inline elements",
+        "xs": { "$value": "{primitive.spacing.1}", "$type": "dimension" },
+        "sm": { "$value": "{primitive.spacing.2}", "$type": "dimension" },
+        "md": { "$value": "{primitive.spacing.4}", "$type": "dimension" },
+        "lg": { "$value": "{primitive.spacing.6}", "$type": "dimension" },
+        "xl": { "$value": "{primitive.spacing.8}", "$type": "dimension" }
+      }
+    },
+    "radius": {
+      "$description": "Semantic border radius tokens",
+      "component": {
+        "button": { "$value": "{primitive.radius.md}", "$type": "dimension", "$description": "Button border radius" },
+        "input": { "$value": "{primitive.radius.md}", "$type": "dimension", "$description": "Input field border radius" },
+        "card": { "$value": "{primitive.radius.lg}", "$type": "dimension", "$description": "Card border radius" },
+        "modal": { "$value": "{primitive.radius.xl}", "$type": "dimension", "$description": "Modal/dialog border radius" },
+        "badge": { "$value": "{primitive.radius.full}", "$type": "dimension", "$description": "Badge/tag border radius" },
+        "avatar": { "$value": "{primitive.radius.full}", "$type": "dimension", "$description": "Avatar border radius" }
+      }
+    }
+  }
+}

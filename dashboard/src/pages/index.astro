@@ -1,0 +1,744 @@
+---
+import Layout from '../layouts/Layout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Load component index
+const indexPath = path.join(process.cwd(), 'src', 'data', 'components', 'index.json');
+let componentData = { categories: [], components: [] };
+
+try {
+  componentData = JSON.parse(fs.readFileSync(indexPath, 'utf-8'));
+} catch (e) {
+  console.warn('Components index not found');
+}
+
+// Status badge colors
+const statusConfig = {
+  stable: { bg: '#dcfce7', text: '#166534', label: 'Stable' },
+  beta: { bg: '#fef3c7', text: '#92400e', label: 'Beta' },
+  draft: { bg: '#e0e7ff', text: '#3730a3', label: 'Draft' },
+  deprecated: { bg: '#fee2e2', text: '#991b1b', label: 'Deprecated' }
+};
+
+// Group components by category
+const componentsByCategory = componentData.categories.map(category => ({
+  ...category,
+  items: componentData.components.filter(c => c.category === category.id)
+}));
+
+// Stats
+const totalComponents = componentData.components.length;
+const stableComponents = componentData.components.filter(c => c.status === 'stable').length;
+const draftComponents = componentData.components.filter(c => c.status === 'draft').length;
+---
+
+<Layout title="Components">
+  <div class="components-page">
+    <!-- Hero Section -->
+    <header class="page-hero">
+      <div class="hero-content">
+        <h1>Components</h1>
+        <p class="hero-description">
+          A comprehensive library of reusable UI components designed for consistency, 
+          accessibility, and flexibility across all products.
+        </p>
+        
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span class="stat-value">{totalComponents}</span>
+            <span class="stat-label">Components</span>
+          </div>
+          <div class="hero-stat">
+            <span class="stat-value">{stableComponents}</span>
+            <span class="stat-label">Stable</span>
+          </div>
+          <div class="hero-stat">
+            <span class="stat-value">{draftComponents}</span>
+            <span class="stat-label">In Progress</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="hero-visual">
+        <div class="visual-grid">
+          <div class="visual-item">
+            <div class="visual-button">Button</div>
+          </div>
+          <div class="visual-item">
+            <div class="visual-input" data-placeholder="Input field"></div>
+          </div>
+          <div class="visual-item">
+            <div class="visual-toggle"></div>
+          </div>
+          <div class="visual-item">
+            <div class="visual-card"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Quick Start -->
+    <section class="quick-start">
+      <h2>Quick Start</h2>
+      <div class="quick-start-cards">
+        <a href="/tokens" class="quick-card">
+          <div class="quick-icon">🎨</div>
+          <h3>Design Tokens</h3>
+          <p>Explore colors, typography, spacing, and other foundational values</p>
+        </a>
+        <a href="/decisions" class="quick-card">
+          <div class="quick-icon">🧭</div>
+          <h3>Decision Trees</h3>
+          <p>Interactive guides to help you choose the right component</p>
+        </a>
+        <a href="/docs" class="quick-card">
+          <div class="quick-icon">📚</div>
+          <h3>Documentation</h3>
+          <p>Implementation guides, patterns, and best practices</p>
+        </a>
+      </div>
+    </section>
+    
+    <!-- Search & Filter (Sticky on scroll) -->
+    <div class="search-section-wrapper" id="search-wrapper">
+      <section class="search-section" id="search-section">
+        <input 
+          type="search" 
+          id="component-search"
+          placeholder="Search components..."
+          class="search-input"
+        />
+        
+        <div class="filter-pills">
+          <button class="filter-pill active" data-filter="all">All</button>
+          <button class="filter-pill" data-filter="stable">Stable</button>
+          <button class="filter-pill" data-filter="draft">In Progress</button>
+        </div>
+      </section>
+    </div>
+    
+    <!-- Component Categories -->
+    <div class="categories">
+      {componentsByCategory.map(category => (
+        <section class="category-section" data-category={category.id}>
+          <div class="category-header">
+            <h2>{category.name}</h2>
+            <p>{category.description}</p>
+          </div>
+          
+          <div class="component-grid">
+            {category.items.map(component => {
+              const status = statusConfig[component.status] || statusConfig.draft;
+              return (
+                <a href={`/components/${component.id}`} class="component-card" data-status={component.status}>
+                  <div class="card-preview">
+                    <span class="preview-placeholder">{component.name[0]}</span>
+                  </div>
+                  <div class="card-content">
+                    <div class="card-header">
+                      <h3>{component.name}</h3>
+                      <span 
+                        class="status-badge" 
+                        style={`background: ${status.bg}; color: ${status.text}`}
+                      >
+                        {status.label}
+                      </span>
+                    </div>
+                    <p>{component.description}</p>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      ))}
+    </div>
+    
+    <!-- Empty State (shown when no results) -->
+    <div class="empty-state" id="empty-state" style="display: none;">
+      <div class="empty-icon">🔍</div>
+      <h3>No components found</h3>
+      <p>Try adjusting your search or filter criteria</p>
+    </div>
+    
+    <!-- Contribution CTA -->
+    <section class="contribution-section">
+      <h2>Want to contribute?</h2>
+      <p>
+        Have a component request or found an issue? 
+        We welcome contributions from all teams.
+      </p>
+      <div class="contribution-actions">
+        <a href="https://github.com/ark-design/components/issues/new" class="contribution-btn primary">
+          Request Component
+        </a>
+        <a href="/docs/contributing" class="contribution-btn secondary">
+          Contribution Guide
+        </a>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<script>
+  const searchInput = document.getElementById('component-search') as HTMLInputElement;
+  const filterPills = document.querySelectorAll('.filter-pill');
+  const componentCards = document.querySelectorAll('.component-card');
+  const categorySections = document.querySelectorAll('.category-section');
+  const emptyState = document.getElementById('empty-state');
+  
+  let activeFilter = 'all';
+  
+  function applyFilters() {
+    const searchQuery = searchInput?.value.toLowerCase() || '';
+    let visibleCount = 0;
+    
+    componentCards.forEach(card => {
+      const cardStatus = card.getAttribute('data-status');
+      const cardText = card.textContent?.toLowerCase() || '';
+      
+      const matchesSearch = searchQuery === '' || cardText.includes(searchQuery);
+      const matchesFilter = activeFilter === 'all' || cardStatus === activeFilter;
+      
+      const isVisible = matchesSearch && matchesFilter;
+      (card as HTMLElement).style.display = isVisible ? '' : 'none';
+      
+      if (isVisible) visibleCount++;
+    });
+    
+    // Hide empty categories
+    categorySections.forEach(section => {
+      const visibleCards = section.querySelectorAll('.component-card:not([style*="display: none"])');
+      (section as HTMLElement).style.display = visibleCards.length > 0 ? '' : 'none';
+    });
+    
+    // Show/hide empty state
+    if (emptyState) {
+      emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+  }
+  
+  searchInput?.addEventListener('input', applyFilters);
+  
+  filterPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      activeFilter = pill.getAttribute('data-filter') || 'all';
+      filterPills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      applyFilters();
+    });
+  });
+  
+  // Sticky search bar behavior (Airbnb-style)
+  const searchWrapper = document.getElementById('search-wrapper');
+  const quickStartSection = document.querySelector('.quick-start');
+  
+  if (searchWrapper && quickStartSection) {
+    // Create a sentinel element to detect when to make search bar sticky
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          // When quick-start section leaves the viewport, make search sticky
+          if (!entry.isIntersecting) {
+            searchWrapper.classList.add('is-stuck');
+          } else {
+            searchWrapper.classList.remove('is-stuck');
+          }
+        });
+      },
+      {
+        // Trigger when quick-start bottom edge passes the sticky position (68px from top)
+        rootMargin: '-68px 0px 0px 0px',
+        threshold: 0
+      }
+    );
+    
+    observer.observe(quickStartSection);
+  }
+</script>
+
+<style>
+  .components-page {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+  
+  /* Hero Section */
+  .page-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    padding: 2rem 0;
+  }
+  
+  @media (max-width: 768px) {
+    .page-hero {
+      grid-template-columns: 1fr;
+    }
+    
+    .hero-visual {
+      display: none;
+    }
+  }
+  
+  .hero-content h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--brand-primary, #18181b) 0%, var(--brand-accent, #52525b) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .hero-description {
+    font-size: 1.125rem;
+    color: var(--color-text-secondary, #52525b);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+  
+  .hero-stats {
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .hero-stat {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text-primary, #18181b);
+  }
+  
+  .stat-label {
+    font-size: 0.875rem;
+    color: var(--color-text-muted, #71717a);
+  }
+  
+  .hero-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .visual-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    transform: rotate(-5deg);
+  }
+  
+  .visual-item {
+    padding: 1rem;
+    background: var(--color-surface-primary, #fff);
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+  
+  .visual-button {
+    padding: 0.625rem 1.25rem;
+    background: var(--brand-primary, #18181b);
+    color: white;
+    border-radius: var(--brand-radius-button, 8px);
+    font-weight: 500;
+    font-size: 0.875rem;
+    text-align: center;
+  }
+  
+  .visual-input {
+    padding: 0.625rem 1rem;
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 8px;
+    color: var(--color-text-muted, #a1a1aa);
+    font-size: 0.875rem;
+  }
+  
+  .visual-input::before {
+    content: attr(data-placeholder);
+  }
+  
+  .visual-toggle {
+    width: 44px;
+    height: 24px;
+    background: var(--brand-primary, #18181b);
+    border-radius: 12px;
+    position: relative;
+  }
+  
+  .visual-toggle::after {
+    content: '';
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+  }
+  
+  .visual-card {
+    width: 80px;
+    height: 60px;
+    background: var(--color-surface-secondary, #fafafa);
+    border-radius: 8px;
+    position: relative;
+  }
+  
+  .visual-card::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    height: 8px;
+    background: var(--color-border-default, #e4e4e7);
+    border-radius: 4px;
+  }
+  
+  /* Quick Start */
+  .quick-start {
+    padding: 2rem;
+    background: var(--color-surface-secondary, #fafafa);
+    border-radius: 16px;
+  }
+  
+  .quick-start h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  
+  .quick-start-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  
+  @media (max-width: 640px) {
+    .quick-start-cards {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .quick-card {
+    display: block;
+    padding: 1.25rem;
+    background: var(--color-surface-primary, #fff);
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+  
+  .quick-card:hover {
+    border-color: var(--brand-primary, #18181b);
+    box-shadow: var(--brand-shadow-card, 0 4px 12px rgba(0, 0, 0, 0.08));
+    transform: translateY(-2px);
+  }
+  
+  .quick-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .quick-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary, #18181b);
+    margin-bottom: 0.375rem;
+  }
+  
+  .quick-card p {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #52525b);
+    margin: 0;
+    line-height: 1.5;
+  }
+  
+  /* Search Section - Sticky on scroll */
+  .search-section-wrapper {
+    position: sticky;
+    top: 68px; /* Below the main header */
+    z-index: 90;
+    margin: 0 -1.5rem; /* Extend to edges */
+    padding: 0.75rem 1.5rem;
+    background: var(--color-surface-primary, #fff);
+    transition: all 0.2s ease;
+  }
+  
+  .search-section-wrapper.is-stuck {
+    background: var(--color-surface-primary, #fff);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid var(--color-border-default, #e4e4e7);
+  }
+  
+  [data-theme="dark"] .search-section-wrapper.is-stuck {
+    background: var(--semantic-neutral-bg-default, #000);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border-bottom-color: var(--semantic-neutral-border-default, #2e3033);
+  }
+  
+  .search-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  
+  .search-input {
+    flex: 1;
+    min-width: 200px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: var(--brand-radius-button, 8px);
+    background: var(--color-surface-primary, #fff);
+    color: var(--color-text-primary, #18181b);
+    transition: all 0.15s ease;
+  }
+  
+  [data-theme="dark"] .search-input {
+    background: var(--semantic-neutral-bg-medium, #191a1a);
+    border-color: var(--semantic-neutral-border-default, #2e3033);
+    color: var(--semantic-neutral-text-default, #ffffffd9);
+  }
+  
+  .search-input::placeholder {
+    color: var(--color-text-muted, #a1a1aa);
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: var(--brand-primary, #18181b);
+    box-shadow: 0 0 0 3px var(--semantic-focus-ring-primary, rgba(0, 0, 0, 0.1));
+  }
+  
+  .filter-pills {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .filter-pill {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-secondary, #52525b);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  
+  [data-theme="dark"] .filter-pill {
+    border-color: var(--semantic-neutral-border-default, #2e3033);
+    color: var(--semantic-neutral-text-weak, #ffffffa6);
+  }
+  
+  .filter-pill:hover {
+    background: var(--color-surface-secondary, #fafafa);
+  }
+  
+  [data-theme="dark"] .filter-pill:hover {
+    background: var(--semantic-neutral-bg-medium, #191a1a);
+  }
+  
+  .filter-pill.active {
+    background: var(--brand-primary, #18181b);
+    border-color: var(--brand-primary, #18181b);
+    color: white;
+  }
+  
+  /* Categories */
+  .categories {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+  
+  .category-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .category-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.375rem;
+  }
+  
+  .category-header p {
+    color: var(--color-text-secondary, #52525b);
+    font-size: 1rem;
+  }
+  
+  /* Component Grid */
+  .component-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  
+  .component-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface-primary, #fff);
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+  
+  .component-card:hover {
+    border-color: var(--brand-primary, #18181b);
+    box-shadow: var(--brand-shadow-card, 0 4px 12px rgba(0, 0, 0, 0.08));
+    transform: translateY(-2px);
+  }
+  
+  .card-preview {
+    height: 120px;
+    background: linear-gradient(135deg, var(--color-surface-secondary, #fafafa) 0%, var(--color-surface-tertiary, #f4f4f5) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .preview-placeholder {
+    width: 48px;
+    height: 48px;
+    background: var(--brand-primary, #18181b);
+    color: white;
+    border-radius: var(--brand-radius-card, 12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  
+  .card-content {
+    padding: 1rem;
+  }
+  
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  
+  .card-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary, #18181b);
+  }
+  
+  .status-badge {
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+  }
+  
+  .card-content p {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #52525b);
+    margin: 0;
+    line-height: 1.5;
+  }
+  
+  /* Empty State */
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--color-surface-secondary, #fafafa);
+    border-radius: 16px;
+  }
+  
+  .empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .empty-state h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .empty-state p {
+    color: var(--color-text-secondary, #52525b);
+  }
+  
+  /* Contribution Section */
+  .contribution-section {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, #f5f3ff 0%, #fdf4ff 100%);
+    border-radius: 16px;
+  }
+  
+  .contribution-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+  
+  .contribution-section p {
+    color: var(--color-text-secondary, #52525b);
+    margin-bottom: 1.5rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .contribution-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .contribution-btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  
+  .contribution-btn.primary {
+    background: var(--brand-primary, #18181b);
+    color: white;
+    border-radius: var(--brand-radius-button, 8px);
+  }
+  
+  .contribution-btn.primary:hover {
+    background: var(--brand-primary-hover, #27272a);
+  }
+  
+  .contribution-btn.secondary {
+    background: white;
+    color: var(--color-text-primary, #18181b);
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: var(--brand-radius-button, 8px);
+  }
+  
+  .contribution-btn.secondary:hover {
+    border-color: var(--brand-primary, #18181b);
+    color: var(--brand-primary, #18181b);
+  }
+</style>

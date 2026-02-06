@@ -1,0 +1,42 @@
+{
+  "brand": {
+    "keela": {
+      "$description": "Keela brand colors - Blue/Purple theme",
+      "color": {
+        "primary": {
+          "$value": "#6f3dc4",
+          "$type": "color",
+          "$description": "Primary brand color"
+        },
+        "primary-hover": {
+          "$value": "#5c32a5",
+          "$type": "color"
+        },
+        "primary-light": {
+          "$value": "#f6f4fe",
+          "$type": "color"
+        },
+        "primary-dark": {
+          "$value": "#2d1a5e",
+          "$type": "color"
+        },
+        "accent": {
+          "$value": "#0091ff",
+          "$type": "color",
+          "$description": "Accent color - Blue"
+        },
+        "accent-light": {
+          "$value": "#edf5ff",
+          "$type": "color"
+        }
+      },
+      "button": {
+        "radius": {
+          "$value": "8px",
+          "$type": "dimension",
+          "$description": "Rounded buttons"
+        }
+      }
+    }
+  }
+}

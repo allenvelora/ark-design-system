@@ -1,0 +1,42 @@
+{
+  "brand": {
+    "raisely": {
+      "$description": "Raisely brand colors - Purple theme",
+      "color": {
+        "primary": {
+          "$value": "#6138d8",
+          "$type": "color",
+          "$description": "Primary brand color"
+        },
+        "primary-hover": {
+          "$value": "#4d26bf",
+          "$type": "color"
+        },
+        "primary-light": {
+          "$value": "#f5f2ff",
+          "$type": "color"
+        },
+        "primary-dark": {
+          "$value": "#20134b",
+          "$type": "color"
+        },
+        "accent": {
+          "$value": "#fa60de",
+          "$type": "color",
+          "$description": "Accent color - Pink"
+        },
+        "accent-light": {
+          "$value": "#ffebfd",
+          "$type": "color"
+        }
+      },
+      "button": {
+        "radius": {
+          "$value": "9999px",
+          "$type": "dimension",
+          "$description": "Pill-shaped buttons"
+        }
+      }
+    }
+  }
+}

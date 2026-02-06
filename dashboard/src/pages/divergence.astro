@@ -1,0 +1,514 @@
+---
+import Layout from '../layouts/Layout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Load divergence data
+const dataPath = path.join(process.cwd(), '..', 'data');
+const divergenceData = JSON.parse(
+  fs.readFileSync(path.join(dataPath, 'divergence-log.json'), 'utf-8')
+);
+
+const entries = divergenceData.entries.filter((e: any) => !e._isExample);
+const categories = divergenceData.categories;
+
+// Group by status
+const openEntries = entries.filter((e: any) => e.status === 'open');
+const acceptedEntries = entries.filter((e: any) => e.status === 'accepted');
+const resolvedEntries = entries.filter((e: any) => e.status === 'resolved');
+
+// Count by category
+const categoryCounts = entries.reduce((acc: any, e: any) => {
+  acc[e.category] = (acc[e.category] || 0) + 1;
+  return acc;
+}, {});
+---
+
+<Layout title="Divergence Log">
+  <div class="divergence-page">
+    <header class="page-header">
+      <h1>Divergence Log</h1>
+      <p class="subtitle">Track and manage design system divergences • Edit <code>data/divergence-log.json</code></p>
+    </header>
+    
+    <!-- Summary Cards -->
+    <section class="summary-grid">
+      <div class="card summary-card">
+        <span class="card-value">{entries.length}</span>
+        <span class="card-label">Total Entries</span>
+      </div>
+      <div class="card summary-card warning">
+        <span class="card-value">{openEntries.length}</span>
+        <span class="card-label">Open</span>
+      </div>
+      <div class="card summary-card success">
+        <span class="card-value">{acceptedEntries.length}</span>
+        <span class="card-label">Accepted</span>
+      </div>
+      <div class="card summary-card">
+        <span class="card-value">{resolvedEntries.length}</span>
+        <span class="card-label">Resolved</span>
+      </div>
+    </section>
+    
+    <!-- Category Breakdown -->
+    <section class="section">
+      <h2 class="section-title">By Category</h2>
+      <div class="category-grid">
+        {Object.entries(categories).map(([key, cat]: [string, any]) => (
+          <div class={`category-card severity-${cat.severity}`}>
+            <div class="category-header">
+              <h3>{cat.label}</h3>
+              <span class="category-count">{categoryCounts[key] || 0}</span>
+            </div>
+            <p class="category-description">{cat.description}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+    
+    <!-- Filters -->
+    <section class="section">
+      <div class="filters">
+        <h2 class="section-title">All Entries</h2>
+        <div class="filter-buttons">
+          <button class="filter-button active" data-filter="all">All</button>
+          <button class="filter-button" data-filter="open">Open</button>
+          <button class="filter-button" data-filter="accepted">Accepted</button>
+          <button class="filter-button" data-filter="resolved">Resolved</button>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Entries List -->
+    {entries.length === 0 ? (
+      <div class="empty-state">
+        <h3>No Divergences Recorded</h3>
+        <p>When teams diverge from the design system, entries appear here.</p>
+        <p class="hint">Add entries to <code>data/divergence-log.json</code></p>
+      </div>
+    ) : (
+      <section class="entries-list">
+        {entries.map((entry: any) => (
+          <article 
+            class={`card entry-card category-${entry.category}`}
+            data-status={entry.status}
+            data-category={entry.category}
+          >
+            <header class="entry-header">
+              <span class="entry-id">{entry.id}</span>
+              <span class={`badge badge-${entry.category}`}>
+                {categories[entry.category]?.label || entry.category}
+              </span>
+              <span class={`badge badge-status-${entry.status}`}>{entry.status}</span>
+              <span class="entry-product">{entry.product}</span>
+            </header>
+            
+            <h3 class="entry-summary">{entry.summary}</h3>
+            <p class="entry-description">{entry.description}</p>
+            
+            {entry.tokensAffected && entry.tokensAffected.length > 0 && (
+              <div class="entry-tokens">
+                <strong>Tokens affected:</strong>
+                {entry.tokensAffected.map((token: string) => (
+                  <code>{token}</code>
+                ))}
+              </div>
+            )}
+            
+            {entry.alternativeUsed && (
+              <div class="entry-alternative">
+                <strong>Alternative used:</strong> {entry.alternativeUsed}
+              </div>
+            )}
+            
+            {entry.rationale && (
+              <div class="entry-rationale">
+                <strong>Rationale:</strong> {entry.rationale}
+              </div>
+            )}
+            
+            <footer class="entry-footer">
+              <span>Date: {entry.date}</span>
+              <span>Reported by: {entry.reportedBy}</span>
+              {entry.ticket && (
+                <a href="#" class="entry-ticket">{entry.ticket}</a>
+              )}
+            </footer>
+          </article>
+        ))}
+      </section>
+    )}
+    
+    <!-- How to Add Entry -->
+    <section class="section add-entry-section">
+      <h2 class="section-title">Adding a Divergence</h2>
+      <p>To add a new divergence entry, edit <code>data/divergence-log.json</code> and add an object to the <code>entries</code> array:</p>
+      <pre><code>{`{
+  "id": "div-XXX",
+  "date": "YYYY-MM-DD",
+  "product": "keela|aplos|raisely",
+  "category": "intentional|unintentional|technical-debt|blocked",
+  "status": "open|accepted|resolved|wont-fix",
+  "summary": "Brief description",
+  "description": "Detailed explanation",
+  "tokensAffected": ["token.name.here"],
+  "alternativeUsed": "What was used instead",
+  "rationale": "Why this approach was taken",
+  "ticket": "JIRA-XXX or null",
+  "reportedBy": "Team or person"
+}`}</code></pre>
+    </section>
+  </div>
+</Layout>
+
+<script>
+  // Filter functionality
+  const filterButtons = document.querySelectorAll('.filter-button');
+  const entryCards = document.querySelectorAll('.entry-card');
+  
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const filter = button.getAttribute('data-filter');
+      
+      // Update active button
+      filterButtons.forEach(b => b.classList.remove('active'));
+      button.classList.add('active');
+      
+      // Filter entries
+      entryCards.forEach(card => {
+        const status = card.getAttribute('data-status');
+        if (filter === 'all' || status === filter) {
+          (card as HTMLElement).style.display = '';
+        } else {
+          (card as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .divergence-page {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .page-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+  
+  .subtitle {
+    color: var(--color-text-muted, #a1a1aa);
+    font-size: 0.875rem;
+  }
+  
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  
+  /* Summary Grid */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+  
+  .card {
+    background: var(--color-surface-primary, #fff);
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 8px;
+    padding: 1.25rem;
+  }
+  
+  .summary-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .summary-card .card-value {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+  
+  .summary-card .card-label {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #52525b);
+  }
+  
+  .summary-card.warning {
+    border-color: var(--color-feedback-warning-border, #fde68a);
+    background: var(--color-feedback-warning-bg, #fffbeb);
+  }
+  
+  .summary-card.success {
+    border-color: var(--color-feedback-success-border, #bbf7d0);
+    background: var(--color-feedback-success-bg, #f0fdf4);
+  }
+  
+  /* Category Grid */
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+  
+  .category-card {
+    background: var(--color-surface-primary, #fff);
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 8px;
+    padding: 1rem;
+    border-left: 3px solid;
+  }
+  
+  .category-card.severity-low {
+    border-left-color: var(--color-feedback-info-icon, #3b82f6);
+  }
+  
+  .category-card.severity-medium {
+    border-left-color: var(--color-feedback-warning-icon, #f59e0b);
+  }
+  
+  .category-card.severity-high {
+    border-left-color: var(--color-feedback-error-icon, #ef4444);
+  }
+  
+  .category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .category-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  .category-count {
+    background: var(--color-surface-tertiary, #f4f4f5);
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  
+  .category-description {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #52525b);
+  }
+  
+  /* Filters */
+  .filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .filter-buttons {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .filter-button {
+    padding: 0.5rem 1rem;
+    background: var(--color-surface-secondary, #fafafa);
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    cursor: pointer;
+  }
+  
+  .filter-button:hover {
+    background: var(--color-surface-tertiary, #f4f4f5);
+  }
+  
+  .filter-button.active {
+    background: var(--color-action-primary-default, #2563eb);
+    color: white;
+    border-color: var(--color-action-primary-default, #2563eb);
+  }
+  
+  /* Entry Cards */
+  .entries-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .entry-card {
+    border-left: 3px solid var(--color-border-default, #e4e4e7);
+  }
+  
+  .entry-card.category-blocked {
+    border-left-color: var(--color-feedback-error-icon, #ef4444);
+  }
+  
+  .entry-card.category-intentional {
+    border-left-color: var(--color-feedback-info-icon, #3b82f6);
+  }
+  
+  .entry-card.category-unintentional {
+    border-left-color: var(--color-feedback-warning-icon, #f59e0b);
+  }
+  
+  .entry-card.category-technical-debt {
+    border-left-color: var(--color-text-muted, #a1a1aa);
+  }
+  
+  .entry-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+  }
+  
+  .entry-id {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-muted, #a1a1aa);
+  }
+  
+  .entry-product {
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: var(--color-text-secondary, #52525b);
+  }
+  
+  .badge {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  
+  .badge-intentional {
+    background: var(--color-feedback-info-bg, #eff6ff);
+    color: var(--color-feedback-info-text, #1d4ed8);
+  }
+  
+  .badge-unintentional {
+    background: var(--color-feedback-warning-bg, #fffbeb);
+    color: var(--color-feedback-warning-text, #b45309);
+  }
+  
+  .badge-technical-debt {
+    background: var(--color-surface-tertiary, #f4f4f5);
+    color: var(--color-text-secondary, #52525b);
+  }
+  
+  .badge-blocked {
+    background: var(--color-feedback-error-bg, #fef2f2);
+    color: var(--color-feedback-error-text, #b91c1c);
+  }
+  
+  .badge-status-open {
+    background: var(--color-feedback-warning-bg, #fffbeb);
+    color: var(--color-feedback-warning-text, #b45309);
+  }
+  
+  .badge-status-accepted {
+    background: var(--color-feedback-success-bg, #f0fdf4);
+    color: var(--color-feedback-success-text, #15803d);
+  }
+  
+  .badge-status-resolved,
+  .badge-status-wont-fix {
+    background: var(--color-surface-tertiary, #f4f4f5);
+    color: var(--color-text-muted, #a1a1aa);
+  }
+  
+  .entry-summary {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .entry-description {
+    color: var(--color-text-secondary, #52525b);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+  
+  .entry-tokens,
+  .entry-alternative,
+  .entry-rationale {
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .entry-tokens code {
+    margin-left: 0.25rem;
+  }
+  
+  .entry-footer {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.75rem;
+    color: var(--color-text-muted, #a1a1aa);
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border-default, #e4e4e7);
+    flex-wrap: wrap;
+  }
+  
+  .entry-ticket {
+    color: var(--color-text-link, #2563eb);
+  }
+  
+  /* Empty State */
+  .empty-state {
+    padding: 3rem;
+    text-align: center;
+    background: var(--color-surface-secondary, #fafafa);
+    border-radius: 8px;
+  }
+  
+  .empty-state h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .empty-state .hint {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--color-text-muted, #a1a1aa);
+  }
+  
+  /* Add Entry Section */
+  .add-entry-section {
+    padding: 1.5rem;
+    background: var(--color-surface-secondary, #fafafa);
+    border-radius: 8px;
+  }
+  
+  .add-entry-section p {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #52525b);
+    margin-bottom: 1rem;
+  }
+  
+  .add-entry-section pre {
+    background: var(--color-surface-primary, #fff);
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 6px;
+    padding: 1rem;
+    overflow-x: auto;
+    font-size: 0.8125rem;
+  }
+</style>

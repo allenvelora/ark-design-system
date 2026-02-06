@@ -1,0 +1,58 @@
+{
+  "categories": [
+    {
+      "id": "actions",
+      "name": "Actions",
+      "description": "Components that trigger actions or commands",
+      "components": ["button", "icon-button", "menu"]
+    },
+    {
+      "id": "forms",
+      "name": "Forms",
+      "description": "Components for collecting user input",
+      "components": ["input", "select", "checkbox", "radio", "toggle", "textarea", "form-field"]
+    },
+    {
+      "id": "feedback",
+      "name": "Feedback",
+      "description": "Components that communicate status and provide feedback",
+      "components": ["toast", "alert", "badge", "progress", "skeleton"]
+    },
+    {
+      "id": "layout",
+      "name": "Layout",
+      "description": "Components for organizing and structuring content",
+      "components": ["card", "modal", "drawer", "tabs", "accordion", "divider"]
+    },
+    {
+      "id": "navigation",
+      "name": "Navigation",
+      "description": "Components for moving between pages and sections",
+      "components": ["link", "breadcrumb", "pagination", "navbar", "sidebar"]
+    },
+    {
+      "id": "data-display",
+      "name": "Data Display",
+      "description": "Components for presenting information",
+      "components": ["avatar", "table", "list", "tooltip", "popover"]
+    }
+  ],
+  "components": [
+    {"id": "button", "name": "Button", "category": "actions", "status": "stable", "description": "Triggers actions and commands"},
+    {"id": "input", "name": "Input", "category": "forms", "status": "stable", "description": "Text input for forms"},
+    {"id": "select", "name": "Select", "category": "forms", "status": "stable", "description": "Dropdown selection from options"},
+    {"id": "checkbox", "name": "Checkbox", "category": "forms", "status": "stable", "description": "Multiple selection control"},
+    {"id": "toggle", "name": "Toggle", "category": "forms", "status": "stable", "description": "On/off switch control"},
+    {"id": "card", "name": "Card", "category": "layout", "status": "stable", "description": "Content container surface"},
+    {"id": "modal", "name": "Modal", "category": "layout", "status": "stable", "description": "Dialog overlay window"},
+    {"id": "toast", "name": "Toast", "category": "feedback", "status": "stable", "description": "Brief notification message"},
+    {"id": "badge", "name": "Badge", "category": "feedback", "status": "stable", "description": "Status indicator label"},
+    {"id": "avatar", "name": "Avatar", "category": "data-display", "status": "draft", "description": "User profile image"},
+    {"id": "tabs", "name": "Tabs", "category": "layout", "status": "draft", "description": "Tabbed content navigation"},
+    {"id": "tooltip", "name": "Tooltip", "category": "data-display", "status": "draft", "description": "Contextual information popup"},
+    {"id": "alert", "name": "Alert", "category": "feedback", "status": "draft", "description": "Important message banner"},
+    {"id": "link", "name": "Link", "category": "navigation", "status": "draft", "description": "Navigation text link"},
+    {"id": "textarea", "name": "Textarea", "category": "forms", "status": "draft", "description": "Multi-line text input"},
+    {"id": "radio", "name": "Radio", "category": "forms", "status": "draft", "description": "Single selection from options"}
+  ]
+}

@@ -1,0 +1,805 @@
+---
+import Layout from '../layouts/Layout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Load built tokens
+const tokensPath = path.join(process.cwd(), '..', 'tokens', 'build', 'json', 'tokens.json');
+let tokens = {};
+
+try {
+  tokens = JSON.parse(fs.readFileSync(tokensPath, 'utf-8'));
+} catch (e) {
+  console.warn('Tokens not built yet. Run npm run build in the tokens directory.');
+}
+
+// Group tokens by category (primitive, semantic, brand)
+// Token names are in PascalCase: e.g., "PrimitiveColorGreen50", "SemanticNeutralBgDefault"
+const groupedTokens: Record<string, Record<string, any[]>> = {
+  primitive: {},
+  semantic: {},
+  'semantic-dark': {},
+  brand: {},
+};
+
+// Helper to convert PascalCase to kebab-case for CSS variable naming
+function toKebabCase(str: string): string {
+  return str.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+}
+
+// Helper to split PascalCase into parts
+function splitPascalCase(str: string): string[] {
+  return str.split(/(?=[A-Z])/).map(s => s.toLowerCase());
+}
+
+// Helper to extract category name (normalize variations)
+function extractCategory(str: string): string {
+  const lower = str.toLowerCase();
+  // Normalize shadow variants (shadow, shadow2xl, etc.) -> shadow
+  if (lower.startsWith('shadow')) return 'shadow';
+  // Normalize radius variants (radius, radius2xl, radius3xl, etc.) -> radius
+  if (lower.startsWith('radius')) return 'radius';
+  // Strip trailing numbers for other categories
+  return lower.replace(/\d+$/, '') || lower;
+}
+
+// Categories to hide from filter chips (still shown in token list)
+const hiddenPrimitiveCategories = ['easing', 'duration'];
+
+Object.entries(tokens).forEach(([name, value]: [string, any]) => {
+  // Split PascalCase: e.g., "PrimitiveColorGreen50" -> ["primitive", "color", "green", "50"]
+  const parts = splitPascalCase(name);
+  const topLevel = parts[0]; // primitive, semantic, brand
+  
+  const tokenData = { 
+    name: toKebabCase(name), 
+    value: typeof value === 'object' ? value.value : value 
+  };
+  
+  if (topLevel === 'primitive') {
+    // Extract category without trailing numbers: "spacing48" -> "spacing"
+    const subCategory = extractCategory(parts[1] || 'other');
+    if (!groupedTokens.primitive[subCategory]) {
+      groupedTokens.primitive[subCategory] = [];
+    }
+    groupedTokens.primitive[subCategory].push(tokenData);
+  } else if (topLevel === 'semantic') {
+    // Check if it's dark theme (e.g., "SemanticDarkNeutralBgDefault")
+    if (parts[1] === 'dark') {
+      const subCategory = extractCategory(parts[2] || 'other');
+      if (!groupedTokens['semantic-dark'][subCategory]) {
+        groupedTokens['semantic-dark'][subCategory] = [];
+      }
+      groupedTokens['semantic-dark'][subCategory].push(tokenData);
+    } else {
+      const subCategory = extractCategory(parts[1] || 'other');
+      if (!groupedTokens.semantic[subCategory]) {
+        groupedTokens.semantic[subCategory] = [];
+      }
+      groupedTokens.semantic[subCategory].push(tokenData);
+    }
+  } else if (topLevel === 'brand') {
+    const brandName = parts[1] || 'other'; // raisely, aplos, keela
+    if (!groupedTokens.brand[brandName]) {
+      groupedTokens.brand[brandName] = [];
+    }
+    groupedTokens.brand[brandName].push(tokenData);
+  }
+});
+
+// Calculate totals
+const totalTokens = Object.keys(tokens).length;
+const primitiveCount = Object.values(groupedTokens.primitive).flat().length;
+const semanticCount = Object.values(groupedTokens.semantic).flat().length;
+const darkCount = Object.values(groupedTokens['semantic-dark']).flat().length;
+const brandCount = Object.values(groupedTokens.brand).flat().length;
+
+// Get subcategories with counts for each layer (excluding hidden categories)
+const primitiveSubcategories = Object.entries(groupedTokens.primitive)
+  .filter(([name]) => !hiddenPrimitiveCategories.includes(name))
+  .map(([name, tokens]) => ({
+    id: name,
+    label: name.charAt(0).toUpperCase() + name.slice(1),
+    count: tokens.length
+  })).sort((a, b) => b.count - a.count);
+
+const semanticSubcategories = Object.entries(groupedTokens.semantic).map(([name, tokens]) => ({
+  id: name,
+  label: name.charAt(0).toUpperCase() + name.slice(1),
+  count: tokens.length
+})).sort((a, b) => b.count - a.count);
+
+// Helper to determine if a value is a color
+function isColor(value: any): boolean {
+  if (typeof value !== 'string') return false;
+  return value.startsWith('#') || value.startsWith('rgb');
+}
+---
+
+<Layout title="Token Browser">
+  <div class="tokens-page">
+    <header class="page-header">
+      <h1>Token Browser</h1>
+      <p class="subtitle">Explore all available design tokens • Edit source files in <code>tokens/src/</code></p>
+    </header>
+    
+    {totalTokens === 0 ? (
+      <div class="empty-state">
+        <h2>Tokens Not Built</h2>
+        <p>Run the following command to build tokens:</p>
+        <pre><code>cd tokens && npm run build</code></pre>
+      </div>
+    ) : (
+      <>
+        <!-- Quick Stats -->
+        <section class="stats">
+          <div class="stat">
+            <span class="stat-value">{totalTokens}</span>
+            <span class="stat-label">Total</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">{primitiveCount}</span>
+            <span class="stat-label">Primitive</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">{semanticCount + darkCount}</span>
+            <span class="stat-label">Semantic</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">{brandCount}</span>
+            <span class="stat-label">Brand</span>
+          </div>
+        </section>
+        
+        <!-- Search & Filters -->
+        <div class="search-bar">
+          <input 
+            type="text" 
+            id="token-search" 
+            placeholder="Search tokens by name or value..."
+            class="search-input"
+          />
+          
+          <!-- Unified Filter Tabs -->
+          <nav class="filter-tabs" role="tablist">
+            <button class="tab active" data-filter="all" role="tab" aria-selected="true">
+              All Tokens
+            </button>
+            <button class="tab" data-filter="primitive" role="tab">
+              Primitive
+            </button>
+            <button class="tab" data-filter="semantic" role="tab">
+              Semantic
+            </button>
+            <button class="tab" data-filter="brand" role="tab">
+              Brand
+            </button>
+          </nav>
+          
+          <!-- Subcategory Filters (shown contextually) -->
+          <div class="subcategory-filters" id="subcategory-filters">
+            <!-- Primitive subcategories -->
+            <div class="subcategory-group" data-for="primitive" style="display: none;">
+              <button class="chip active" data-subcategory="all">All</button>
+              {primitiveSubcategories.map(sub => (
+                <button class="chip" data-subcategory={sub.id}>
+                  {sub.label}
+                  <span class="chip-count">{sub.count}</span>
+                </button>
+              ))}
+            </div>
+            
+            <!-- Semantic subcategories -->
+            <div class="subcategory-group" data-for="semantic" style="display: none;">
+              <button class="chip active" data-subcategory="all">All</button>
+              {semanticSubcategories.map(sub => (
+                <button class="chip" data-subcategory={sub.id}>
+                  {sub.label}
+                  <span class="chip-count">{sub.count}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+        
+        <!-- Primitive Tokens -->
+        <div class="token-layer" data-layer="primitive">
+          <h2 class="layer-title">Primitive Tokens</h2>
+          <p class="layer-description">Raw design values from your Figma Base Colours and Primitives collections</p>
+          
+          {Object.entries(groupedTokens.primitive).map(([subCategory, categoryTokens]) => (
+            <section class="category-section" data-category={subCategory}>
+              <h3 class="category-title">
+                {subCategory.charAt(0).toUpperCase() + subCategory.slice(1)}
+                <span class="category-count">{categoryTokens.length}</span>
+              </h3>
+              
+              <div class="token-grid">
+                {categoryTokens.map((token) => (
+                  <div 
+                    class="token-card" 
+                    data-name={token.name.toLowerCase()}
+                    data-value={token.value?.toString().toLowerCase()}
+                  >
+                    {isColor(token.value) && (
+                      <div 
+                        class="token-swatch"
+                        style={`background-color: ${token.value}`}
+                      ></div>
+                    )}
+                    <div class="token-info">
+                      <code class="token-name">{token.name}</code>
+                      <span class="token-value">{token.value}</span>
+                    </div>
+                    <button class="copy-button" data-value={`var(--${token.name})`}>
+                      Copy
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+        
+        <!-- Semantic Tokens (Light) -->
+        <div class="token-layer" data-layer="semantic">
+          <h2 class="layer-title">Semantic Tokens (Light Theme)</h2>
+          <p class="layer-description">Intent-based tokens from your Figma Theme collection - Light mode</p>
+          
+          {Object.entries(groupedTokens.semantic).map(([subCategory, categoryTokens]) => (
+            <section class="category-section" data-category={subCategory}>
+              <h3 class="category-title">
+                {subCategory.charAt(0).toUpperCase() + subCategory.slice(1)}
+                <span class="category-count">{categoryTokens.length}</span>
+              </h3>
+              
+              <div class="token-grid">
+                {categoryTokens.map((token) => (
+                  <div 
+                    class="token-card" 
+                    data-name={token.name.toLowerCase()}
+                    data-value={token.value?.toString().toLowerCase()}
+                  >
+                    {isColor(token.value) && (
+                      <div 
+                        class="token-swatch"
+                        style={`background-color: ${token.value}`}
+                      ></div>
+                    )}
+                    <div class="token-info">
+                      <code class="token-name">{token.name}</code>
+                      <span class="token-value">{token.value}</span>
+                    </div>
+                    <button class="copy-button" data-value={`var(--${token.name})`}>
+                      Copy
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+        
+        <!-- Semantic Tokens (Dark) -->
+        <div class="token-layer" data-layer="semantic">
+          <h2 class="layer-title">Semantic Tokens (Dark Theme)</h2>
+          <p class="layer-description">Intent-based tokens from your Figma Theme collection - Dark mode</p>
+          
+          {Object.entries(groupedTokens['semantic-dark']).map(([subCategory, categoryTokens]) => (
+            <section class="category-section" data-category={subCategory}>
+              <h3 class="category-title">
+                {subCategory.charAt(0).toUpperCase() + subCategory.slice(1)}
+                <span class="category-count">{categoryTokens.length}</span>
+              </h3>
+              
+              <div class="token-grid">
+                {categoryTokens.map((token) => (
+                  <div 
+                    class="token-card" 
+                    data-name={token.name.toLowerCase()}
+                    data-value={token.value?.toString().toLowerCase()}
+                  >
+                    {isColor(token.value) && (
+                      <div 
+                        class="token-swatch"
+                        style={`background-color: ${token.value}`}
+                      ></div>
+                    )}
+                    <div class="token-info">
+                      <code class="token-name">{token.name}</code>
+                      <span class="token-value">{token.value}</span>
+                    </div>
+                    <button class="copy-button" data-value={`var(--${token.name})`}>
+                      Copy
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+        
+        <!-- Brand Tokens -->
+        <div class="token-layer" data-layer="brand">
+          <h2 class="layer-title">Brand Tokens</h2>
+          <p class="layer-description">Product-specific tokens from your Figma Brand collection</p>
+          
+          {Object.entries(groupedTokens.brand).map(([brandName, brandTokens]) => (
+            <section class="category-section brand-section" data-category={brandName} data-brand={brandName}>
+              <h3 class="category-title">
+                {brandName.charAt(0).toUpperCase() + brandName.slice(1)}
+                <span class="category-count">{brandTokens.length}</span>
+              </h3>
+              
+              <div class="token-grid">
+                {brandTokens.map((token) => (
+                  <div 
+                    class="token-card" 
+                    data-name={token.name.toLowerCase()}
+                    data-value={token.value?.toString().toLowerCase()}
+                    data-brand={brandName}
+                  >
+                    {isColor(token.value) && (
+                      <div 
+                        class="token-swatch"
+                        style={`background-color: ${token.value}`}
+                      ></div>
+                    )}
+                    <div class="token-info">
+                      <code class="token-name">{token.name}</code>
+                      <span class="token-value">{token.value}</span>
+                    </div>
+                    <button class="copy-button" data-value={`var(--${token.name})`}>
+                      Copy
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </>
+    )}
+  </div>
+</Layout>
+
+<script>
+  const searchInput = document.getElementById('token-search') as HTMLInputElement;
+  const tokenCards = document.querySelectorAll('.token-card');
+  const categorySections = document.querySelectorAll('.category-section');
+  const tokenLayers = document.querySelectorAll('.token-layer');
+  const tabs = document.querySelectorAll('.tab');
+  const subcategoryGroups = document.querySelectorAll('.subcategory-group');
+  const subcategoryChips = document.querySelectorAll('.chip[data-subcategory]');
+  
+  let activeFilter = 'all';
+  let activeSubcategory = 'all';
+  
+  // Update subcategory filter visibility
+  function updateSubcategoryFilters() {
+    const filtersContainer = document.getElementById('subcategory-filters');
+    let hasVisibleGroup = false;
+    
+    subcategoryGroups.forEach(group => {
+      const forLayer = group.getAttribute('data-for');
+      if (forLayer === activeFilter) {
+        (group as HTMLElement).style.display = 'flex';
+        hasVisibleGroup = true;
+      } else {
+        (group as HTMLElement).style.display = 'none';
+      }
+    });
+    
+    // Hide container if no groups visible
+    if (filtersContainer) {
+      filtersContainer.style.display = hasVisibleGroup ? 'block' : 'none';
+    }
+  }
+  
+  // Apply all filters
+  function applyFilters() {
+    const query = searchInput?.value.toLowerCase() || '';
+    
+    // Apply layer filter
+    tokenLayers.forEach(layer => {
+      const layerType = layer.getAttribute('data-layer');
+      if (activeFilter === 'all' || layerType === activeFilter) {
+        (layer as HTMLElement).style.display = '';
+      } else {
+        (layer as HTMLElement).style.display = 'none';
+      }
+    });
+    
+    // Apply subcategory filter (only for non-brand sections)
+    categorySections.forEach(section => {
+      const sectionCategory = section.getAttribute('data-category');
+      const sectionBrand = section.getAttribute('data-brand');
+      
+      // Skip brand sections for subcategory filtering
+      if (sectionBrand) return;
+      
+      if (activeSubcategory === 'all' || sectionCategory === activeSubcategory) {
+        (section as HTMLElement).style.display = '';
+      } else {
+        (section as HTMLElement).style.display = 'none';
+      }
+    });
+    
+    // Apply search filter to individual cards
+    tokenCards.forEach(card => {
+      const name = card.getAttribute('data-name') || '';
+      const value = card.getAttribute('data-value') || '';
+      
+      const matchesSearch = query === '' || name.includes(query) || value.includes(query);
+      
+      (card as HTMLElement).style.display = matchesSearch ? '' : 'none';
+    });
+    
+    // Hide empty categories when searching
+    if (query !== '') {
+      categorySections.forEach(section => {
+        const visibleCards = section.querySelectorAll('.token-card:not([style*="display: none"])');
+        if (visibleCards.length === 0) {
+          (section as HTMLElement).style.display = 'none';
+        }
+      });
+    }
+    
+    updateSubcategoryFilters();
+  }
+  
+  searchInput?.addEventListener('input', applyFilters);
+  
+  // Tab click handlers
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const filter = tab.getAttribute('data-filter') || 'all';
+      activeFilter = filter;
+      
+      // Update active state
+      tabs.forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      
+      // Reset subcategory when switching layers
+      activeSubcategory = 'all';
+      subcategoryChips.forEach(chip => {
+        chip.classList.toggle('active', chip.getAttribute('data-subcategory') === 'all');
+      });
+      
+      applyFilters();
+    });
+  });
+  
+  // Subcategory chip click handlers
+  subcategoryChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const subcategory = chip.getAttribute('data-subcategory') || 'all';
+      activeSubcategory = subcategory;
+      
+      // Update active state within the same group
+      const group = chip.parentElement;
+      group?.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      
+      applyFilters();
+    });
+  });
+  
+  // Copy functionality
+  document.querySelectorAll('.copy-button').forEach(button => {
+    button.addEventListener('click', async () => {
+      const value = button.getAttribute('data-value');
+      if (value) {
+        await navigator.clipboard.writeText(value);
+        button.textContent = 'Copied!';
+        setTimeout(() => {
+          button.textContent = 'Copy';
+        }, 1500);
+      }
+    });
+  });
+</script>
+
+<style>
+  .tokens-page {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .page-header {
+    margin-bottom: 1rem;
+  }
+  
+  .page-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  
+  .subtitle {
+    color: var(--color-text-muted, #71717a);
+    font-size: 1rem;
+  }
+  
+  .subtitle code {
+    background: var(--color-surface-tertiary, #f4f4f5);
+    padding: 0.125rem 0.375rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+  }
+  
+  /* Stats */
+  .stats {
+    display: flex;
+    gap: 2rem;
+    padding: 1rem 1.5rem;
+    background: var(--color-surface-secondary, #fafafa);
+    border-radius: 12px;
+  }
+  
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary, #18181b);
+  }
+  
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--color-text-muted, #a1a1aa);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  /* Search Bar */
+  .search-bar {
+    position: sticky;
+    top: 64px;
+    background: var(--color-surface-primary, #fff);
+    padding: 1rem 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 8px;
+    background: var(--color-surface-primary, #fff);
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: var(--color-border-focus, #a1a1aa);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Filter Tabs */
+  .filter-tabs {
+    display: flex;
+    gap: 0.25rem;
+    background: var(--color-surface-secondary, #f4f4f5);
+    padding: 0.25rem;
+    border-radius: 10px;
+    width: fit-content;
+  }
+  
+  .tab {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-secondary, #71717a);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+  
+  .tab:hover:not(.active) {
+    color: var(--color-text-primary, #18181b);
+    background: var(--color-surface-tertiary, #e4e4e7);
+  }
+  
+  .tab.active {
+    background: var(--color-surface-primary, #ffffff);
+    color: var(--color-text-primary, #18181b);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Subcategory Filters */
+  .subcategory-filters {
+    /* Visibility controlled by JS */
+  }
+  
+  .subcategory-group {
+    display: flex;
+    gap: 0.375rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    background: transparent;
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 9999px;
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary, #52525b);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+  
+  .chip:hover {
+    background: var(--color-surface-secondary, #f4f4f5);
+    border-color: var(--color-border-strong, #d4d4d8);
+  }
+  
+  .chip.active {
+    background: var(--brand-primary-light, #f4f4f5);
+    border-color: var(--brand-primary, #18181b);
+    color: var(--brand-primary, #18181b);
+  }
+  
+  .chip-count {
+    font-size: 0.6875rem;
+    padding: 0.125rem 0.375rem;
+    background: var(--color-surface-tertiary, #f4f4f5);
+    border-radius: 9999px;
+    color: var(--color-text-muted, #a1a1aa);
+  }
+  
+  .chip.active .chip-count {
+    background: var(--semantic-focus-ring-primary, rgba(0, 0, 0, 0.1));
+    color: var(--brand-primary, #18181b);
+  }
+  
+  /* Token Layers */
+  .token-layer {
+    margin-bottom: 2rem;
+  }
+  
+  .layer-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  
+  .layer-description {
+    color: var(--color-text-muted, #71717a);
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Category Sections */
+  .category-section {
+    margin-bottom: 2rem;
+  }
+  
+  .category-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .category-count {
+    background: var(--color-surface-tertiary, #f4f4f5);
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-text-secondary, #52525b);
+  }
+  
+  .token-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 0.75rem;
+  }
+  
+  .token-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--color-surface-primary, #fff);
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 8px;
+    transition: border-color 0.2s;
+  }
+  
+  .token-card:hover {
+    border-color: var(--color-border-strong, #d4d4d8);
+  }
+  
+  .token-swatch {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .token-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+  
+  .token-name {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-text-primary, #18181b);
+    word-break: break-all;
+  }
+  
+  .token-value {
+    font-size: 0.6875rem;
+    color: var(--color-text-secondary, #52525b);
+    font-family: monospace;
+  }
+  
+  .copy-button {
+    flex-shrink: 0;
+    padding: 0.25rem 0.5rem;
+    background: var(--color-surface-secondary, #fafafa);
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 4px;
+    font-size: 0.6875rem;
+    color: var(--color-text-secondary, #52525b);
+    cursor: pointer;
+  }
+  
+  .copy-button:hover {
+    background: var(--color-surface-tertiary, #f4f4f5);
+  }
+  
+  .empty-state {
+    padding: 3rem;
+    text-align: center;
+    background: var(--color-surface-secondary, #fafafa);
+    border-radius: 8px;
+  }
+  
+  .empty-state h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .empty-state pre {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--color-surface-tertiary, #f4f4f5);
+    border-radius: 6px;
+  }
+</style>

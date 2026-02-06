@@ -1,0 +1,138 @@
+{
+  "primitive": {
+    "spacing": {
+      "$description": "Spacing scale based on 4px grid",
+      "0": {
+        "$value": "0px",
+        "$type": "dimension",
+        "$description": "No spacing"
+      },
+      "1": {
+        "$value": "2px",
+        "$type": "dimension",
+        "$description": "2px - Micro spacing"
+      },
+      "2": {
+        "$value": "4px",
+        "$type": "dimension",
+        "$description": "4px - Tight spacing"
+      },
+      "3": {
+        "$value": "6px",
+        "$type": "dimension"
+      },
+      "4": {
+        "$value": "8px",
+        "$type": "dimension",
+        "$description": "8px - Default small spacing"
+      },
+      "5": {
+        "$value": "10px",
+        "$type": "dimension"
+      },
+      "6": {
+        "$value": "12px",
+        "$type": "dimension",
+        "$description": "12px - Component padding"
+      },
+      "7": {
+        "$value": "14px",
+        "$type": "dimension"
+      },
+      "8": {
+        "$value": "16px",
+        "$type": "dimension",
+        "$description": "16px - Base spacing unit"
+      },
+      "9": {
+        "$value": "18px",
+        "$type": "dimension"
+      },
+      "10": {
+        "$value": "20px",
+        "$type": "dimension"
+      },
+      "12": {
+        "$value": "24px",
+        "$type": "dimension",
+        "$description": "24px - Section spacing"
+      },
+      "16": {
+        "$value": "32px",
+        "$type": "dimension"
+      },
+      "20": {
+        "$value": "40px",
+        "$type": "dimension"
+      },
+      "24": {
+        "$value": "48px",
+        "$type": "dimension",
+        "$description": "48px - Large section spacing"
+      },
+      "32": {
+        "$value": "64px",
+        "$type": "dimension"
+      },
+      "40": {
+        "$value": "80px",
+        "$type": "dimension"
+      },
+      "48": {
+        "$value": "96px",
+        "$type": "dimension"
+      },
+      "80": {
+        "$value": "160px",
+        "$type": "dimension",
+        "$description": "160px - Hero/page spacing"
+      }
+    },
+    "radius": {
+      "$description": "Border radius scale",
+      "none": {
+        "$value": "0px",
+        "$type": "dimension",
+        "$description": "No rounding"
+      },
+      "xs": {
+        "$value": "4px",
+        "$type": "dimension",
+        "$description": "Extra small radius"
+      },
+      "sm": {
+        "$value": "6px",
+        "$type": "dimension",
+        "$description": "Small radius"
+      },
+      "md": {
+        "$value": "8px",
+        "$type": "dimension",
+        "$description": "Medium radius - default for cards"
+      },
+      "lg": {
+        "$value": "12px",
+        "$type": "dimension",
+        "$description": "Large radius"
+      },
+      "xl": {
+        "$value": "16px",
+        "$type": "dimension",
+        "$description": "Extra large radius"
+      },
+      "2xl": {
+        "$value": "20px",
+        "$type": "dimension"
+      },
+      "3xl": {
+        "$value": "24px",
+        "$type": "dimension"
+      },
+      "full": {
+        "$value": "9999px",
+        "$type": "dimension",
+        "$description": "Fully rounded (pill shape)"
+      }
+    }
+  }
+}

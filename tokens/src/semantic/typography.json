@@ -1,0 +1,120 @@
+{
+  "semantic": {
+    "text": {
+      "$description": "Semantic text styles for consistent typography across the system",
+      "display": {
+        "$description": "Display/hero text styles",
+        "large": {
+          "fontSize": { "$value": "{primitive.font.size.6xl}" },
+          "fontWeight": { "$value": "{primitive.font.weight.bold}" },
+          "lineHeight": { "$value": "{primitive.font.lineHeight.tight}" },
+          "letterSpacing": { "$value": "{primitive.font.letterSpacing.tighter}" }
+        },
+        "medium": {
+          "fontSize": { "$value": "{primitive.font.size.5xl}" },
+          "fontWeight": { "$value": "{primitive.font.weight.bold}" },
+          "lineHeight": { "$value": "{primitive.font.lineHeight.tight}" },
+          "letterSpacing": { "$value": "{primitive.font.letterSpacing.tighter}" }
+        },
+        "small": {
+          "fontSize": { "$value": "{primitive.font.size.4xl}" },
+          "fontWeight": { "$value": "{primitive.font.weight.semibold}" },
+          "lineHeight": { "$value": "{primitive.font.lineHeight.tight}" },
+          "letterSpacing": { "$value": "{primitive.font.letterSpacing.tight}" }
+        }
+      },
+      "heading": {
+        "$description": "Heading text styles",
+        "h1": {
+          "fontSize": { "$value": "{primitive.font.size.4xl}" },
+          "fontWeight": { "$value": "{primitive.font.weight.semibold}" },
+          "lineHeight": { "$value": "{primitive.font.lineHeight.tight}" },
+          "letterSpacing": { "$value": "{primitive.font.letterSpacing.tight}" }
+        },
+        "h2": {
+          "fontSize": { "$value": "{primitive.font.size.3xl}" },
+          "fontWeight": { "$value": "{primitive.font.weight.semibold}" },
+          "lineHeight": { "$value": "{primitive.font.lineHeight.tight}" },
+          "letterSpacing": { "$value": "{primitive.font.letterSpacing.tight}" }
+        },
+        "h3": {
+          "fontSize": { "$value": "{primitive.font.size.2xl}" },
+          "fontWeight": { "$value": "{primitive.font.weight.semibold}" },
+          "lineHeight": { "$value": "{primitive.font.lineHeight.snug}" }
+        },
+        "h4": {
+          "fontSize": { "$value": "{primitive.font.size.xl}" },
+          "fontWeight": { "$value": "{primitive.font.weight.semibold}" },
+          "lineHeight": { "$value": "{primitive.font.lineHeight.snug}" }
+        },
+        "h5": {
+          "fontSize": { "$value": "{primitive.font.size.lg}" },
+          "fontWeight": { "$value": "{primitive.font.weight.medium}" },
+          "lineHeight": { "$value": "{primitive.font.lineHeight.snug}" }
+        },
+        "h6": {
+          "fontSize": { "$value": "{primitive.font.size.base}" },
+          "fontWeight": { "$value": "{primitive.font.weight.medium}" },
+          "lineHeight": { "$value": "{primitive.font.lineHeight.normal}" }
+        }
+      },
+      "body": {
+        "$description": "Body text styles",
+        "large": {
+          "fontSize": { "$value": "{primitive.font.size.lg}" },
+          "fontWeight": { "$value": "{primitive.font.weight.regular}" },
+          "lineHeight": { "$value": "{primitive.font.lineHeight.relaxed}" }
+        },
+        "base": {
+          "fontSize": { "$value": "{primitive.font.size.base}" },
+          "fontWeight": { "$value": "{primitive.font.weight.regular}" },
+          "lineHeight": { "$value": "{primitive.font.lineHeight.normal}" }
+        },
+        "small": {
+          "fontSize": { "$value": "{primitive.font.size.sm}" },
+          "fontWeight": { "$value": "{primitive.font.weight.regular}" },
+          "lineHeight": { "$value": "{primitive.font.lineHeight.normal}" }
+        }
+      },
+      "label": {
+        "$description": "Label and UI text styles",
+        "large": {
+          "fontSize": { "$value": "{primitive.font.size.base}" },
+          "fontWeight": { "$value": "{primitive.font.weight.medium}" },
+          "lineHeight": { "$value": "{primitive.font.lineHeight.tight}" }
+        },
+        "base": {
+          "fontSize": { "$value": "{primitive.font.size.sm}" },
+          "fontWeight": { "$value": "{primitive.font.weight.medium}" },
+          "lineHeight": { "$value": "{primitive.font.lineHeight.tight}" }
+        },
+        "small": {
+          "fontSize": { "$value": "{primitive.font.size.xs}" },
+          "fontWeight": { "$value": "{primitive.font.weight.medium}" },
+          "lineHeight": { "$value": "{primitive.font.lineHeight.tight}" }
+        }
+      },
+      "caption": {
+        "$description": "Caption and helper text",
+        "base": {
+          "fontSize": { "$value": "{primitive.font.size.xs}" },
+          "fontWeight": { "$value": "{primitive.font.weight.regular}" },
+          "lineHeight": { "$value": "{primitive.font.lineHeight.normal}" }
+        }
+      },
+      "code": {
+        "$description": "Code/monospace text styles",
+        "base": {
+          "fontFamily": { "$value": "{primitive.font.family.mono}" },
+          "fontSize": { "$value": "{primitive.font.size.sm}" },
+          "lineHeight": { "$value": "{primitive.font.lineHeight.normal}" }
+        },
+        "small": {
+          "fontFamily": { "$value": "{primitive.font.family.mono}" },
+          "fontSize": { "$value": "{primitive.font.size.xs}" },
+          "lineHeight": { "$value": "{primitive.font.lineHeight.normal}" }
+        }
+      }
+    }
+  }
+}

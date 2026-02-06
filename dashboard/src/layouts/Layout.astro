@@ -1,0 +1,521 @@
+---
+import brandsData from '../data/brands.json';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'ARK Design System Dashboard' } = Astro.props;
+const { brands } = brandsData;
+---
+
+<!DOCTYPE html>
+<html lang="en" data-brand="neutral" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} | ARK Design System</title>
+    
+    <!-- Load generated tokens -->
+    <link rel="stylesheet" href="/tokens.css" />
+    
+    <!-- Shared styles (common patterns) -->
+    <link rel="stylesheet" href="/shared-styles.css" />
+    
+    <!-- Theme overrides -->
+    <link rel="stylesheet" href="/dark-theme.css" />
+    
+    <!-- Brand overrides -->
+    <link rel="stylesheet" href="/brand-overrides.css" />
+    
+    <style is:global>
+      /* Base styles using tokens */
+      :root {
+        --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+      }
+      
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      
+      html {
+        font-family: var(--font-sans);
+        background: var(--color-surface-primary, #fff);
+        color: var(--color-text-primary, #18181b);
+      }
+      
+      body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      a {
+        color: var(--color-text-link, #2563eb);
+        text-decoration: none;
+      }
+      
+      a:hover {
+        text-decoration: underline;
+      }
+      
+      code {
+        font-family: var(--font-mono);
+        font-size: 0.875em;
+        background: var(--color-surface-secondary, #fafafa);
+        padding: 0.125em 0.375em;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-content">
+        <a href="/" class="logo">
+          <svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Minimal bud: simple teardrop/petal shape -->
+            <path d="M12 3C12 3 6 10 6 15C6 18.3 8.7 21 12 21C15.3 21 18 18.3 18 15C18 10 12 3 12 3Z" fill="currentColor"/>
+          </svg>
+          <span class="logo-text">ARK Design System</span>
+        </a>
+        <nav class="nav">
+          <a href="/" class="nav-link">Components</a>
+          <a href="/tokens" class="nav-link">Tokens</a>
+          <a href="/decisions" class="nav-link">Decisions</a>
+          <a href="/health" class="nav-link">System Health</a>
+          <a href="/docs" class="nav-link">Docs</a>
+        </nav>
+        
+        <!-- Header Actions -->
+        <div class="header-actions">
+          <!-- Theme Toggle -->
+          <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+            <svg class="theme-icon sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="theme-icon moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+          
+          <!-- Brand Switcher -->
+          <div class="brand-switcher" id="brand-switcher">
+          <button class="brand-trigger" id="brand-trigger" aria-expanded="false" aria-haspopup="true">
+            <span class="brand-icon" id="brand-icon">◇</span>
+            <span class="brand-name" id="brand-name">Neutral</span>
+            <svg class="brand-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          
+          <div class="brand-dropdown" id="brand-dropdown">
+            <div class="brand-dropdown-header">Switch Brand Style</div>
+            {Object.values(brands).map((brand: any) => (
+              <button 
+                class="brand-option" 
+                data-brand={brand.id}
+                data-icon={brand.icon}
+                data-name={brand.name}
+                data-color={brand.primaryColor}
+              >
+                <span class="brand-option-icon" style={`color: ${brand.primaryColor}`}>{brand.icon}</span>
+                <div class="brand-option-info">
+                  <span class="brand-option-name">{brand.name}</span>
+                  <span class="brand-option-tagline">{brand.tagline}</span>
+                </div>
+                <span class="brand-option-check">✓</span>
+              </button>
+            ))}
+            <div class="brand-dropdown-footer">
+              <a href="/docs/brands" class="brand-learn-more">Learn about brand personalities →</a>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </header>
+    
+    <main class="main">
+      <slot />
+    </main>
+    
+    <footer class="footer">
+      <p>ARK Design System • Configuration-driven • Edit data files, refresh to see changes</p>
+    </footer>
+    
+    <style>
+      .header {
+        background: var(--color-surface-primary, #fff);
+        border-bottom: 1px solid var(--color-border-default, #e4e4e7);
+        padding: 1rem 1.5rem;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      
+      .header-content {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        color: var(--color-text-primary, #18181b);
+      }
+      
+      .logo:hover {
+        text-decoration: none;
+      }
+      
+      .logo-icon {
+        width: 20px;
+        height: 20px;
+        color: var(--brand-primary, #18181b);
+        transition: color var(--brand-transition-duration, 200ms) var(--brand-transition-easing, ease);
+        flex-shrink: 0;
+      }
+      
+      .nav {
+        display: flex;
+        gap: 1.5rem;
+      }
+      
+      .nav-link {
+        color: var(--color-text-secondary, #52525b);
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 0.25rem 0;
+        border-bottom: 2px solid transparent;
+      }
+      
+      .nav-link:hover {
+        color: var(--color-text-primary, #18181b);
+        text-decoration: none;
+      }
+      
+      .main {
+        flex: 1;
+        max-width: 1280px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+      }
+      
+      .footer {
+        border-top: 1px solid var(--color-border-default, #e4e4e7);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        color: var(--color-text-muted, #a1a1aa);
+        font-size: 0.875rem;
+      }
+      
+      /* Header Actions */
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      
+      /* Theme Toggle */
+      .theme-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        background: var(--semantic-neutral-bg-medium, #f8f7fa);
+        border: 1px solid var(--semantic-neutral-border-default, #eae8ef);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        color: var(--semantic-neutral-text-default, #52525b);
+      }
+      
+      .theme-toggle:hover {
+        background: var(--semantic-neutral-bg-hover, #f1eff4);
+        border-color: var(--semantic-neutral-border-hover, #e5e3ea);
+        color: var(--semantic-neutral-text-default, #18181b);
+      }
+      
+      .theme-icon {
+        transition: transform 0.3s ease, opacity 0.2s ease;
+      }
+      
+      .theme-icon.moon {
+        display: none;
+      }
+      
+      [data-theme="dark"] .theme-icon.sun {
+        display: none;
+      }
+      
+      [data-theme="dark"] .theme-icon.moon {
+        display: block;
+      }
+      
+      /* Brand Switcher */
+      .brand-switcher {
+        position: relative;
+      }
+      
+      .brand-trigger {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        background: var(--semantic-neutral-bg-medium, #f8f7fa);
+        border: 1px solid var(--semantic-neutral-border-default, #eae8ef);
+        border-radius: var(--brand-radius-button, 8px);
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--semantic-neutral-text-default, #20134b);
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      
+      .brand-trigger:hover {
+        background: var(--semantic-neutral-bg-hover, #f1eff4);
+        border-color: var(--semantic-neutral-border-hover, #e5e3ea);
+      }
+      
+      .brand-icon {
+        font-size: 1rem;
+        color: var(--brand-primary, #18181b);
+      }
+      
+      .brand-arrow {
+        transition: transform 0.2s ease;
+      }
+      
+      .brand-switcher.open .brand-arrow {
+        transform: rotate(180deg);
+      }
+      
+      .brand-dropdown {
+        position: absolute;
+        top: calc(100% + 0.5rem);
+        right: 0;
+        width: 280px;
+        background: var(--semantic-neutral-bg-default, #fff);
+        border: 1px solid var(--semantic-neutral-border-default, #eae8ef);
+        border-radius: var(--brand-radius-card, 12px);
+        box-shadow: var(--brand-shadow-card, 0 4px 12px rgba(0, 0, 0, 0.1));
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px);
+        transition: all 0.2s ease;
+        z-index: 1000;
+        overflow: hidden;
+      }
+      
+      .brand-switcher.open .brand-dropdown {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+      
+      .brand-dropdown-header {
+        padding: 0.75rem 1rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--semantic-neutral-text-weak, #6f6b77);
+        border-bottom: 1px solid var(--semantic-neutral-border-default, #eae8ef);
+      }
+      
+      .brand-option {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background: none;
+        border: none;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+      }
+      
+      .brand-option:hover {
+        background: var(--semantic-neutral-bg-hover, #f1eff4);
+      }
+      
+      .brand-option.active {
+        background: var(--semantic-primary-bg-default, #fbfaff);
+      }
+      
+      .brand-option-icon {
+        font-size: 1.25rem;
+        width: 1.5rem;
+        text-align: center;
+      }
+      
+      .brand-option-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;
+      }
+      
+      .brand-option-name {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--semantic-neutral-text-default, #20134b);
+      }
+      
+      .brand-option-tagline {
+        font-size: 0.75rem;
+        color: var(--semantic-neutral-text-weak, #6f6b77);
+      }
+      
+      .brand-option-check {
+        font-size: 0.875rem;
+        color: var(--brand-primary, #18181b);
+        opacity: 0;
+        transition: opacity 0.15s ease;
+      }
+      
+      .brand-option.active .brand-option-check {
+        opacity: 1;
+      }
+      
+      .brand-dropdown-footer {
+        padding: 0.75rem 1rem;
+        border-top: 1px solid var(--semantic-neutral-border-default, #eae8ef);
+        background: var(--semantic-neutral-bg-weak, #fafafa);
+      }
+      
+      .brand-learn-more {
+        font-size: 0.75rem;
+        color: var(--brand-primary-text, #18181b);
+      }
+      
+      @media (max-width: 768px) {
+        .header-content {
+          flex-direction: column;
+          gap: 1rem;
+        }
+        
+        .nav {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        
+        .brand-switcher {
+          margin-left: 0;
+          margin-top: 0.5rem;
+        }
+        
+        .brand-dropdown {
+          right: auto;
+          left: 50%;
+          transform: translateX(-50%) translateY(-8px);
+        }
+        
+        .brand-switcher.open .brand-dropdown {
+          transform: translateX(-50%) translateY(0);
+        }
+      }
+    </style>
+    
+    <script>
+      // Theme Toggle Logic
+      const themeToggle = document.getElementById('theme-toggle');
+      const htmlElement = document.documentElement;
+      
+      // Load saved theme preference
+      const savedTheme = localStorage.getItem('ark-theme') || 'light';
+      setTheme(savedTheme);
+      
+      themeToggle?.addEventListener('click', () => {
+        const currentTheme = htmlElement.getAttribute('data-theme') || 'light';
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        setTheme(newTheme);
+      });
+      
+      function setTheme(theme: string) {
+        htmlElement.setAttribute('data-theme', theme);
+        localStorage.setItem('ark-theme', theme);
+      }
+      
+      // Brand Switcher Logic
+      const brandSwitcher = document.getElementById('brand-switcher');
+      const brandTrigger = document.getElementById('brand-trigger');
+      const brandDropdown = document.getElementById('brand-dropdown');
+      const brandOptions = document.querySelectorAll('.brand-option');
+      const brandIcon = document.getElementById('brand-icon');
+      const brandName = document.getElementById('brand-name');
+      
+      // Load saved brand preference
+      const savedBrand = localStorage.getItem('ark-brand') || 'neutral';
+      setBrand(savedBrand);
+      
+      // Toggle dropdown
+      brandTrigger?.addEventListener('click', () => {
+        brandSwitcher?.classList.toggle('open');
+        const isOpen = brandSwitcher?.classList.contains('open');
+        brandTrigger?.setAttribute('aria-expanded', String(isOpen));
+      });
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!brandSwitcher?.contains(e.target as Node)) {
+          brandSwitcher?.classList.remove('open');
+          brandTrigger?.setAttribute('aria-expanded', 'false');
+        }
+      });
+      
+      // Brand option selection
+      brandOptions.forEach(option => {
+        option.addEventListener('click', () => {
+          const brand = option.getAttribute('data-brand') || 'neutral';
+          setBrand(brand);
+          brandSwitcher?.classList.remove('open');
+          brandTrigger?.setAttribute('aria-expanded', 'false');
+        });
+      });
+      
+      function setBrand(brand: string) {
+        // Update HTML attribute
+        htmlElement.setAttribute('data-brand', brand);
+        
+        // Save preference
+        localStorage.setItem('ark-brand', brand);
+        
+        // Update trigger display
+        const activeOption = document.querySelector(`.brand-option[data-brand="${brand}"]`) as HTMLElement;
+        if (activeOption && brandIcon && brandName) {
+          brandIcon.textContent = activeOption.getAttribute('data-icon') || '●';
+          brandIcon.style.color = activeOption.getAttribute('data-color') || '#18181b';
+          brandName.textContent = activeOption.getAttribute('data-name') || 'Neutral';
+        }
+        
+        // Update active states
+        brandOptions.forEach(opt => {
+          opt.classList.toggle('active', opt.getAttribute('data-brand') === brand);
+        });
+      }
+    </script>
+  </body>
+</html>

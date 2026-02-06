@@ -1,0 +1,17 @@
+{
+  "name": "@ark/dashboard",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Design System Health Dashboard",
+  "scripts": {
+    "copy-tokens": "node scripts/copy-tokens.js",
+    "dev": "npm run copy-tokens && astro dev",
+    "start": "npm run copy-tokens && astro dev",
+    "build": "npm run copy-tokens && astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^4.0.0",
+    "js-yaml": "^4.1.0"
+  }
+}

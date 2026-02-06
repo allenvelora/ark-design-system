@@ -1,0 +1,115 @@
+{
+  "id": "toggle",
+  "name": "Toggle",
+  "description": "Toggles (switches) allow users to turn a single option on or off. They provide immediate visual feedback and are best for settings that take effect instantly.",
+  "status": "stable",
+  "version": "1.0.0",
+  
+  "overview": {
+    "purpose": "Toggles represent a physical switch that allows users to turn things on or off. Unlike checkboxes, toggles typically apply changes immediately without requiring a submit action.",
+    "principles": [
+      "Toggles should apply changes immediately",
+      "The visual state must clearly show on vs off",
+      "Labels should describe the 'on' state",
+      "Avoid toggles in forms that have a submit action"
+    ]
+  },
+  
+  "whenToUse": [
+    "Settings that take effect immediately",
+    "Enabling/disabling features",
+    "Switching between two states (like dark mode)",
+    "Mobile-first interfaces where taps are primary"
+  ],
+  
+  "whenNotToUse": [
+    "In forms with submit buttons - use Checkbox",
+    "For selecting from multiple options - use Checkbox group",
+    "When the change requires confirmation - use Checkbox + Button",
+    "For mutually exclusive choices - use Radio"
+  ],
+  
+  "anatomy": {
+    "description": "A toggle consists of a track and a thumb that moves between positions.",
+    "parts": [
+      {"name": "Track", "description": "The background container showing on/off states", "required": true},
+      {"name": "Thumb", "description": "The circular indicator that moves when toggled", "required": true},
+      {"name": "Label", "description": "Text describing what the toggle controls", "required": true},
+      {"name": "Description", "description": "Additional context about the setting", "required": false}
+    ]
+  },
+  
+  "variants": [
+    {"name": "Default", "description": "Standard toggle with label", "useCase": "Most settings interfaces"},
+    {"name": "With Icons", "description": "Toggle with icons inside track (sun/moon)", "useCase": "Theme toggles, visibility"},
+    {"name": "Compact", "description": "Smaller toggle for dense interfaces", "useCase": "Tables, mobile"}
+  ],
+  
+  "states": [
+    {"name": "Off", "description": "Default inactive state"},
+    {"name": "On", "description": "Active state"},
+    {"name": "Hover", "description": "Cursor over the toggle"},
+    {"name": "Focus", "description": "Keyboard focus visible"},
+    {"name": "Disabled", "description": "Cannot be interacted with"},
+    {"name": "Loading", "description": "Change is being applied"}
+  ],
+  
+  "props": [
+    {"name": "checked", "type": "boolean", "default": "false", "description": "Whether the toggle is on"},
+    {"name": "onChange", "type": "(checked: boolean) => void", "default": "undefined", "description": "Handler when state changes"},
+    {"name": "label", "type": "string", "default": "undefined", "description": "Label describing the toggle"},
+    {"name": "description", "type": "string", "default": "undefined", "description": "Additional context"},
+    {"name": "disabled", "type": "boolean", "default": "false", "description": "Disable the toggle"},
+    {"name": "size", "type": "'sm' | 'md'", "default": "'md'", "description": "Toggle size"}
+  ],
+  
+  "tokens": {
+    "description": "Design tokens for Toggle",
+    "categories": [
+      {
+        "name": "Colors",
+        "tokens": [
+          {"name": "--color-toggle-track-off", "value": "#d4d4d8", "usage": "Off state track"},
+          {"name": "--color-toggle-track-on", "value": "#6138d8", "usage": "On state track"},
+          {"name": "--color-toggle-thumb", "value": "#ffffff", "usage": "Thumb color"}
+        ]
+      },
+      {
+        "name": "Shape",
+        "tokens": [
+          {"name": "--radius-toggle", "value": "9999px", "usage": "Track border radius"},
+          {"name": "--size-toggle-thumb", "value": "20px", "usage": "Thumb size"}
+        ]
+      }
+    ]
+  },
+  
+  "accessibility": {
+    "description": "Toggles must be keyboard accessible and announce state changes.",
+    "guidelines": [
+      {"title": "Role", "description": "Use role=\"switch\" with aria-checked"},
+      {"title": "Keyboard", "description": "Space or Enter to toggle"},
+      {"title": "Labels", "description": "Always provide accessible label"}
+    ],
+    "wcagCriteria": ["1.3.1", "2.1.1", "4.1.2"]
+  },
+  
+  "bestPractices": {
+    "do": [
+      "Apply changes immediately when toggled",
+      "Label should describe the 'on' state",
+      "Show loading state for async changes",
+      "Position toggle consistently (usually right of label)"
+    ],
+    "dont": [
+      "Don't use in forms with submit buttons",
+      "Don't require confirmation for toggle changes",
+      "Don't use toggles for one-time actions"
+    ]
+  },
+  
+  "relatedComponents": [
+    {"name": "Checkbox", "description": "For selections within forms", "url": "/components/checkbox"},
+    {"name": "Radio", "description": "For mutually exclusive choices", "url": "/components/radio"}
+  ]
+}

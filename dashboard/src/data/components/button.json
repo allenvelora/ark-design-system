@@ -1,0 +1,353 @@
+{
+  "id": "button",
+  "name": "Button",
+  "description": "Buttons allow users to take actions and make choices with a single tap. They communicate actions that users can take and are typically placed in dialogs, forms, cards, and toolbars.",
+  "status": "stable",
+  "version": "1.0.0",
+  "figmaUrl": "https://www.figma.com/design/F8rMavAwnFag21a04KUV9C/ARK-Components?node-id=button",
+  "githubUrl": "https://github.com/ark-design/components/tree/main/src/button",
+  
+  "overview": {
+    "purpose": "Buttons are the primary way users interact with your product. They should be used to trigger actions, submit forms, or navigate between pages.",
+    "principles": [
+      "Buttons should clearly communicate what will happen when pressed",
+      "Use a single primary action per screen whenever possible",
+      "Button labels should be action-oriented (verbs)"
+    ]
+  },
+  
+  "whenToUse": [
+    "To trigger an immediate action (submit, save, delete)",
+    "To navigate to another page or open a modal",
+    "To toggle a state (follow/unfollow)",
+    "To confirm or cancel a decision"
+  ],
+  
+  "whenNotToUse": [
+    "For navigation within content - use Links instead",
+    "When the action is passive or informational - use text or badges",
+    "For toggling between views - use Tabs or Segmented Controls",
+    "When space is limited and action is secondary - consider icon-only buttons"
+  ],
+  
+  "anatomy": {
+    "description": "A button consists of several key parts that work together to create a clear, accessible interaction.",
+    "parts": [
+      {
+        "name": "Container",
+        "description": "The outer boundary that holds all button elements and receives interaction states",
+        "required": true
+      },
+      {
+        "name": "Label",
+        "description": "Text that describes the action. Should be concise and action-oriented",
+        "required": true
+      },
+      {
+        "name": "Leading Icon",
+        "description": "Optional icon placed before the label to reinforce meaning",
+        "required": false
+      },
+      {
+        "name": "Trailing Icon",
+        "description": "Optional icon placed after the label, often used for dropdown indicators",
+        "required": false
+      }
+    ]
+  },
+  
+  "variants": [
+    {
+      "name": "Primary",
+      "description": "High-emphasis button for the main action on a screen. Use sparingly - typically one per view.",
+      "useCase": "Submit forms, confirm important actions, CTAs",
+      "tokens": ["color-action-primary-default", "color-action-primary-hover", "color-action-primary-text"]
+    },
+    {
+      "name": "Secondary",
+      "description": "Medium-emphasis button for supporting actions that complement the primary action.",
+      "useCase": "Cancel, back, secondary CTAs",
+      "tokens": ["color-action-secondary-default", "color-action-secondary-hover"]
+    },
+    {
+      "name": "Tertiary",
+      "description": "Low-emphasis button for less important actions. Often appears as text with minimal styling.",
+      "useCase": "Learn more links, optional actions, text-style buttons",
+      "tokens": ["color-action-tertiary-default", "color-action-tertiary-hover"]
+    },
+    {
+      "name": "Destructive",
+      "description": "Indicates a potentially dangerous action like deletion. Uses warning colors to communicate risk.",
+      "useCase": "Delete, remove, cancel subscription",
+      "tokens": ["color-feedback-error-default", "color-feedback-error-hover"]
+    },
+    {
+      "name": "Ghost",
+      "description": "Transparent button that appears on hover. Useful in toolbars and dense UIs.",
+      "useCase": "Toolbar actions, icon buttons, compact interfaces",
+      "tokens": ["color-action-ghost-hover"]
+    }
+  ],
+  
+  "sizes": [
+    {
+      "name": "Small",
+      "height": "32px",
+      "padding": "8px 12px",
+      "fontSize": "14px",
+      "useCase": "Dense UIs, tables, inline actions"
+    },
+    {
+      "name": "Medium",
+      "height": "40px",
+      "padding": "10px 16px",
+      "fontSize": "14px",
+      "useCase": "Default size for most contexts"
+    },
+    {
+      "name": "Large",
+      "height": "48px",
+      "padding": "12px 24px",
+      "fontSize": "16px",
+      "useCase": "Marketing pages, mobile-first designs, prominent CTAs"
+    }
+  ],
+  
+  "states": [
+    {
+      "name": "Default",
+      "description": "The resting state of the button"
+    },
+    {
+      "name": "Hover",
+      "description": "Visual feedback when cursor is over the button. Slightly darker/lighter depending on variant."
+    },
+    {
+      "name": "Focus",
+      "description": "Visible focus ring for keyboard navigation. Essential for accessibility."
+    },
+    {
+      "name": "Active/Pressed",
+      "description": "Visual feedback during click/tap. Provides immediate response to interaction."
+    },
+    {
+      "name": "Disabled",
+      "description": "Indicates the button cannot be interacted with. Reduced opacity and no pointer events."
+    },
+    {
+      "name": "Loading",
+      "description": "Shows a spinner while an async action is processing. Button should be disabled during loading."
+    }
+  ],
+  
+  "props": [
+    {
+      "name": "variant",
+      "type": "'primary' | 'secondary' | 'tertiary' | 'destructive' | 'ghost'",
+      "default": "'primary'",
+      "description": "The visual style of the button"
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md' | 'lg'",
+      "default": "'md'",
+      "description": "The size of the button"
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Whether the button is disabled"
+    },
+    {
+      "name": "loading",
+      "type": "boolean",
+      "default": "false",
+      "description": "Shows loading spinner and disables interaction"
+    },
+    {
+      "name": "fullWidth",
+      "type": "boolean",
+      "default": "false",
+      "description": "Makes the button span the full width of its container"
+    },
+    {
+      "name": "leadingIcon",
+      "type": "ReactNode",
+      "default": "undefined",
+      "description": "Icon to display before the label"
+    },
+    {
+      "name": "trailingIcon",
+      "type": "ReactNode",
+      "default": "undefined",
+      "description": "Icon to display after the label"
+    },
+    {
+      "name": "onClick",
+      "type": "(event: MouseEvent) => void",
+      "default": "undefined",
+      "description": "Handler called when the button is clicked"
+    },
+    {
+      "name": "type",
+      "type": "'button' | 'submit' | 'reset'",
+      "default": "'button'",
+      "description": "The HTML button type attribute"
+    }
+  ],
+  
+  "tokens": {
+    "description": "Design tokens used by the Button component",
+    "categories": [
+      {
+        "name": "Colors",
+        "tokens": [
+          {"name": "--color-action-primary-default", "value": "#6138d8", "usage": "Primary button background"},
+          {"name": "--color-action-primary-hover", "value": "#4f2eb3", "usage": "Primary button hover state"},
+          {"name": "--color-action-primary-text", "value": "#ffffff", "usage": "Primary button text color"},
+          {"name": "--color-action-secondary-default", "value": "transparent", "usage": "Secondary button background"},
+          {"name": "--color-action-secondary-border", "value": "#e4e4e7", "usage": "Secondary button border"},
+          {"name": "--color-feedback-error-default", "value": "#dc2626", "usage": "Destructive button background"}
+        ]
+      },
+      {
+        "name": "Spacing",
+        "tokens": [
+          {"name": "--spacing-button-sm", "value": "8px 12px", "usage": "Small button padding"},
+          {"name": "--spacing-button-md", "value": "10px 16px", "usage": "Medium button padding"},
+          {"name": "--spacing-button-lg", "value": "12px 24px", "usage": "Large button padding"}
+        ]
+      },
+      {
+        "name": "Typography",
+        "tokens": [
+          {"name": "--font-weight-button", "value": "500", "usage": "Button label font weight"},
+          {"name": "--font-size-button-sm", "value": "14px", "usage": "Small/Medium button font size"},
+          {"name": "--font-size-button-lg", "value": "16px", "usage": "Large button font size"}
+        ]
+      },
+      {
+        "name": "Shape",
+        "tokens": [
+          {"name": "--radius-button", "value": "8px", "usage": "Button border radius"},
+          {"name": "--radius-button-pill", "value": "9999px", "usage": "Pill-shaped button radius"}
+        ]
+      }
+    ]
+  },
+  
+  "accessibility": {
+    "description": "Buttons must be accessible to all users, including those using assistive technologies.",
+    "guidelines": [
+      {
+        "title": "Keyboard Navigation",
+        "description": "Buttons must be focusable and activatable via keyboard (Enter or Space keys)"
+      },
+      {
+        "title": "Focus Indicators",
+        "description": "Provide clear visible focus states that meet WCAG 2.1 contrast requirements"
+      },
+      {
+        "title": "Color Contrast",
+        "description": "Button text must have at least 4.5:1 contrast ratio against the background"
+      },
+      {
+        "title": "Touch Targets",
+        "description": "Minimum touch target size of 44x44px for mobile interfaces (WCAG 2.5.5)"
+      },
+      {
+        "title": "Screen Readers",
+        "description": "Use semantic <button> element. Add aria-label for icon-only buttons"
+      },
+      {
+        "title": "Loading States",
+        "description": "Announce loading state to screen readers using aria-busy or live regions"
+      }
+    ],
+    "wcagCriteria": ["1.4.3", "2.1.1", "2.4.7", "2.5.5", "4.1.2"]
+  },
+  
+  "bestPractices": {
+    "do": [
+      "Use clear, action-oriented labels (\"Save changes\" not \"Submit\")",
+      "Place primary actions on the right in button groups (for LTR languages)",
+      "Provide loading feedback for async actions",
+      "Use icons to reinforce meaning, not replace labels",
+      "Keep button labels short (1-3 words when possible)",
+      "Maintain consistent button sizing within a context"
+    ],
+    "dont": [
+      "Don't use multiple primary buttons on the same screen",
+      "Don't disable buttons without explaining why",
+      "Don't use vague labels like \"Click here\" or \"OK\"",
+      "Don't make buttons look like links or vice versa",
+      "Don't change button labels after interaction (except for toggles)",
+      "Don't use all caps for button labels"
+    ]
+  },
+  
+  "examples": [
+    {
+      "title": "Basic Button",
+      "description": "Standard primary button with label",
+      "code": "<Button>Save changes</Button>",
+      "preview": "primary"
+    },
+    {
+      "title": "Button with Icon",
+      "description": "Button with leading icon for visual reinforcement",
+      "code": "<Button leadingIcon={<PlusIcon />}>Add item</Button>",
+      "preview": "with-icon"
+    },
+    {
+      "title": "Button Group",
+      "description": "Common pattern for form actions",
+      "code": "<ButtonGroup>\n  <Button variant=\"secondary\">Cancel</Button>\n  <Button variant=\"primary\">Save</Button>\n</ButtonGroup>",
+      "preview": "button-group"
+    },
+    {
+      "title": "Loading State",
+      "description": "Button showing async operation in progress",
+      "code": "<Button loading>Saving...</Button>",
+      "preview": "loading"
+    },
+    {
+      "title": "Destructive Action",
+      "description": "Button for dangerous actions requiring confirmation",
+      "code": "<Button variant=\"destructive\">Delete account</Button>",
+      "preview": "destructive"
+    }
+  ],
+  
+  "relatedComponents": [
+    {
+      "name": "IconButton",
+      "description": "For icon-only button actions",
+      "url": "/components/icon-button"
+    },
+    {
+      "name": "ButtonGroup",
+      "description": "For grouping related buttons together",
+      "url": "/components/button-group"
+    },
+    {
+      "name": "Link",
+      "description": "For navigation actions that don't trigger side effects",
+      "url": "/components/link"
+    },
+    {
+      "name": "Toggle",
+      "description": "For binary on/off states",
+      "url": "/components/toggle"
+    }
+  ],
+  
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-01-15",
+      "changes": ["Initial release with all variants and sizes"]
+    }
+  ]
+}

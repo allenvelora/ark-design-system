@@ -1,0 +1,331 @@
+{
+  "id": "modal",
+  "name": "Modal",
+  "description": "Modals (dialogs) present content in a layer above the main application. They focus the user's attention and require an action before returning to the underlying content.",
+  "status": "stable",
+  "version": "1.0.0",
+  "figmaUrl": "https://www.figma.com/design/F8rMavAwnFag21a04KUV9C/ARK-Components?node-id=modal",
+  
+  "overview": {
+    "purpose": "Modals create focused interactions that block the rest of the interface until completed. They're appropriate for critical information that requires immediate attention or action.",
+    "principles": [
+      "Modals should be used sparingly - they interrupt user flow",
+      "Content should be concise and focused on a single task",
+      "Always provide a clear way to dismiss the modal",
+      "Preserve user's work if they accidentally dismiss"
+    ]
+  },
+  
+  "whenToUse": [
+    "Confirming destructive or irreversible actions",
+    "Collecting essential input that blocks the main workflow",
+    "Showing critical information that requires acknowledgment",
+    "Displaying focused content like image galleries or videos",
+    "Complex forms that benefit from isolated focus"
+  ],
+  
+  "whenNotToUse": [
+    "For non-critical information - use Toast or inline messages",
+    "For simple confirmations - consider inline confirmation patterns",
+    "When content could be shown in the main flow",
+    "For long forms - consider a separate page instead",
+    "For casual, frequent interactions"
+  ],
+  
+  "anatomy": {
+    "description": "Modals consist of an overlay, a dialog container, and structured content areas.",
+    "parts": [
+      {
+        "name": "Overlay/Backdrop",
+        "description": "Semi-transparent layer that dims the background content",
+        "required": true
+      },
+      {
+        "name": "Dialog Container",
+        "description": "The elevated surface containing the modal content",
+        "required": true
+      },
+      {
+        "name": "Header",
+        "description": "Contains title and optional close button",
+        "required": true
+      },
+      {
+        "name": "Body",
+        "description": "Main content area of the modal",
+        "required": true
+      },
+      {
+        "name": "Footer",
+        "description": "Action buttons area, typically Cancel and Confirm",
+        "required": false
+      },
+      {
+        "name": "Close Button",
+        "description": "Icon button in header or corner to dismiss modal",
+        "required": true
+      }
+    ]
+  },
+  
+  "variants": [
+    {
+      "name": "Default",
+      "description": "Standard modal for general content and forms",
+      "useCase": "Forms, settings, detailed views",
+      "tokens": ["color-bg-modal", "shadow-modal"]
+    },
+    {
+      "name": "Alert",
+      "description": "Compact modal for confirmations and warnings",
+      "useCase": "Delete confirmations, warnings, errors",
+      "tokens": ["color-bg-modal", "color-feedback-error-default"]
+    },
+    {
+      "name": "Fullscreen",
+      "description": "Modal that covers the entire viewport",
+      "useCase": "Media viewers, complex workflows, mobile",
+      "tokens": ["color-bg-modal"]
+    },
+    {
+      "name": "Drawer",
+      "description": "Modal that slides in from an edge (bottom/right)",
+      "useCase": "Mobile menus, filters, side panels",
+      "tokens": ["color-bg-modal"]
+    }
+  ],
+  
+  "sizes": [
+    {
+      "name": "Small",
+      "width": "400px",
+      "useCase": "Simple confirmations, short messages"
+    },
+    {
+      "name": "Medium",
+      "width": "560px",
+      "useCase": "Default for most modals, forms"
+    },
+    {
+      "name": "Large",
+      "width": "720px",
+      "useCase": "Complex content, tables, detailed views"
+    },
+    {
+      "name": "Extra Large",
+      "width": "960px",
+      "useCase": "Full workflows, multi-step processes"
+    }
+  ],
+  
+  "states": [
+    {
+      "name": "Closed",
+      "description": "Modal is not visible"
+    },
+    {
+      "name": "Opening",
+      "description": "Animation state while modal appears"
+    },
+    {
+      "name": "Open",
+      "description": "Modal is visible and interactive"
+    },
+    {
+      "name": "Closing",
+      "description": "Animation state while modal dismisses"
+    }
+  ],
+  
+  "props": [
+    {
+      "name": "open",
+      "type": "boolean",
+      "default": "false",
+      "description": "Controls the visibility of the modal"
+    },
+    {
+      "name": "onClose",
+      "type": "() => void",
+      "default": "undefined",
+      "description": "Handler called when modal is dismissed"
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "default": "undefined",
+      "description": "Title displayed in the modal header"
+    },
+    {
+      "name": "size",
+      "type": "'sm' | 'md' | 'lg' | 'xl' | 'full'",
+      "default": "'md'",
+      "description": "The width of the modal"
+    },
+    {
+      "name": "closeOnOverlayClick",
+      "type": "boolean",
+      "default": "true",
+      "description": "Whether clicking the overlay closes the modal"
+    },
+    {
+      "name": "closeOnEscape",
+      "type": "boolean",
+      "default": "true",
+      "description": "Whether pressing Escape closes the modal"
+    },
+    {
+      "name": "showCloseButton",
+      "type": "boolean",
+      "default": "true",
+      "description": "Whether to show the X close button"
+    },
+    {
+      "name": "preventScroll",
+      "type": "boolean",
+      "default": "true",
+      "description": "Prevents background scrolling when open"
+    },
+    {
+      "name": "initialFocus",
+      "type": "RefObject",
+      "default": "undefined",
+      "description": "Element to focus when modal opens"
+    }
+  ],
+  
+  "tokens": {
+    "description": "Design tokens used by the Modal component",
+    "categories": [
+      {
+        "name": "Colors",
+        "tokens": [
+          {"name": "--color-bg-modal", "value": "#ffffff", "usage": "Modal background color"},
+          {"name": "--color-bg-overlay", "value": "rgba(0, 0, 0, 0.5)", "usage": "Backdrop overlay color"},
+          {"name": "--color-border-modal-header", "value": "#e4e4e7", "usage": "Separator between header and body"}
+        ]
+      },
+      {
+        "name": "Shadows",
+        "tokens": [
+          {"name": "--shadow-modal", "value": "0 20px 60px rgba(0, 0, 0, 0.2)", "usage": "Modal elevation shadow"}
+        ]
+      },
+      {
+        "name": "Spacing",
+        "tokens": [
+          {"name": "--spacing-modal-header", "value": "20px 24px", "usage": "Modal header padding"},
+          {"name": "--spacing-modal-body", "value": "24px", "usage": "Modal body padding"},
+          {"name": "--spacing-modal-footer", "value": "16px 24px", "usage": "Modal footer padding"}
+        ]
+      },
+      {
+        "name": "Shape",
+        "tokens": [
+          {"name": "--radius-modal", "value": "16px", "usage": "Modal border radius"}
+        ]
+      },
+      {
+        "name": "Animation",
+        "tokens": [
+          {"name": "--duration-modal", "value": "200ms", "usage": "Modal transition duration"},
+          {"name": "--easing-modal", "value": "ease-out", "usage": "Modal transition easing"}
+        ]
+      }
+    ]
+  },
+  
+  "accessibility": {
+    "description": "Modals must properly manage focus and be accessible to all users.",
+    "guidelines": [
+      {
+        "title": "Focus Trapping",
+        "description": "Keep focus within the modal while open. Tab should cycle through modal elements only."
+      },
+      {
+        "title": "Focus Restoration",
+        "description": "Return focus to the triggering element when the modal closes"
+      },
+      {
+        "title": "Keyboard Support",
+        "description": "Support Escape key to close. Tab/Shift+Tab to navigate."
+      },
+      {
+        "title": "ARIA Attributes",
+        "description": "Use role=\"dialog\" and aria-modal=\"true\". Label with aria-labelledby."
+      },
+      {
+        "title": "Screen Reader Announcements",
+        "description": "Announce modal opening and closing to assistive technologies"
+      },
+      {
+        "title": "Reduced Motion",
+        "description": "Respect prefers-reduced-motion for open/close animations"
+      }
+    ],
+    "wcagCriteria": ["1.3.1", "2.1.1", "2.1.2", "2.4.3", "4.1.2"]
+  },
+  
+  "bestPractices": {
+    "do": [
+      "Keep modal content focused on a single task",
+      "Provide clear action buttons with descriptive labels",
+      "Allow users to dismiss with Escape, overlay click, and close button",
+      "Use progressive disclosure for complex content",
+      "Preserve user input if modal is accidentally closed",
+      "Position the primary action on the right (for LTR)"
+    ],
+    "dont": [
+      "Don't open modals from within modals (nested modals)",
+      "Don't use modals for content that could be shown inline",
+      "Don't block critical information behind dismissable modals",
+      "Don't use modals on page load without user action",
+      "Don't auto-close modals with important information",
+      "Don't make users lose their work if they cancel"
+    ]
+  },
+  
+  "examples": [
+    {
+      "title": "Basic Modal",
+      "description": "Simple modal with title and actions",
+      "code": "<Modal open={isOpen} onClose={() => setIsOpen(false)} title=\"Edit Profile\">\n  <ModalBody>\n    <Input label=\"Name\" value={name} onChange={setName} />\n  </ModalBody>\n  <ModalFooter>\n    <Button variant=\"secondary\" onClick={() => setIsOpen(false)}>Cancel</Button>\n    <Button onClick={handleSave}>Save</Button>\n  </ModalFooter>\n</Modal>"
+    },
+    {
+      "title": "Confirmation Dialog",
+      "description": "Alert modal for destructive action",
+      "code": "<Modal \n  open={showConfirm} \n  onClose={() => setShowConfirm(false)}\n  title=\"Delete Item?\"\n  size=\"sm\"\n>\n  <ModalBody>\n    <p>This action cannot be undone.</p>\n  </ModalBody>\n  <ModalFooter>\n    <Button variant=\"secondary\" onClick={() => setShowConfirm(false)}>Cancel</Button>\n    <Button variant=\"destructive\" onClick={handleDelete}>Delete</Button>\n  </ModalFooter>\n</Modal>"
+    }
+  ],
+  
+  "relatedComponents": [
+    {
+      "name": "Drawer",
+      "description": "Side panel that slides in from edge",
+      "url": "/components/drawer"
+    },
+    {
+      "name": "AlertDialog",
+      "description": "Modal specifically for confirmations",
+      "url": "/components/alert-dialog"
+    },
+    {
+      "name": "Toast",
+      "description": "Non-blocking notifications",
+      "url": "/components/toast"
+    },
+    {
+      "name": "Popover",
+      "description": "Small overlay attached to trigger",
+      "url": "/components/popover"
+    }
+  ],
+  
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-01-15",
+      "changes": ["Initial release"]
+    }
+  ]
+}

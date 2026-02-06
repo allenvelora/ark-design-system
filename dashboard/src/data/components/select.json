@@ -1,0 +1,113 @@
+{
+  "id": "select",
+  "name": "Select",
+  "description": "Select components allow users to choose a single value from a list of options. They're useful when space is limited and the list of options is predictable.",
+  "status": "stable",
+  "version": "1.0.0",
+  
+  "overview": {
+    "purpose": "Selects provide a compact way to present a list of options. They're ideal when the user needs to choose from a predefined set of values.",
+    "principles": [
+      "Use select when there are more than 5-7 options",
+      "Order options logically (alphabetical, by frequency, or by importance)",
+      "Provide a clear default or placeholder when appropriate",
+      "Consider searchable select for long lists (10+ options)"
+    ]
+  },
+  
+  "whenToUse": [
+    "Choosing from 5+ predefined options",
+    "When space is limited and a list would be too long",
+    "Selecting a single value from a closed set",
+    "Form fields like country, state, or category selection"
+  ],
+  
+  "whenNotToUse": [
+    "For 2-4 options - use Radio buttons instead",
+    "For binary choices - use Checkbox or Toggle",
+    "When users might need to enter custom values - use Combobox",
+    "For multi-select - use MultiSelect or Checkbox group"
+  ],
+  
+  "anatomy": {
+    "description": "A select consists of a trigger button and a dropdown list of options.",
+    "parts": [
+      {"name": "Label", "description": "Describes what selection is being made", "required": true},
+      {"name": "Trigger", "description": "Button that opens the dropdown and shows current selection", "required": true},
+      {"name": "Dropdown", "description": "Container for the list of options", "required": true},
+      {"name": "Option", "description": "Individual selectable item in the list", "required": true},
+      {"name": "Chevron", "description": "Icon indicating dropdown functionality", "required": true},
+      {"name": "Helper Text", "description": "Additional context below the select", "required": false}
+    ]
+  },
+  
+  "variants": [
+    {"name": "Default", "description": "Standard select with border and background", "useCase": "Most form contexts"},
+    {"name": "Native", "description": "Uses native browser select for maximum accessibility", "useCase": "Simple forms, maximum compatibility"},
+    {"name": "Searchable", "description": "Includes search/filter input in dropdown", "useCase": "Long lists (10+ options)"}
+  ],
+  
+  "states": [
+    {"name": "Default", "description": "Resting state with placeholder or value"},
+    {"name": "Hover", "description": "Cursor over the trigger"},
+    {"name": "Focus", "description": "Keyboard focus on trigger"},
+    {"name": "Open", "description": "Dropdown is expanded"},
+    {"name": "Disabled", "description": "Cannot be interacted with"},
+    {"name": "Error", "description": "Validation error state"}
+  ],
+  
+  "props": [
+    {"name": "options", "type": "Array<{value: string, label: string}>", "default": "[]", "description": "List of options to display"},
+    {"name": "value", "type": "string", "default": "undefined", "description": "Currently selected value"},
+    {"name": "onChange", "type": "(value: string) => void", "default": "undefined", "description": "Handler when selection changes"},
+    {"name": "placeholder", "type": "string", "default": "'Select...'", "description": "Placeholder when no value selected"},
+    {"name": "label", "type": "string", "default": "undefined", "description": "Label for the select"},
+    {"name": "disabled", "type": "boolean", "default": "false", "description": "Disable the select"},
+    {"name": "error", "type": "string | boolean", "default": "false", "description": "Error state and message"},
+    {"name": "searchable", "type": "boolean", "default": "false", "description": "Enable search in dropdown"}
+  ],
+  
+  "tokens": {
+    "description": "Design tokens for Select",
+    "categories": [
+      {
+        "name": "Colors",
+        "tokens": [
+          {"name": "--color-bg-select", "value": "#ffffff", "usage": "Select background"},
+          {"name": "--color-border-select", "value": "#e4e4e7", "usage": "Select border"},
+          {"name": "--color-bg-select-option-hover", "value": "#f4f4f5", "usage": "Option hover background"}
+        ]
+      }
+    ]
+  },
+  
+  "accessibility": {
+    "description": "Select must be keyboard navigable and properly labeled.",
+    "guidelines": [
+      {"title": "Keyboard Navigation", "description": "Arrow keys to navigate, Enter to select, Escape to close"},
+      {"title": "Labels", "description": "Always associate label with select using htmlFor"},
+      {"title": "ARIA", "description": "Use proper ARIA attributes for custom selects"}
+    ],
+    "wcagCriteria": ["1.3.1", "2.1.1", "4.1.2"]
+  },
+  
+  "bestPractices": {
+    "do": [
+      "Provide a sensible default when appropriate",
+      "Order options logically",
+      "Use clear, concise option labels",
+      "Consider native select for simple use cases"
+    ],
+    "dont": [
+      "Don't use select for less than 5 options",
+      "Don't use placeholder as the label",
+      "Don't disable without explanation"
+    ]
+  },
+  
+  "relatedComponents": [
+    {"name": "Radio", "description": "For 2-5 visible options", "url": "/components/radio"},
+    {"name": "Combobox", "description": "Select with custom input", "url": "/components/combobox"},
+    {"name": "MultiSelect", "description": "For selecting multiple values", "url": "/components/multi-select"}
+  ]
+}

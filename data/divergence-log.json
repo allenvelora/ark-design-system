@@ -1,0 +1,57 @@
+{
+  "$schema": "./schemas/divergence-log.schema.json",
+  "$description": "Log of design system divergences across products. Edit this file to record new divergences.",
+  
+  "lastUpdated": "2026-02-03",
+  
+  "categories": {
+    "intentional": {
+      "label": "Intentional Divergence",
+      "description": "Documented, accepted deviation from the system. Signals a potential system gap.",
+      "severity": "low"
+    },
+    "unintentional": {
+      "label": "Unintentional Drift",
+      "description": "Hardcoded values or patterns that bypassed the system, usually discovered in review.",
+      "severity": "medium"
+    },
+    "technical-debt": {
+      "label": "Technical Debt",
+      "description": "Known inconsistency that will be addressed later, tracked and prioritized.",
+      "severity": "medium"
+    },
+    "blocked": {
+      "label": "Blocked by System",
+      "description": "Team wanted to use system but couldn't due to missing feature or constraint.",
+      "severity": "high"
+    }
+  },
+  
+  "statuses": {
+    "open": "Divergence identified, not yet resolved",
+    "accepted": "Divergence reviewed and accepted as valid",
+    "resolved": "Divergence addressed (either fixed or system updated)",
+    "wont-fix": "Divergence acknowledged but won't be addressed"
+  },
+  
+  "entries": [
+    {
+      "id": "div-example-001",
+      "date": "2026-02-03",
+      "product": "keela",
+      "category": "intentional",
+      "status": "accepted",
+      "summary": "Example: Custom donor card gradient",
+      "description": "Donor profile cards use a custom gradient background that doesn't map to semantic surface tokens. This is intentional to create visual distinction for a premium feature.",
+      "tokensAffected": ["color.surface.primary", "color.surface.secondary"],
+      "alternativeUsed": "Custom CSS gradient defined in donor-card.css",
+      "rationale": "Premium feature differentiation, approved by design leadership",
+      "ticket": "EXAMPLE-123",
+      "reportedBy": "Design Team",
+      "reviewedBy": null,
+      "resolvedDate": null,
+      "resolution": null,
+      "_isExample": true
+    }
+  ]
+}

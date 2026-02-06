@@ -1,0 +1,46 @@
+{
+  "$schema": "./schemas/products.schema.json",
+  "$description": "Product metadata for the design system dashboard. Edit this file to add/update products.",
+  
+  "products": [
+    {
+      "id": "keela",
+      "name": "Keela",
+      "description": "CRM for nonprofits",
+      "stack": "react",
+      "currentSystem": "design-system-b",
+      "team": {
+        "designLead": "TBD",
+        "engineeringLead": "TBD"
+      },
+      "status": "active",
+      "notes": "Largest codebase, highest adoption priority"
+    },
+    {
+      "id": "aplos",
+      "name": "Aplos",
+      "description": "Accounting software for nonprofits",
+      "stack": "react",
+      "currentSystem": "design-system-a",
+      "team": {
+        "designLead": "TBD",
+        "engineeringLead": "TBD"
+      },
+      "status": "active",
+      "notes": "Shared design system with Raisely"
+    },
+    {
+      "id": "raisely",
+      "name": "Raisely",
+      "description": "Fundraising platform",
+      "stack": "vue",
+      "currentSystem": "design-system-a",
+      "team": {
+        "designLead": "TBD",
+        "engineeringLead": "TBD"
+      },
+      "status": "active",
+      "notes": "Only Vue product - token-only adoption recommended"
+    }
+  ]
+}

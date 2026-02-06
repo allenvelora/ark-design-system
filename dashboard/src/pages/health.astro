@@ -1,0 +1,473 @@
+---
+import Layout from '../layouts/Layout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Load data files at build/request time
+const dataPath = path.join(process.cwd(), '..', 'data');
+
+const metricsData = JSON.parse(
+  fs.readFileSync(path.join(dataPath, 'metrics.json'), 'utf-8')
+);
+
+const productsData = JSON.parse(
+  fs.readFileSync(path.join(dataPath, 'products.json'), 'utf-8')
+);
+
+const divergenceData = JSON.parse(
+  fs.readFileSync(path.join(dataPath, 'divergence-log.json'), 'utf-8')
+);
+
+// Calculate summary stats
+const products = productsData.products;
+const divergences = divergenceData.entries.filter(e => !e._isExample);
+const openDivergences = divergences.filter(d => d.status === 'open').length;
+const blockedDivergences = divergences.filter(d => d.category === 'blocked').length;
+---
+
+<Layout title="System Health">
+  <div class="dashboard">
+    <header class="page-header">
+      <h1>System Health Dashboard</h1>
+      <p class="subtitle">Last updated: {metricsData.lastUpdated}</p>
+    </header>
+    
+    <!-- Summary Cards -->
+    <section class="summary-grid">
+      <div class="card summary-card">
+        <div class="card-icon">🎯</div>
+        <div class="card-content">
+          <span class="card-value">{metricsData.summary.averageAdoption}%</span>
+          <span class="card-label">Avg Token Adoption</span>
+        </div>
+      </div>
+      
+      <div class="card summary-card">
+        <div class="card-icon">📝</div>
+        <div class="card-content">
+          <span class="card-value">{divergences.length}</span>
+          <span class="card-label">Total Divergences</span>
+        </div>
+      </div>
+      
+      <div class="card summary-card warning">
+        <div class="card-icon">⚠️</div>
+        <div class="card-content">
+          <span class="card-value">{blockedDivergences}</span>
+          <span class="card-label">Blocked by System</span>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Products Section -->
+    <section class="section">
+      <h2 class="section-title">Products</h2>
+      <div class="products-grid">
+        {products.map((product) => {
+          const metrics = metricsData.products[product.id];
+          return (
+            <div class="card product-card">
+              <div class="product-header">
+                <h3>{product.name}</h3>
+                <span class={`badge badge-${product.stack}`}>{product.stack}</span>
+              </div>
+              <p class="product-description">{product.description}</p>
+              <div class="product-metrics">
+                <div class="metric">
+                  <span class="metric-value">{metrics?.tokenAdoption || 0}%</span>
+                  <span class="metric-label">Token Adoption</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-value">{metrics?.divergenceCount || 0}</span>
+                  <span class="metric-label">Divergences</span>
+                </div>
+              </div>
+              <div class="product-footer">
+                <span class={`trend trend-${metrics?.adoptionTrend || 'not-started'}`}>
+                  {metrics?.adoptionTrend || 'not-started'}
+                </span>
+                <span class="system-badge">{product.currentSystem}</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+    
+    <!-- Recent Divergences -->
+    <section class="section">
+      <h2 class="section-title">Recent Divergences</h2>
+      {divergences.length === 0 ? (
+        <div class="empty-state">
+          <p>No divergences recorded yet.</p>
+          <p class="hint">Edit <code>data/divergence-log.json</code> to add entries.</p>
+        </div>
+      ) : (
+        <div class="divergence-list">
+          {divergences.slice(0, 5).map((div) => (
+            <div class={`card divergence-item category-${div.category}`}>
+              <div class="divergence-header">
+                <span class="divergence-id">{div.id}</span>
+                <span class={`badge badge-${div.category}`}>{div.category}</span>
+                <span class={`badge badge-status-${div.status}`}>{div.status}</span>
+              </div>
+              <h4>{div.summary}</h4>
+              <p class="divergence-description">{div.description}</p>
+              <div class="divergence-meta">
+                <span>Product: {div.product}</span>
+                <span>Date: {div.date}</span>
+                {div.ticket && <a href="#">{div.ticket}</a>}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      <a href="/divergence" class="link-more">View all divergences →</a>
+    </section>
+    
+    <!-- Quick Actions -->
+    <section class="section">
+      <h2 class="section-title">Quick Actions</h2>
+      <div class="actions-grid">
+        <a href="/decisions" class="card action-card">
+          <span class="action-icon">🧭</span>
+          <span class="action-title">Decision Helper</span>
+          <span class="action-description">Interactive guides for component choices</span>
+        </a>
+        <a href="/tokens" class="card action-card">
+          <span class="action-icon">🎨</span>
+          <span class="action-title">Token Browser</span>
+          <span class="action-description">Explore all available design tokens</span>
+        </a>
+        <a href="/docs" class="card action-card">
+          <span class="action-icon">📚</span>
+          <span class="action-title">Documentation</span>
+          <span class="action-description">Governance, principles, and guides</span>
+        </a>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .page-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+  
+  .subtitle {
+    color: var(--color-text-muted, #a1a1aa);
+    font-size: 0.875rem;
+  }
+  
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text-primary, #18181b);
+  }
+  
+  /* Summary Grid */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .card {
+    background: var(--color-surface-primary, #fff);
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 8px;
+    padding: 1.25rem;
+  }
+  
+  .summary-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .summary-card.warning {
+    border-color: var(--color-feedback-warning-border, #fde68a);
+    background: var(--color-feedback-warning-bg, #fffbeb);
+  }
+  
+  .card-icon {
+    font-size: 2rem;
+  }
+  
+  .card-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary, #18181b);
+  }
+  
+  .card-label {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #52525b);
+  }
+  
+  /* Products Grid */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+  
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .product-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .product-header h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+  
+  .product-description {
+    color: var(--color-text-secondary, #52525b);
+    font-size: 0.875rem;
+  }
+  
+  .product-metrics {
+    display: flex;
+    gap: 2rem;
+    padding: 0.75rem 0;
+    border-top: 1px solid var(--color-border-default, #e4e4e7);
+    border-bottom: 1px solid var(--color-border-default, #e4e4e7);
+  }
+  
+  .metric {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .metric-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  
+  .metric-label {
+    font-size: 0.75rem;
+    color: var(--color-text-muted, #a1a1aa);
+  }
+  
+  .product-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+  }
+  
+  /* Badges */
+  .badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  
+  .badge-react {
+    background: #61dafb20;
+    color: #0ea5e9;
+  }
+  
+  .badge-vue {
+    background: #42b88320;
+    color: #22c55e;
+  }
+  
+  .badge-intentional {
+    background: var(--color-feedback-info-bg, #eff6ff);
+    color: var(--color-feedback-info-text, #1d4ed8);
+  }
+  
+  .badge-unintentional {
+    background: var(--color-feedback-warning-bg, #fffbeb);
+    color: var(--color-feedback-warning-text, #b45309);
+  }
+  
+  .badge-technical-debt {
+    background: var(--color-surface-tertiary, #f4f4f5);
+    color: var(--color-text-secondary, #52525b);
+  }
+  
+  .badge-blocked {
+    background: var(--color-feedback-error-bg, #fef2f2);
+    color: var(--color-feedback-error-text, #b91c1c);
+  }
+  
+  .badge-status-open {
+    background: var(--color-feedback-warning-bg, #fffbeb);
+    color: var(--color-feedback-warning-text, #b45309);
+  }
+  
+  .badge-status-accepted {
+    background: var(--color-feedback-success-bg, #f0fdf4);
+    color: var(--color-feedback-success-text, #15803d);
+  }
+  
+  .badge-status-resolved {
+    background: var(--color-surface-tertiary, #f4f4f5);
+    color: var(--color-text-muted, #a1a1aa);
+  }
+  
+  .trend {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  
+  .trend-not-started {
+    background: var(--color-surface-tertiary, #f4f4f5);
+    color: var(--color-text-muted, #a1a1aa);
+  }
+  
+  .trend-improving {
+    background: var(--color-feedback-success-bg, #f0fdf4);
+    color: var(--color-feedback-success-text, #15803d);
+  }
+  
+  .trend-stable {
+    background: var(--color-feedback-info-bg, #eff6ff);
+    color: var(--color-feedback-info-text, #1d4ed8);
+  }
+  
+  .trend-declining {
+    background: var(--color-feedback-error-bg, #fef2f2);
+    color: var(--color-feedback-error-text, #b91c1c);
+  }
+  
+  .system-badge {
+    color: var(--color-text-muted, #a1a1aa);
+  }
+  
+  /* Divergence List */
+  .divergence-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .divergence-item {
+    border-left: 3px solid var(--color-border-default, #e4e4e7);
+  }
+  
+  .divergence-item.category-blocked {
+    border-left-color: var(--color-feedback-error-icon, #ef4444);
+  }
+  
+  .divergence-item.category-intentional {
+    border-left-color: var(--color-feedback-info-icon, #3b82f6);
+  }
+  
+  .divergence-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .divergence-id {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-muted, #a1a1aa);
+  }
+  
+  .divergence-item h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  
+  .divergence-description {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #52525b);
+    margin-bottom: 0.5rem;
+  }
+  
+  .divergence-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.75rem;
+    color: var(--color-text-muted, #a1a1aa);
+  }
+  
+  /* Actions Grid */
+  .actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+  
+  .action-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-decoration: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  
+  .action-card:hover {
+    border-color: var(--color-action-primary-default, #2563eb);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+  
+  .action-icon {
+    font-size: 1.5rem;
+  }
+  
+  .action-title {
+    font-weight: 600;
+    color: var(--color-text-primary, #18181b);
+  }
+  
+  .action-description {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #52525b);
+  }
+  
+  /* Empty State */
+  .empty-state {
+    padding: 2rem;
+    text-align: center;
+    background: var(--color-surface-secondary, #fafafa);
+    border-radius: 8px;
+  }
+  
+  .empty-state .hint {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-text-muted, #a1a1aa);
+  }
+  
+  .link-more {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+</style>

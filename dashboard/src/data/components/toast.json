@@ -1,0 +1,113 @@
+{
+  "id": "toast",
+  "name": "Toast",
+  "description": "Toasts provide brief, non-blocking feedback about an operation. They appear temporarily and can be dismissed, allowing users to continue their workflow without interruption.",
+  "status": "stable",
+  "version": "1.0.0",
+  
+  "overview": {
+    "purpose": "Toasts communicate the result of an action or provide low-priority information that doesn't require user action. They shouldn't interrupt the user's task.",
+    "principles": [
+      "Toasts should be brief and scannable",
+      "Don't use for critical information requiring action",
+      "Auto-dismiss after a reasonable duration",
+      "Allow manual dismissal for accessibility"
+    ]
+  },
+  
+  "whenToUse": [
+    "Confirming successful actions (save, send, delete)",
+    "Non-critical errors that don't block workflow",
+    "Informational messages about background processes",
+    "Undo opportunities after destructive actions"
+  ],
+  
+  "whenNotToUse": [
+    "For critical errors requiring user action - use Alert",
+    "For important confirmations - use Modal",
+    "For contextual help - use Tooltip or Popover",
+    "For persistent status - use Banner or inline alerts"
+  ],
+  
+  "anatomy": {
+    "description": "A toast consists of a container with icon, message, and optional action.",
+    "parts": [
+      {"name": "Container", "description": "The surface containing toast content", "required": true},
+      {"name": "Icon", "description": "Visual indicator of toast type", "required": false},
+      {"name": "Message", "description": "Brief text describing the notification", "required": true},
+      {"name": "Action", "description": "Optional button for related action (Undo)", "required": false},
+      {"name": "Close Button", "description": "Dismiss button for accessibility", "required": true}
+    ]
+  },
+  
+  "variants": [
+    {"name": "Default", "description": "Neutral informational toast", "useCase": "General notifications"},
+    {"name": "Success", "description": "Positive feedback with green styling", "useCase": "Successful operations"},
+    {"name": "Error", "description": "Error indication with red styling", "useCase": "Non-critical errors"},
+    {"name": "Warning", "description": "Warning with amber styling", "useCase": "Potential issues"},
+    {"name": "Loading", "description": "Shows loading state with spinner", "useCase": "Async operations in progress"}
+  ],
+  
+  "props": [
+    {"name": "title", "type": "string", "default": "undefined", "description": "Toast title"},
+    {"name": "description", "type": "string", "default": "undefined", "description": "Toast message"},
+    {"name": "variant", "type": "'default' | 'success' | 'error' | 'warning'", "default": "'default'", "description": "Visual style"},
+    {"name": "duration", "type": "number", "default": "5000", "description": "Auto-dismiss time in ms"},
+    {"name": "action", "type": "{ label: string, onClick: () => void }", "default": "undefined", "description": "Optional action button"},
+    {"name": "onDismiss", "type": "() => void", "default": "undefined", "description": "Handler when dismissed"}
+  ],
+  
+  "tokens": {
+    "description": "Design tokens for Toast",
+    "categories": [
+      {
+        "name": "Colors",
+        "tokens": [
+          {"name": "--color-bg-toast", "value": "#18181b", "usage": "Toast background (dark)"},
+          {"name": "--color-text-toast", "value": "#ffffff", "usage": "Toast text color"},
+          {"name": "--color-toast-success", "value": "#22c55e", "usage": "Success variant accent"},
+          {"name": "--color-toast-error", "value": "#ef4444", "usage": "Error variant accent"}
+        ]
+      },
+      {
+        "name": "Shape",
+        "tokens": [
+          {"name": "--radius-toast", "value": "8px", "usage": "Toast border radius"},
+          {"name": "--shadow-toast", "value": "0 4px 12px rgba(0,0,0,0.15)", "usage": "Toast elevation"}
+        ]
+      }
+    ]
+  },
+  
+  "accessibility": {
+    "description": "Toasts must be accessible and not disrupt screen reader users.",
+    "guidelines": [
+      {"title": "Live Regions", "description": "Use role=\"status\" and aria-live=\"polite\""},
+      {"title": "Focus", "description": "Don't steal focus from user's current task"},
+      {"title": "Duration", "description": "Allow enough time to read (min 5 seconds)"},
+      {"title": "Dismissal", "description": "Provide keyboard-accessible dismiss"}
+    ],
+    "wcagCriteria": ["1.3.1", "2.2.1", "4.1.3"]
+  },
+  
+  "bestPractices": {
+    "do": [
+      "Keep messages brief (1-2 lines)",
+      "Use appropriate variant for context",
+      "Provide undo for destructive actions",
+      "Position consistently (usually bottom-right)"
+    ],
+    "dont": [
+      "Don't use for critical information",
+      "Don't stack too many toasts",
+      "Don't auto-dismiss toasts with actions",
+      "Don't block user interaction"
+    ]
+  },
+  
+  "relatedComponents": [
+    {"name": "Alert", "description": "For persistent, important messages", "url": "/components/alert"},
+    {"name": "Banner", "description": "For page-level announcements", "url": "/components/banner"},
+    {"name": "Modal", "description": "For confirmations requiring action", "url": "/components/modal"}
+  ]
+}

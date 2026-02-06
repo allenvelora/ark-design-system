@@ -1,0 +1,152 @@
+# Button Decision Tree
+# Edit this file to change decision logic - no code changes needed
+# Dashboard parses this at runtime - edit, refresh, done
+
+id: button-decision
+title: "When you need a clickable action"
+description: "Guides you to the right button treatment and tokens"
+category: Interaction
+lastUpdated: "2026-02-03"
+
+steps:
+  - id: action-type
+    question: "What type of action is this?"
+    helpText: "Consider the user's intent and the action's importance"
+    options:
+      - id: primary
+        label: "Primary action"
+        description: "The main thing we want users to do (Submit, Save, Continue)"
+        next: primary-path
+      
+      - id: secondary
+        label: "Secondary action"
+        description: "Alternative or supporting action (Cancel, Back, Skip)"
+        next: secondary-path
+      
+      - id: destructive
+        label: "Destructive action"
+        description: "Deletes, removes, or causes irreversible change"
+        next: destructive-path
+      
+      - id: navigation
+        label: "Navigation"
+        description: "Moves user to another view or page"
+        next: navigation-path
+
+  - id: primary-path
+    question: "Is this the only primary action visible?"
+    helpText: "Avoid competing primary actions on the same view"
+    options:
+      - id: yes
+        label: "Yes, single primary action"
+        outcome:
+          type: tokens
+          tokens:
+            background: "color.action.primary.default"
+            backgroundHover: "color.action.primary.hover"
+            text: "color.text.inverse"
+            borderRadius: "radius.component.button"
+          guidance: |
+            Use primary button styling. Ensure it's visually prominent.
+            Consider button size based on context (form vs. hero).
+          component: "@ark/button variant='primary'"
+      
+      - id: no
+        label: "No, multiple primary actions"
+        outcome:
+          type: recommendation
+          guidance: |
+            Having multiple primary actions creates decision paralysis.
+            Consider: Which action is truly most important?
+            Demote one action to secondary styling.
+          suggestedReview: true
+
+  - id: secondary-path
+    question: "How important is this secondary action?"
+    options:
+      - id: paired
+        label: "Paired with primary (e.g., Cancel next to Submit)"
+        outcome:
+          type: tokens
+          tokens:
+            background: "color.action.secondary.default"
+            backgroundHover: "color.action.secondary.hover"
+            text: "color.text.primary"
+            border: "color.border.default"
+            borderRadius: "radius.component.button"
+          guidance: |
+            Use secondary/outline button styling.
+            Position to the left of primary action.
+          component: "@ark/button variant='secondary'"
+      
+      - id: standalone
+        label: "Standalone secondary action"
+        outcome:
+          type: tokens
+          tokens:
+            background: "transparent"
+            backgroundHover: "color.action.secondary.hover"
+            text: "color.text.link"
+          guidance: |
+            Consider if this needs to be a button at all.
+            Text links may be more appropriate for standalone secondary actions.
+          component: "@ark/button variant='ghost'"
+
+  - id: destructive-path
+    question: "How severe is this destructive action?"
+    helpText: "Consider reversibility and impact"
+    options:
+      - id: severe
+        label: "Irreversible or high-impact (Delete account, Remove all)"
+        outcome:
+          type: tokens
+          tokens:
+            background: "color.action.destructive.default"
+            backgroundHover: "color.action.destructive.hover"
+            text: "color.text.inverse"
+            borderRadius: "radius.component.button"
+          guidance: |
+            Use destructive button styling.
+            MUST include confirmation dialog before action.
+            Consider requiring user to type confirmation for very severe actions.
+          component: "@ark/button variant='destructive'"
+          requiresConfirmation: true
+      
+      - id: moderate
+        label: "Reversible or moderate impact (Remove item, Unsubscribe)"
+        outcome:
+          type: tokens
+          tokens:
+            background: "transparent"
+            backgroundHover: "color.feedback.error.bg"
+            text: "color.feedback.error.text"
+            border: "color.feedback.error.border"
+            borderRadius: "radius.component.button"
+          guidance: |
+            Use destructive outline styling.
+            Confirmation recommended but not required.
+          component: "@ark/button variant='destructive-outline'"
+
+  - id: navigation-path
+    question: "Is this navigation contextual or global?"
+    options:
+      - id: contextual
+        label: "Within current context (View details, Edit)"
+        outcome:
+          type: recommendation
+          guidance: |
+            Consider using a text link instead of a button.
+            Buttons imply action; links imply navigation.
+            If button is needed, use ghost/tertiary styling.
+          tokens:
+            text: "color.text.link"
+          component: "Link or @ark/button variant='ghost'"
+      
+      - id: global
+        label: "Major navigation (Go to Dashboard, Open Settings)"
+        outcome:
+          type: recommendation
+          guidance: |
+            This should likely live in navigation UI, not as a button.
+            If inline navigation is truly needed, use secondary button styling.
+          suggestedReview: true

@@ -1,0 +1,1048 @@
+---
+import Layout from '../layouts/Layout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+import yaml from 'js-yaml';
+
+// Load decision trees from YAML files
+const dataPath = path.join(process.cwd(), '..', 'data', 'decision-trees');
+const decisionFiles = fs.readdirSync(dataPath).filter(f => f.endsWith('.yaml'));
+
+const decisionTrees = decisionFiles.map(file => {
+  const content = fs.readFileSync(path.join(dataPath, file), 'utf-8');
+  return yaml.load(content);
+});
+
+// Group by category
+const categories = decisionTrees.reduce((acc: any, tree: any) => {
+  const cat = tree.category || 'General';
+  if (!acc[cat]) {
+    acc[cat] = {
+      name: cat,
+      trees: [],
+      icon: getCategoryIcon(cat),
+      description: getCategoryDescription(cat)
+    };
+  }
+  acc[cat].trees.push(tree);
+  return acc;
+}, {});
+
+function getCategoryIcon(category: string): string {
+  const icons: Record<string, string> = {
+    'Interaction': '👆',
+    'Forms': '📝',
+    'Layout': '📐',
+    'Components': '🧩',
+    'Color': '🎨',
+    'Typography': '✍️',
+    'Spacing': '↔️',
+    'Patterns': '🔄',
+    'General': '💡'
+  };
+  return icons[category] || '💡';
+}
+
+function getCategoryDescription(category: string): string {
+  const descriptions: Record<string, string> = {
+    'Interaction': 'Buttons, links, and clickable elements',
+    'Forms': 'Inputs, selects, and form controls',
+    'Layout': 'Structure and spacing for your interface',
+    'Components': 'Choose the right component for your use case',
+    'Color': 'Select appropriate colors for context and meaning',
+    'Typography': 'Find the right type scale and styles',
+    'Spacing': 'Apply consistent spacing patterns',
+    'Patterns': 'Follow established UX patterns',
+    'General': 'General design decisions'
+  };
+  return descriptions[category] || 'Make informed design decisions';
+}
+---
+
+<Layout title="Decision Helper">
+  <div class="decisions-page">
+    <header class="page-header">
+      <h1>Decision Helper</h1>
+      <p class="subtitle">Interactive guides to help you make consistent design decisions</p>
+    </header>
+
+    <!-- Category Selection -->
+    <section class="categories-section" id="categories-section">
+      <h2 class="section-title">What are you trying to decide?</h2>
+      <div class="category-grid">
+        {Object.values(categories).map((category: any) => (
+          <button 
+            class="category-card" 
+            data-category={category.name}
+            type="button"
+          >
+            <span class="category-icon">{category.icon}</span>
+            <div class="category-info">
+              <h3>{category.name}</h3>
+              <p>{category.description}</p>
+            </div>
+            <span class="category-count">{category.trees.length}</span>
+          </button>
+        ))}
+      </div>
+    </section>
+
+    <!-- Tree Selection (shown after category) -->
+    <section class="trees-section" id="trees-section" style="display: none;">
+      <div class="section-header">
+        <button class="back-button" id="back-to-categories" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          Back to categories
+        </button>
+        <h2 class="section-title" id="selected-category-title">Select a decision tree</h2>
+      </div>
+      
+      <div class="tree-list" id="tree-list">
+        {decisionTrees.map((tree: any) => (
+          <button 
+            class="tree-card" 
+            data-tree-id={tree.id}
+            data-category={tree.category}
+            type="button"
+          >
+            <div class="tree-card-content">
+              <h3>{tree.title}</h3>
+              <p>{tree.description}</p>
+            </div>
+            <div class="tree-card-meta">
+              <span class="tree-steps-count">{tree.steps.length} steps</span>
+              <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </button>
+        ))}
+      </div>
+    </section>
+
+    <!-- Active Decision Tree (wizard view) -->
+    <section class="wizard-section" id="wizard-section" style="display: none;">
+      <div class="wizard-header">
+        <button class="back-button" id="back-to-trees" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          Back to trees
+        </button>
+        <div class="wizard-title-area">
+          <h2 id="wizard-title">Decision Tree</h2>
+          <p id="wizard-description"></p>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <span class="progress-text" id="progress-text">Step 1 of 3</span>
+      </div>
+
+      <!-- Steps Container -->
+      <div class="wizard-content" id="wizard-content">
+        {decisionTrees.map((tree: any) => (
+          <div class="wizard-tree" data-tree-id={tree.id} style="display: none;">
+            {tree.steps.map((step: any, index: number) => (
+              <div 
+                class="wizard-step" 
+                data-step-id={step.id}
+                data-step-index={index}
+                style={index === 0 ? '' : 'display: none;'}
+              >
+                <div class="step-content">
+                  <span class="step-number">Question {index + 1}</span>
+                  <h3 class="step-question">{step.question}</h3>
+                  {step.helpText && (
+                    <p class="step-help">{step.helpText}</p>
+                  )}
+                </div>
+                
+                <div class="options-grid">
+                  {step.options.map((option: any) => (
+                    <button 
+                      class="option-card"
+                      data-next={option.next || ''}
+                      data-outcome={option.outcome ? JSON.stringify(option.outcome) : ''}
+                      type="button"
+                    >
+                      <div class="option-content">
+                        <span class="option-label">{option.label}</span>
+                        {option.description && (
+                          <span class="option-description">{option.description}</span>
+                        )}
+                      </div>
+                      <svg class="option-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                      </svg>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+            
+            <!-- Outcome Panel -->
+            <div class="outcome-panel" data-tree-outcome={tree.id} style="display: none;">
+              <div class="outcome-success">
+                <div class="outcome-icon">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                  </svg>
+                </div>
+                <h3>Here's Your Recommendation</h3>
+                <div class="outcome-body" id={`outcome-body-${tree.id}`}>
+                  <!-- Populated by JS -->
+                </div>
+                <div class="outcome-actions">
+                  <button class="btn btn-secondary restart-btn" type="button">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M1 4v6h6"/>
+                      <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                    </svg>
+                    Start Over
+                  </button>
+                  <button class="btn btn-primary" id="try-another-btn" type="button">
+                    Try Another Tree
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Info Section -->
+    <section class="info-section">
+      <div class="info-card">
+        <div class="info-icon">📝</div>
+        <div class="info-content">
+          <h3>Configuration-Driven</h3>
+          <p>Decision trees are defined in YAML files in <code>data/decision-trees/</code>. Edit these files to update the logic - no code changes required.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<script>
+  const categoriesSection = document.getElementById('categories-section');
+  const treesSection = document.getElementById('trees-section');
+  const wizardSection = document.getElementById('wizard-section');
+  const treeList = document.getElementById('tree-list');
+  const categoryTitle = document.getElementById('selected-category-title');
+  const wizardTitle = document.getElementById('wizard-title');
+  const wizardDescription = document.getElementById('wizard-description');
+  const wizardContent = document.getElementById('wizard-content');
+  const progressFill = document.getElementById('progress-fill');
+  const progressText = document.getElementById('progress-text');
+
+  let currentTreeId: string | null = null;
+  let currentStepIndex = 0;
+  let totalSteps = 0;
+  let selectedCategory: string | null = null;
+
+  // Category selection
+  document.querySelectorAll('.category-card').forEach(card => {
+    card.addEventListener('click', () => {
+      selectedCategory = (card as HTMLElement).dataset.category || null;
+      showTreesForCategory(selectedCategory);
+    });
+  });
+
+  function showTreesForCategory(category: string | null) {
+    if (!category) return;
+    
+    // Update title
+    if (categoryTitle) categoryTitle.textContent = `${category} Decisions`;
+    
+    // Show/hide trees based on category
+    document.querySelectorAll('.tree-card').forEach(card => {
+      const cardCategory = (card as HTMLElement).dataset.category;
+      (card as HTMLElement).style.display = cardCategory === category ? 'flex' : 'none';
+    });
+    
+    // Switch sections
+    if (categoriesSection) categoriesSection.style.display = 'none';
+    if (treesSection) treesSection.style.display = 'block';
+  }
+
+  // Back to categories
+  document.getElementById('back-to-categories')?.addEventListener('click', () => {
+    if (categoriesSection) categoriesSection.style.display = 'block';
+    if (treesSection) treesSection.style.display = 'none';
+  });
+
+  // Tree selection
+  document.querySelectorAll('.tree-card').forEach(card => {
+    card.addEventListener('click', () => {
+      currentTreeId = (card as HTMLElement).dataset.treeId || null;
+      startWizard(currentTreeId);
+    });
+  });
+
+  function startWizard(treeId: string | null) {
+    if (!treeId) return;
+    
+    const tree = document.querySelector(`.wizard-tree[data-tree-id="${treeId}"]`) as HTMLElement;
+    if (!tree) return;
+    
+    // Get tree info from the tree card
+    const treeCard = document.querySelector(`.tree-card[data-tree-id="${treeId}"]`);
+    if (wizardTitle && treeCard) {
+      wizardTitle.textContent = treeCard.querySelector('h3')?.textContent || 'Decision Tree';
+      if (wizardDescription) wizardDescription.textContent = treeCard.querySelector('p')?.textContent || '';
+    }
+    
+    // Count steps
+    const steps = tree.querySelectorAll('.wizard-step');
+    totalSteps = steps.length;
+    currentStepIndex = 0;
+    
+    // Reset all steps
+    steps.forEach((step, index) => {
+      (step as HTMLElement).style.display = index === 0 ? 'block' : 'none';
+      step.querySelectorAll('.option-card').forEach(opt => opt.classList.remove('selected'));
+    });
+    
+    // Hide all trees, show current
+    document.querySelectorAll('.wizard-tree').forEach(t => {
+      (t as HTMLElement).style.display = 'none';
+    });
+    tree.style.display = 'block';
+    
+    // Hide outcome
+    const outcome = tree.querySelector('.outcome-panel') as HTMLElement;
+    if (outcome) outcome.style.display = 'none';
+    
+    // Update progress
+    updateProgress();
+    
+    // Switch sections
+    if (treesSection) treesSection.style.display = 'none';
+    if (wizardSection) wizardSection.style.display = 'block';
+  }
+
+  function updateProgress() {
+    const percent = totalSteps > 0 ? ((currentStepIndex + 1) / totalSteps) * 100 : 0;
+    if (progressFill) progressFill.style.width = `${percent}%`;
+    if (progressText) progressText.textContent = `Step ${currentStepIndex + 1} of ${totalSteps}`;
+  }
+
+  // Back to trees
+  document.getElementById('back-to-trees')?.addEventListener('click', () => {
+    if (treesSection) treesSection.style.display = 'block';
+    if (wizardSection) wizardSection.style.display = 'none';
+  });
+
+  // Option selection
+  document.querySelectorAll('.option-card').forEach(option => {
+    option.addEventListener('click', () => {
+      const optionEl = option as HTMLElement;
+      const step = optionEl.closest('.wizard-step') as HTMLElement;
+      const tree = optionEl.closest('.wizard-tree') as HTMLElement;
+      
+      if (!step || !tree) return;
+      
+      // Mark as selected
+      step.querySelectorAll('.option-card').forEach(o => o.classList.remove('selected'));
+      optionEl.classList.add('selected');
+      
+      const nextId = optionEl.dataset.next;
+      const outcomeData = optionEl.dataset.outcome;
+      
+      // Small delay for visual feedback
+      setTimeout(() => {
+        if (outcomeData) {
+          // Show outcome
+          showOutcome(tree, JSON.parse(outcomeData));
+        } else if (nextId) {
+          // Show next step
+          const nextStep = tree.querySelector(`.wizard-step[data-step-id="${nextId}"]`) as HTMLElement;
+          if (nextStep) {
+            step.style.display = 'none';
+            nextStep.style.display = 'block';
+            currentStepIndex = parseInt(nextStep.dataset.stepIndex || '0');
+            updateProgress();
+          }
+        }
+      }, 200);
+    });
+  });
+
+  function showOutcome(tree: HTMLElement, data: any) {
+    const outcome = tree.querySelector('.outcome-panel') as HTMLElement;
+    const body = tree.querySelector('.outcome-body') as HTMLElement;
+    
+    if (!outcome || !body) return;
+    
+    // Hide current step
+    tree.querySelectorAll('.wizard-step').forEach(s => {
+      (s as HTMLElement).style.display = 'none';
+    });
+    
+    // Build outcome HTML
+    let html = '';
+    
+    if (data.type === 'tokens' && data.tokens) {
+      html += '<div class="outcome-tokens">';
+      html += '<h4>Recommended Tokens</h4>';
+      html += '<div class="token-list">';
+      for (const [key, value] of Object.entries(data.tokens)) {
+        html += `<div class="token-item"><code class="token-name">${key}</code><code class="token-value">${value}</code></div>`;
+      }
+      html += '</div></div>';
+    }
+    
+    if (data.guidance) {
+      html += `<div class="outcome-guidance"><h4>Guidance</h4><p>${data.guidance}</p></div>`;
+    }
+    
+    if (data.component) {
+      html += `<div class="outcome-component"><h4>Recommended Component</h4><div class="component-badge"><code>${data.component}</code></div></div>`;
+    }
+    
+    if (data.type === 'recommendation') {
+      html += `<div class="outcome-guidance"><p>${data.guidance}</p></div>`;
+    }
+    
+    if (data.suggestedReview) {
+      html += '<div class="outcome-note warning"><span class="note-icon">⚠️</span><p>Consider discussing this with the team before proceeding.</p></div>';
+    }
+    
+    if (data.logDivergence) {
+      html += '<div class="outcome-note info"><span class="note-icon">📝</span><p>If you proceed with a custom solution, please document it in the divergence log.</p></div>';
+    }
+    
+    body.innerHTML = html;
+    outcome.style.display = 'block';
+    
+    // Update progress to 100%
+    if (progressFill) progressFill.style.width = '100%';
+    if (progressText) progressText.textContent = 'Complete!';
+  }
+
+  // Restart buttons
+  document.querySelectorAll('.restart-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (currentTreeId) startWizard(currentTreeId);
+    });
+  });
+
+  // Try another tree
+  document.getElementById('try-another-btn')?.addEventListener('click', () => {
+    if (treesSection) treesSection.style.display = 'block';
+    if (wizardSection) wizardSection.style.display = 'none';
+  });
+</script>
+
+<style>
+  .decisions-page {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .page-header {
+    margin-bottom: 0.5rem;
+  }
+
+  .page-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    color: var(--color-text-muted, #71717a);
+    font-size: 0.9375rem;
+  }
+
+  /* Section Titles */
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--color-text-primary, #18181b);
+  }
+
+  .section-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Category Grid */
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .category-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: var(--color-surface-primary, #fff);
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: var(--brand-radius-card, 12px);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+  }
+
+  .category-card:hover {
+    border-color: var(--brand-primary, #18181b);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+
+  .category-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+
+  .category-info {
+    flex: 1;
+  }
+
+  .category-info h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--color-text-primary, #18181b);
+  }
+
+  .category-info p {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary, #52525b);
+    margin: 0;
+  }
+
+  .category-count {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--brand-primary-light, #f4f4f5);
+    color: var(--brand-primary, #18181b);
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Back Button */
+  .back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #52525b);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    width: fit-content;
+  }
+
+  .back-button:hover {
+    background: var(--color-surface-secondary, #fafafa);
+    color: var(--color-text-primary, #18181b);
+  }
+
+  /* Tree List */
+  .tree-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .tree-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    background: var(--color-surface-primary, #fff);
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: var(--brand-radius-card, 12px);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+  }
+
+  .tree-card:hover {
+    border-color: var(--brand-primary, #18181b);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .tree-card-content h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--color-text-primary, #18181b);
+  }
+
+  .tree-card-content p {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #52525b);
+    margin: 0;
+  }
+
+  .tree-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .tree-steps-count {
+    font-size: 0.75rem;
+    color: var(--color-text-muted, #71717a);
+    background: var(--color-surface-secondary, #fafafa);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+  }
+
+  .arrow-icon {
+    color: var(--color-text-muted, #a1a1aa);
+    transition: transform 0.2s ease;
+  }
+
+  .tree-card:hover .arrow-icon {
+    color: var(--brand-primary, #18181b);
+    transform: translateX(4px);
+  }
+
+  /* Wizard Section */
+  .wizard-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .wizard-title-area {
+    margin-top: 1rem;
+  }
+
+  .wizard-title-area h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+
+  .wizard-title-area p {
+    color: var(--color-text-secondary, #52525b);
+    font-size: 0.9375rem;
+    margin: 0;
+  }
+
+  /* Progress Bar */
+  .progress-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--color-surface-secondary, #f4f4f5);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--brand-primary, #18181b);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+    width: 0%;
+  }
+
+  .progress-text {
+    font-size: 0.75rem;
+    color: var(--color-text-muted, #71717a);
+    white-space: nowrap;
+  }
+
+  /* Wizard Steps */
+  .wizard-step {
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .step-content {
+    margin-bottom: 1.5rem;
+  }
+
+  .step-number {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--brand-primary, #18181b);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+
+  .step-question {
+    font-size: 1.375rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--color-text-primary, #18181b);
+  }
+
+  .step-help {
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary, #52525b);
+    margin: 0;
+  }
+
+  /* Options Grid */
+  .options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .option-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem;
+    background: var(--color-surface-primary, #fff);
+    border: 2px solid var(--color-border-default, #e4e4e7);
+    border-radius: var(--brand-radius-card, 12px);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+  }
+
+  .option-card:hover {
+    border-color: var(--brand-primary, #18181b);
+    background: var(--color-surface-secondary, #fafafa);
+  }
+
+  .option-card.selected {
+    border-color: var(--brand-primary, #18181b);
+    background: var(--brand-primary-light, #f4f4f5);
+  }
+
+  .option-card.selected .option-check {
+    color: var(--brand-primary, #18181b);
+  }
+
+  .option-card.selected .option-check circle {
+    fill: var(--brand-primary, #18181b);
+    stroke: var(--brand-primary, #18181b);
+  }
+
+  .option-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .option-label {
+    font-weight: 600;
+    color: var(--color-text-primary, #18181b);
+  }
+
+  .option-description {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #52525b);
+  }
+
+  .option-check {
+    color: var(--color-text-muted, #a1a1aa);
+    flex-shrink: 0;
+  }
+
+  /* Outcome Panel */
+  .outcome-panel {
+    animation: fadeIn 0.4s ease;
+  }
+
+  .outcome-success {
+    text-align: center;
+    padding: 2rem;
+    background: var(--color-surface-primary, #fff);
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: var(--brand-radius-card, 12px);
+  }
+
+  .outcome-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+    color: #16a34a;
+    border-radius: 50%;
+    margin-bottom: 1.5rem;
+  }
+
+  .outcome-success h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--color-text-primary, #18181b);
+  }
+
+  .outcome-body {
+    text-align: left;
+    margin-bottom: 2rem;
+  }
+
+  .outcome-body h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-secondary, #52525b);
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .token-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .token-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: var(--color-surface-secondary, #fafafa);
+    border-radius: 8px;
+  }
+
+  .token-name {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #52525b);
+  }
+
+  .token-value {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--brand-primary, #18181b);
+    background: var(--brand-primary-light, #f4f4f5);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  .outcome-guidance {
+    padding: 1rem;
+    background: var(--color-surface-secondary, #fafafa);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .outcome-guidance p {
+    margin: 0;
+    color: var(--color-text-secondary, #52525b);
+    line-height: 1.6;
+  }
+
+  .outcome-component {
+    margin-bottom: 1rem;
+  }
+
+  .component-badge {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: var(--brand-primary, #18181b);
+    border-radius: 8px;
+  }
+
+  .component-badge code {
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    background: transparent;
+    padding: 0;
+  }
+
+  .outcome-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+  }
+
+  .outcome-note.warning {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+  }
+
+  .outcome-note.info {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+  }
+
+  .outcome-note p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #52525b);
+  }
+
+  .outcome-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    border-radius: var(--brand-radius-button, 8px);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary {
+    background: var(--brand-primary, #18181b);
+    color: white;
+    border: none;
+  }
+
+  .btn-primary:hover {
+    background: var(--brand-primary-hover, #27272a);
+  }
+
+  .btn-secondary {
+    background: var(--color-surface-primary, #fff);
+    color: var(--color-text-primary, #18181b);
+    border: 1px solid var(--color-border-default, #e4e4e7);
+  }
+
+  .btn-secondary:hover {
+    background: var(--color-surface-secondary, #fafafa);
+    border-color: var(--brand-primary, #18181b);
+  }
+
+  /* Info Section */
+  .info-section {
+    margin-top: 1rem;
+  }
+
+  .info-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: var(--color-surface-secondary, #fafafa);
+    border-radius: var(--brand-radius-card, 12px);
+  }
+
+  .info-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .info-content h3 {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--color-text-primary, #18181b);
+  }
+
+  .info-content p {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #52525b);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .info-content code {
+    background: var(--color-surface-primary, #fff);
+    padding: 0.125rem 0.375rem;
+    border-radius: 4px;
+    font-size: 0.8125rem;
+  }
+
+  /* Dark Mode */
+  [data-theme="dark"] .category-card,
+  [data-theme="dark"] .tree-card,
+  [data-theme="dark"] .option-card,
+  [data-theme="dark"] .outcome-success {
+    background: var(--semantic-neutral-bg-medium, #191a1a);
+    border-color: var(--semantic-neutral-border-default, #2e3033);
+  }
+
+  [data-theme="dark"] .category-info h3,
+  [data-theme="dark"] .tree-card-content h3,
+  [data-theme="dark"] .option-label,
+  [data-theme="dark"] .step-question,
+  [data-theme="dark"] .outcome-success h3,
+  [data-theme="dark"] .info-content h3 {
+    color: var(--semantic-neutral-text-default, #ffffffd9);
+  }
+
+  [data-theme="dark"] .category-info p,
+  [data-theme="dark"] .tree-card-content p,
+  [data-theme="dark"] .option-description,
+  [data-theme="dark"] .step-help,
+  [data-theme="dark"] .hero-subtitle,
+  [data-theme="dark"] .wizard-title-area p,
+  [data-theme="dark"] .info-content p {
+    color: var(--semantic-neutral-text-weak, #ffffffa6);
+  }
+
+  [data-theme="dark"] .info-card,
+  [data-theme="dark"] .outcome-guidance,
+  [data-theme="dark"] .token-item {
+    background: var(--semantic-neutral-bg-strong, #2e3033);
+  }
+
+  [data-theme="dark"] .progress-bar {
+    background: var(--semantic-neutral-bg-strong, #2e3033);
+  }
+
+  [data-theme="dark"] .back-button {
+    border-color: var(--semantic-neutral-border-default, #2e3033);
+    color: var(--semantic-neutral-text-weak, #ffffffa6);
+  }
+
+  [data-theme="dark"] .back-button:hover {
+    background: var(--semantic-neutral-bg-hover, #252626);
+    color: var(--semantic-neutral-text-default, #ffffffd9);
+  }
+
+  [data-theme="dark"] .btn-secondary {
+    background: var(--semantic-neutral-bg-medium, #191a1a);
+    color: var(--semantic-neutral-text-default, #ffffffd9);
+    border-color: var(--semantic-neutral-border-default, #2e3033);
+  }
+
+  [data-theme="dark"] .btn-secondary:hover {
+    background: var(--semantic-neutral-bg-hover, #252626);
+  }
+
+  [data-theme="dark"] .info-content code {
+    background: var(--semantic-neutral-bg-medium, #191a1a);
+  }
+</style>
