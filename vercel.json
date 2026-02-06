@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "cd tokens && npm run build && cd ../dashboard && npm run copy-tokens && npx astro build",
+  "buildCommand": "cd dashboard && npm run copy-tokens && npx astro build",
   "outputDirectory": "dashboard/dist",
-  "installCommand": "npm install --workspaces --include-workspace-root",
+  "installCommand": "cd dashboard && npm install",
   "framework": null
 }
