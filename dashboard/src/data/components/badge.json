@@ -4,7 +4,9 @@
   "description": "Badges are small status indicators that highlight important information or draw attention to new content. They communicate status, count, or category at a glance.",
   "status": "stable",
   "version": "1.0.0",
-  
+  "storybook": "?path=/docs/react-badge--documentation",
+  "storybook_stories": ["default", "all-variants", "all-appearances", "status-badges", "numeric-badges", "pill-badges", "attention-animations", "with-buttons"],
+
   "overview": {
     "purpose": "Badges provide compact visual indicators that quickly communicate status, category, or count without requiring additional interaction.",
     "principles": [

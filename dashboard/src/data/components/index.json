@@ -1,28 +1,29 @@
 {
+  "storybook_base_url": "https://aplos-software.github.io/velora-ui",
   "categories": [
     {
       "id": "actions",
       "name": "Actions",
       "description": "Components that trigger actions or commands",
-      "components": ["button", "icon-button", "menu"]
+      "components": ["button", "icon-button", "dropdown", "menu"]
     },
     {
       "id": "forms",
       "name": "Forms",
       "description": "Components for collecting user input",
-      "components": ["input", "select", "checkbox", "radio", "toggle", "textarea", "form-field"]
+      "components": ["input", "select", "checkbox", "radio", "radiogroup", "toggle", "textarea", "typeahead-single-select", "typeahead-multi-select", "form-field"]
     },
     {
       "id": "feedback",
       "name": "Feedback",
       "description": "Components that communicate status and provide feedback",
-      "components": ["toast", "alert", "badge", "progress", "skeleton"]
+      "components": ["toast", "alert", "badge", "tag", "progress", "skeleton"]
     },
     {
       "id": "layout",
       "name": "Layout",
       "description": "Components for organizing and structuring content",
-      "components": ["card", "modal", "drawer", "tabs", "accordion", "divider"]
+      "components": ["card", "modal", "drawer", "details", "tabs", "accordion", "divider"]
     },
     {
       "id": "navigation",
@@ -34,25 +35,36 @@
       "id": "data-display",
       "name": "Data Display",
       "description": "Components for presenting information",
-      "components": ["avatar", "table", "list", "tooltip", "popover"]
+      "components": ["avatar", "icon", "table", "list", "tooltip", "popover", "popup"]
     }
   ],
   "components": [
-    {"id": "button", "name": "Button", "category": "actions", "status": "stable", "description": "Triggers actions and commands"},
-    {"id": "input", "name": "Input", "category": "forms", "status": "stable", "description": "Text input for forms"},
+    {"id": "button", "name": "Button", "category": "actions", "status": "stable", "description": "Triggers actions and commands", "storybook": "?path=/docs/react-button--documentation"},
+    {"id": "dropdown", "name": "Dropdown", "category": "actions", "status": "stable", "description": "Menu of actions triggered by a button", "storybook": "?path=/docs/react-dropdown--documentation"},
+    {"id": "input", "name": "Input", "category": "forms", "status": "stable", "description": "Text input for forms", "storybook": "?path=/docs/react-input--documentation"},
     {"id": "select", "name": "Select", "category": "forms", "status": "stable", "description": "Dropdown selection from options"},
-    {"id": "checkbox", "name": "Checkbox", "category": "forms", "status": "stable", "description": "Multiple selection control"},
+    {"id": "checkbox", "name": "Checkbox", "category": "forms", "status": "stable", "description": "Multiple selection control", "storybook": "?path=/docs/react-checkbox--documentation"},
+    {"id": "radio", "name": "Radio", "category": "forms", "status": "stable", "description": "Single selection from options", "storybook": "?path=/docs/react-radio--documentation"},
+    {"id": "radiogroup", "name": "RadioGroup", "category": "forms", "status": "stable", "description": "Grouped radio buttons for single selection", "storybook": "?path=/docs/react-radiogroup--documentation"},
     {"id": "toggle", "name": "Toggle", "category": "forms", "status": "stable", "description": "On/off switch control"},
-    {"id": "card", "name": "Card", "category": "layout", "status": "stable", "description": "Content container surface"},
-    {"id": "modal", "name": "Modal", "category": "layout", "status": "stable", "description": "Dialog overlay window"},
-    {"id": "toast", "name": "Toast", "category": "feedback", "status": "stable", "description": "Brief notification message"},
-    {"id": "badge", "name": "Badge", "category": "feedback", "status": "stable", "description": "Status indicator label"},
-    {"id": "avatar", "name": "Avatar", "category": "data-display", "status": "draft", "description": "User profile image"},
-    {"id": "tabs", "name": "Tabs", "category": "layout", "status": "draft", "description": "Tabbed content navigation"},
-    {"id": "tooltip", "name": "Tooltip", "category": "data-display", "status": "draft", "description": "Contextual information popup"},
-    {"id": "alert", "name": "Alert", "category": "feedback", "status": "draft", "description": "Important message banner"},
-    {"id": "link", "name": "Link", "category": "navigation", "status": "draft", "description": "Navigation text link"},
     {"id": "textarea", "name": "Textarea", "category": "forms", "status": "draft", "description": "Multi-line text input"},
-    {"id": "radio", "name": "Radio", "category": "forms", "status": "draft", "description": "Single selection from options"}
+    {"id": "typeahead-single-select", "name": "Typeahead Single Select", "category": "forms", "status": "stable", "description": "Searchable single-value select with autocomplete", "storybook": "?path=/docs/react-typeahead-single-select--documentation"},
+    {"id": "typeahead-multi-select", "name": "Typeahead Multi Select", "category": "forms", "status": "stable", "description": "Searchable multi-value select with autocomplete", "storybook": "?path=/docs/react-typeahead-multi-select--documentation"},
+    {"id": "card", "name": "Card", "category": "layout", "status": "stable", "description": "Content container surface"},
+    {"id": "modal", "name": "Modal", "category": "layout", "status": "stable", "description": "Dialog overlay window", "storybook": "?path=/docs/react-modal--documentation"},
+    {"id": "drawer", "name": "Drawer", "category": "layout", "status": "stable", "description": "Slide-out panel from screen edge", "storybook": "?path=/docs/react-drawer--documentation"},
+    {"id": "details", "name": "Details", "category": "layout", "status": "stable", "description": "Collapsible content disclosure widget", "storybook": "?path=/docs/react-details--documentation"},
+    {"id": "divider", "name": "Divider", "category": "layout", "status": "stable", "description": "Visual separator between content sections", "storybook": "?path=/docs/react-divider--documentation"},
+    {"id": "tabs", "name": "Tabs", "category": "layout", "status": "draft", "description": "Tabbed content navigation"},
+    {"id": "toast", "name": "Toast", "category": "feedback", "status": "stable", "description": "Brief notification message"},
+    {"id": "alert", "name": "Alert", "category": "feedback", "status": "draft", "description": "Important message banner"},
+    {"id": "badge", "name": "Badge", "category": "feedback", "status": "stable", "description": "Status indicator label", "storybook": "?path=/docs/react-badge--documentation"},
+    {"id": "tag", "name": "Tag", "category": "feedback", "status": "stable", "description": "Categorization and labeling chip", "storybook": "?path=/docs/react-tag--documentation"},
+    {"id": "avatar", "name": "Avatar", "category": "data-display", "status": "draft", "description": "User profile image"},
+    {"id": "icon", "name": "Icon", "category": "data-display", "status": "stable", "description": "Scalable vector icons with multiple families", "storybook": "?path=/docs/react-icon--documentation"},
+    {"id": "tooltip", "name": "Tooltip", "category": "data-display", "status": "stable", "description": "Contextual information popup", "storybook": "?path=/docs/react-tooltip--documentation"},
+    {"id": "popover", "name": "Popover", "category": "data-display", "status": "stable", "description": "Rich content popup with interactive elements", "storybook": "?path=/docs/react-popover--documentation"},
+    {"id": "popup", "name": "Popup", "category": "data-display", "status": "stable", "description": "Floating UI container for overlay content", "storybook": "?path=/docs/react-popup--documentation"},
+    {"id": "link", "name": "Link", "category": "navigation", "status": "draft", "description": "Navigation text link"}
   ]
 }

@@ -1,0 +1,58 @@
+{
+  "id": "radiogroup",
+  "name": "RadioGroup",
+  "description": "A group of radio buttons for selecting a single value from multiple options. Supports horizontal and vertical orientations, sizes, hints, and form integration.",
+  "category": "forms",
+  "status": "stable",
+  "version": "1.0.0",
+  "storybook": "?path=/docs/react-radiogroup--documentation",
+  "storybook_stories": [
+    "defaults", "orientations", "sizes", "disabled", "required",
+    "with-hint", "form-example", "controlled-example"
+  ],
+  "usage": {
+    "do": [
+      "Use when users must select exactly one option from a set",
+      "Use vertical layout for 3+ options for easier scanning",
+      "Provide a clear group label describing the choice",
+      "Pre-select a default option when possible"
+    ],
+    "dont": [
+      "Don't use for multiple selections — use Checkbox instead",
+      "Don't use for on/off toggles — use Toggle instead",
+      "Don't use for more than 7 options — consider a Select or Typeahead"
+    ]
+  },
+  "variants": [
+    {"name": "Default", "description": "Standard vertical radio group"},
+    {"name": "Horizontal", "description": "Horizontal layout for few options"},
+    {"name": "With Hints", "description": "Options with descriptive hint text"}
+  ],
+  "sizes": [
+    {"name": "sm", "value": "16px", "description": "Small radio buttons"},
+    {"name": "md", "value": "20px", "description": "Default size"},
+    {"name": "lg", "value": "24px", "description": "Large radio buttons"}
+  ],
+  "props": [
+    {"name": "name", "type": "string", "required": true, "description": "Form field name for the radio group"},
+    {"name": "label", "type": "string", "description": "Group label text"},
+    {"name": "value", "type": "string", "description": "Currently selected value (controlled)"},
+    {"name": "defaultValue", "type": "string", "description": "Initial selected value (uncontrolled)"},
+    {"name": "orientation", "type": "\"vertical\" | \"horizontal\"", "default": "\"vertical\"", "description": "Layout direction"},
+    {"name": "size", "type": "\"sm\" | \"md\" | \"lg\"", "default": "\"md\"", "description": "Size of the radio buttons"},
+    {"name": "required", "type": "boolean", "default": "false", "description": "Whether a selection is required"},
+    {"name": "disabled", "type": "boolean", "default": "false", "description": "Disable all options"},
+    {"name": "onChange", "type": "(value: string) => void", "description": "Callback when selection changes"}
+  ],
+  "tokens": {
+    "colors": ["--color-action-primary-default", "--color-text-primary", "--color-text-secondary", "--color-border-default", "--color-border-focus"],
+    "spacing": ["--space-100", "--space-150", "--space-200"],
+    "shape": ["--radius-full"]
+  },
+  "accessibility": [
+    {"guideline": "Use role=\"radiogroup\" with aria-labelledby", "wcag": "1.3.1"},
+    {"guideline": "Arrow keys navigate between options within the group", "wcag": "2.1.1"},
+    {"guideline": "Tab key moves focus to/from the group as a whole", "wcag": "2.4.3"},
+    {"guideline": "Selected option should have aria-checked=\"true\"", "wcag": "4.1.2"}
+  ]
+}

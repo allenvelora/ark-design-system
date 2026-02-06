@@ -5,7 +5,9 @@
   "status": "stable",
   "version": "1.0.0",
   "figmaUrl": "https://www.figma.com/design/F8rMavAwnFag21a04KUV9C/ARK-Components?node-id=modal",
-  
+  "storybook": "?path=/docs/react-modal--documentation",
+  "storybook_stories": ["default", "confirmation-dialog", "with-form", "with-light-dismiss", "without-header", "custom-width", "prevent-close"],
+
   "overview": {
     "purpose": "Modals create focused interactions that block the rest of the interface until completed. They're appropriate for critical information that requires immediate attention or action.",
     "principles": [

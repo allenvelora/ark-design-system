@@ -1,0 +1,47 @@
+{
+  "id": "details",
+  "name": "Details",
+  "description": "A collapsible disclosure widget that shows/hides content. Built on native HTML details/summary elements with enhanced styling and accessibility.",
+  "category": "layout",
+  "status": "stable",
+  "version": "1.0.0",
+  "storybook": "?path=/docs/react-details--documentation",
+  "storybook_stories": [
+    "default", "disabled", "custom-collapsible-button", "with-long-content"
+  ],
+  "usage": {
+    "do": [
+      "Use for progressive disclosure of secondary content",
+      "Use for FAQ sections and expandable panels",
+      "Provide a clear, descriptive summary label",
+      "Use for accordion-style layouts"
+    ],
+    "dont": [
+      "Don't hide critical information that users need immediately",
+      "Don't nest details within details more than one level deep",
+      "Don't use for primary navigation or main content"
+    ]
+  },
+  "variants": [
+    {"name": "Default", "description": "Standard collapsible details element"},
+    {"name": "Disabled", "description": "Non-interactive collapsed state"},
+    {"name": "Custom Trigger", "description": "Custom collapsible button trigger"}
+  ],
+  "props": [
+    {"name": "summary", "type": "ReactNode", "required": true, "description": "Content shown in the summary/trigger area"},
+    {"name": "children", "type": "ReactNode", "required": true, "description": "Content revealed when expanded"},
+    {"name": "open", "type": "boolean", "default": "false", "description": "Controls the expanded state"},
+    {"name": "disabled", "type": "boolean", "default": "false", "description": "Prevents toggling the details"},
+    {"name": "onToggle", "type": "(open: boolean) => void", "description": "Callback when the open state changes"}
+  ],
+  "tokens": {
+    "colors": ["--color-surface-primary", "--color-text-primary", "--color-border-default"],
+    "spacing": ["--space-150", "--space-200"],
+    "shape": ["--radius-md"]
+  },
+  "accessibility": [
+    {"guideline": "Uses native HTML details/summary for built-in accessibility", "wcag": "4.1.2"},
+    {"guideline": "Keyboard accessible with Enter and Space keys", "wcag": "2.1.1"},
+    {"guideline": "Summary element is focusable and announced as expandable", "wcag": "1.3.1"}
+  ]
+}

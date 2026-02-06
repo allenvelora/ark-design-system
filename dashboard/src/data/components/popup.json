@@ -1,0 +1,49 @@
+{
+  "id": "popup",
+  "name": "Popup",
+  "description": "A low-level floating UI container for building overlay components. Provides positioning, arrow rendering, and theme support as a building block for popovers, tooltips, and dropdowns.",
+  "category": "data-display",
+  "status": "stable",
+  "version": "1.0.0",
+  "storybook": "?path=/docs/react-popup--documentation",
+  "storybook_stories": [
+    "default", "with-arrow", "placements", "theme-variants",
+    "distance-and-skidding", "with-form-content", "settings-example",
+    "sync-with-trigger", "custom-max-width"
+  ],
+  "usage": {
+    "do": [
+      "Use as a base primitive for building custom overlay components",
+      "Use when Popover or Tooltip don't fit your specific use case",
+      "Sync width with trigger element when appropriate"
+    ],
+    "dont": [
+      "Don't use directly for common patterns — prefer Popover or Tooltip",
+      "Don't forget to handle focus management in custom implementations"
+    ]
+  },
+  "variants": [
+    {"name": "Default", "description": "Basic floating container"},
+    {"name": "With Arrow", "description": "Includes pointing arrow"},
+    {"name": "Sync Width", "description": "Matches the width of trigger element"},
+    {"name": "Theme Variants", "description": "Light and dark themed"}
+  ],
+  "props": [
+    {"name": "children", "type": "ReactNode", "required": true, "description": "Popup content"},
+    {"name": "trigger", "type": "ReactNode", "required": true, "description": "Trigger element"},
+    {"name": "placement", "type": "Placement", "default": "\"bottom\"", "description": "Preferred placement"},
+    {"name": "showArrow", "type": "boolean", "default": "false", "description": "Show connecting arrow"},
+    {"name": "distance", "type": "number", "default": "8", "description": "Distance from trigger"},
+    {"name": "syncWithTrigger", "type": "boolean", "default": "false", "description": "Sync popup width with trigger width"},
+    {"name": "maxWidth", "type": "string", "description": "Maximum popup width"}
+  ],
+  "tokens": {
+    "colors": ["--color-surface-primary", "--color-surface-overlay", "--color-border-default"],
+    "spacing": ["--space-100", "--space-200"],
+    "shape": ["--radius-md", "--shadow-lg"]
+  },
+  "accessibility": [
+    {"guideline": "Ensure proper ARIA attributes on custom implementations", "wcag": "4.1.2"},
+    {"guideline": "Manage focus when popup contains interactive content", "wcag": "2.4.3"}
+  ]
+}

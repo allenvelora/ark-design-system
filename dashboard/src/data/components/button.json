@@ -6,7 +6,9 @@
   "version": "1.0.0",
   "figmaUrl": "https://www.figma.com/design/F8rMavAwnFag21a04KUV9C/ARK-Components?node-id=button",
   "githubUrl": "https://github.com/ark-design/components/tree/main/src/button",
-  
+  "storybook": "?path=/docs/react-button--documentation",
+  "storybook_stories": ["defaults", "variants", "appearance", "sizes", "disabled", "loading", "icon-buttons", "link-buttons", "pill-buttons", "caret", "custom-width", "start-and-end-decorations"],
+
   "overview": {
     "purpose": "Buttons are the primary way users interact with your product. They should be used to trigger actions, submit forms, or navigate between pages.",
     "principles": [

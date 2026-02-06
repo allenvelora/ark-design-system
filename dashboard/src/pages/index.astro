@@ -146,6 +146,14 @@ const draftComponents = componentData.components.filter(c => c.status === 'draft
                       </span>
                     </div>
                     <p>{component.description}</p>
+                    {component.storybook && (
+                      <span class="storybook-badge">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink: 0;">
+                          <path d="M16.34 2.004l-.354-1.953-.01-.001a.498.498 0 0 0-.553.428l-.247 1.489-1.084-.126a.5.5 0 0 0-.116.993l1.02.119-.36 2.169a.5.5 0 0 0 .985.163l.396-2.388L20.4 3.52a.502.502 0 0 0 .415-.572.5.5 0 0 0-.572-.415l-3.903-.529zM14.5 8.5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4.5 4.5c0 4.418-3.582 8-8 8s-8-3.582-8-8c0-4.418 3.582-8 8-8a7.96 7.96 0 0 1 4.897 1.688l-.003.003A7.963 7.963 0 0 1 19 13z"/>
+                        </svg>
+                        Storybook
+                      </span>
+                    )}
                   </div>
                 </a>
               );
@@ -650,6 +658,26 @@ const draftComponents = componentData.components.filter(c => c.status === 'draft
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.025em;
+  }
+
+  .storybook-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 0.375rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.625rem;
+    font-weight: 600;
+    background: #fff0f5;
+    color: #ff4785;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    width: fit-content;
+  }
+
+  [data-theme="dark"] .storybook-badge {
+    background: rgba(255, 71, 133, 0.15);
   }
   
   .card-content p {

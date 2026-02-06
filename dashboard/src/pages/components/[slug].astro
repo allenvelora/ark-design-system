@@ -57,6 +57,7 @@ const status = statusColors[component.status] || statusColors.draft;
           <nav class="quick-nav">
             <span class="nav-label">Jump to:</span>
             <a href="#overview">Overview</a>
+            {component.storybook_stories && <a href="#storybook">Storybook</a>}
             <a href="#usage">Usage</a>
             {component.anatomy && <a href="#anatomy">Anatomy</a>}
             {component.variants && <a href="#variants">Variants</a>}
@@ -83,6 +84,14 @@ const status = statusColors[component.status] || statusColors.draft;
                   <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.605-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/>
                 </svg>
                 GitHub
+              </a>
+            )}
+            {component.storybook && (
+              <a href={`https://aplos-software.github.io/velora-ui/${component.storybook}`} class="resource-link compact-link storybook-link" target="_blank" rel="noopener">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M16.34 2.004l-.354-1.953-.01-.001a.498.498 0 0 0-.553.428l-.247 1.489-1.084-.126a.5.5 0 0 0-.116.993l1.02.119-.36 2.169a.5.5 0 0 0 .985.163l.396-2.388L20.4 3.52a.502.502 0 0 0 .415-.572.5.5 0 0 0-.572-.415l-3.903-.529zM14.5 8.5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4.5 4.5c0 4.418-3.582 8-8 8s-8-3.582-8-8c0-4.418 3.582-8 8-8a7.96 7.96 0 0 1 4.897 1.688l-.003.003A7.963 7.963 0 0 1 19 13z"/>
+                </svg>
+                Storybook
               </a>
             )}
           </div>
@@ -122,6 +131,14 @@ const status = statusColors[component.status] || statusColors.draft;
             GitHub
           </a>
         )}
+        {component.storybook && (
+          <a href={`https://aplos-software.github.io/velora-ui/${component.storybook}`} class="resource-link storybook-link" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M16.34 2.004l-.354-1.953-.01-.001a.498.498 0 0 0-.553.428l-.247 1.489-1.084-.126a.5.5 0 0 0-.116.993l1.02.119-.36 2.169a.5.5 0 0 0 .985.163l.396-2.388L20.4 3.52a.502.502 0 0 0 .415-.572.5.5 0 0 0-.572-.415l-3.903-.529zM14.5 8.5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4.5 4.5c0 4.418-3.582 8-8 8s-8-3.582-8-8c0-4.418 3.582-8 8-8a7.96 7.96 0 0 1 4.897 1.688l-.003.003A7.963 7.963 0 0 1 19 13z"/>
+            </svg>
+            Storybook
+          </a>
+        )}
       </div>
     </header>
     
@@ -146,33 +163,63 @@ const status = statusColors[component.status] || statusColors.draft;
       )}
     </section>
     
+    <!-- Storybook Stories Section -->
+    {component.storybook_stories && component.storybook_stories.length > 0 && (
+      <section id="storybook" class="section">
+        <h2>
+          <span style="display: inline-flex; align-items: center; gap: 8px;">
+            Live Examples
+            <a href={`https://aplos-software.github.io/velora-ui/${component.storybook}`} target="_blank" rel="noopener" style="font-size: 0.5em; font-weight: 500; padding: 3px 10px; background: #ff4785; color: white; border-radius: 99px; text-decoration: none; letter-spacing: 0.02em;">
+              Open in Storybook &rarr;
+            </a>
+          </span>
+        </h2>
+        <p class="section-intro">Interactive examples available in Storybook. Click any story to view it live with controls.</p>
+        <div class="storybook-stories-grid">
+          {component.storybook_stories.map((story: string) => {
+            const storyUrl = `https://aplos-software.github.io/velora-ui/?path=/story/react-${component.id}--${story}`;
+            const storyLabel = story.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
+            return (
+              <a href={storyUrl} class="storybook-story-card" target="_blank" rel="noopener">
+                <span class="story-name">{storyLabel}</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="opacity: 0.4; flex-shrink: 0;">
+                  <path d="M3.5 1.5H1.5V10.5H10.5V8.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M5.5 6.5L10.5 1.5M10.5 1.5H7M10.5 1.5V5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    )}
+
     <!-- Usage Section -->
     <section id="usage" class="section">
       <h2>Usage Guidelines</h2>
       
       <div class="usage-grid">
-        {component.whenToUse && (
+        {(component.whenToUse || component.usage?.do) && (
           <div class="usage-card do">
             <h3>
               <span class="icon">✓</span>
               When to use
             </h3>
             <ul>
-              {component.whenToUse.map((item: string) => (
+              {(component.whenToUse || component.usage?.do || []).map((item: string) => (
                 <li>{item}</li>
               ))}
             </ul>
           </div>
         )}
         
-        {component.whenNotToUse && (
+        {(component.whenNotToUse || component.usage?.dont) && (
           <div class="usage-card dont">
             <h3>
               <span class="icon">✗</span>
               When not to use
             </h3>
             <ul>
-              {component.whenNotToUse.map((item: string) => (
+              {(component.whenNotToUse || component.usage?.dont || []).map((item: string) => (
                 <li>{item}</li>
               ))}
             </ul>
@@ -315,29 +362,49 @@ const status = statusColors[component.status] || statusColors.draft;
     {component.tokens && (
       <section id="tokens" class="section">
         <h2>Design Tokens</h2>
-        <p class="section-intro">{component.tokens.description}</p>
+        {component.tokens.description && <p class="section-intro">{component.tokens.description}</p>}
         
-        {component.tokens.categories.map((category: any) => (
-          <div class="token-category">
-            <h3>{category.name}</h3>
-            <div class="token-list">
-              {category.tokens.map((token: any) => (
-                <div class="token-item">
-                  <div class="token-preview">
-                    {token.name.includes('color') && (
-                      <span class="token-swatch" style={`background: ${token.value}`}></span>
-                    )}
-                    <code>{token.name}</code>
+        {component.tokens.categories ? (
+          component.tokens.categories.map((category: any) => (
+            <div class="token-category">
+              <h3>{category.name}</h3>
+              <div class="token-list">
+                {category.tokens.map((token: any) => (
+                  <div class="token-item">
+                    <div class="token-preview">
+                      {token.name.includes('color') && (
+                        <span class="token-swatch" style={`background: ${token.value}`}></span>
+                      )}
+                      <code>{token.name}</code>
+                    </div>
+                    <div class="token-value">
+                      <code>{token.value}</code>
+                    </div>
+                    <div class="token-usage">{token.usage}</div>
                   </div>
-                  <div class="token-value">
-                    <code>{token.value}</code>
-                  </div>
-                  <div class="token-usage">{token.usage}</div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          Object.entries(component.tokens).filter(([k]: [string, any]) => k !== 'description').map(([category, tokens]: [string, any]) => (
+            <div class="token-category">
+              <h3>{category.charAt(0).toUpperCase() + category.slice(1)}</h3>
+              <div class="token-list">
+                {(Array.isArray(tokens) ? tokens : []).map((token: string) => (
+                  <div class="token-item">
+                    <div class="token-preview">
+                      {token.includes('color') && (
+                        <span class="token-swatch" style={`background: var(${token})`}></span>
+                      )}
+                      <code>{token}</code>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        )}
       </section>
     )}
     
@@ -345,15 +412,24 @@ const status = statusColors[component.status] || statusColors.draft;
     {component.accessibility && (
       <section id="accessibility" class="section">
         <h2>Accessibility</h2>
-        <p class="section-intro">{component.accessibility.description}</p>
+        {component.accessibility.description && <p class="section-intro">{component.accessibility.description}</p>}
         
         <div class="a11y-guidelines">
-          {component.accessibility.guidelines.map((guide: any) => (
-            <div class="a11y-item">
-              <h4>{guide.title}</h4>
-              <p>{guide.description}</p>
-            </div>
-          ))}
+          {component.accessibility.guidelines ? (
+            component.accessibility.guidelines.map((guide: any) => (
+              <div class="a11y-item">
+                <h4>{guide.title}</h4>
+                <p>{guide.description}</p>
+              </div>
+            ))
+          ) : Array.isArray(component.accessibility) ? (
+            component.accessibility.map((guide: any) => (
+              <div class="a11y-item">
+                <p>{guide.guideline}</p>
+                {guide.wcag && <span class="criterion-badge">{guide.wcag}</span>}
+              </div>
+            ))
+          ) : null}
         </div>
         
         {component.accessibility.wcagCriteria && (
@@ -1255,6 +1331,59 @@ const status = statusColors[component.status] || statusColors.draft;
     font-size: 0.8125rem;
     color: var(--color-text-secondary, #52525b);
     margin: 0;
+  }
+
+  /* Storybook link accent */
+  .storybook-link {
+    border-color: #ff4785 !important;
+    color: #ff4785 !important;
+  }
+  .storybook-link:hover {
+    background: #ff4785 !important;
+    color: white !important;
+    border-color: #ff4785 !important;
+  }
+
+  /* Storybook Stories Grid */
+  .storybook-stories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .storybook-story-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.625rem 0.875rem;
+    border: 1px solid var(--color-border-default, #e4e4e7);
+    border-radius: 8px;
+    background: var(--color-surface-primary, #fff);
+    text-decoration: none;
+    color: var(--color-text-primary, #18181b);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    transition: all 0.15s ease;
+  }
+
+  .storybook-story-card:hover {
+    border-color: #ff4785;
+    background: #fff0f5;
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(255, 71, 133, 0.12);
+  }
+
+  [data-theme="dark"] .storybook-story-card:hover {
+    background: rgba(255, 71, 133, 0.1);
+  }
+
+  .story-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 </style>
 

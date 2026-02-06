@@ -1,0 +1,37 @@
+{
+  "id": "divider",
+  "name": "Divider",
+  "description": "A visual separator used to divide content sections. Supports horizontal and vertical orientations.",
+  "category": "layout",
+  "status": "stable",
+  "version": "1.0.0",
+  "storybook": "?path=/docs/react-divider--documentation",
+  "storybook_stories": ["default", "horizontal", "vertical"],
+  "usage": {
+    "do": [
+      "Use to visually separate groups of related content",
+      "Use horizontal dividers between stacked sections",
+      "Use vertical dividers between inline elements"
+    ],
+    "dont": [
+      "Don't overuse dividers — whitespace is often sufficient",
+      "Don't use dividers inside compact components like cards with minimal content"
+    ]
+  },
+  "variants": [
+    {"name": "Horizontal", "description": "Divides content stacked vertically"},
+    {"name": "Vertical", "description": "Divides content arranged horizontally"}
+  ],
+  "props": [
+    {"name": "orientation", "type": "\"horizontal\" | \"vertical\"", "default": "\"horizontal\"", "description": "Direction of the divider line"},
+    {"name": "className", "type": "string", "description": "Additional CSS classes"}
+  ],
+  "tokens": {
+    "colors": ["--color-border-default"],
+    "spacing": ["--space-200", "--space-300"]
+  },
+  "accessibility": [
+    {"guideline": "Uses role=\"separator\" for proper semantic meaning", "wcag": "1.3.1"},
+    {"guideline": "Decorative dividers should use aria-hidden=\"true\"", "wcag": "1.3.1"}
+  ]
+}

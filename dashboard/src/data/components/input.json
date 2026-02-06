@@ -5,7 +5,9 @@
   "status": "stable",
   "version": "1.0.0",
   "figmaUrl": "https://www.figma.com/design/F8rMavAwnFag21a04KUV9C/ARK-Components?node-id=input",
-  
+  "storybook": "?path=/docs/react-input--documentation",
+  "storybook_stories": ["default", "with-label", "with-help-text", "with-prefix-and-suffix", "error", "error-with-label", "disabled", "readonly", "required", "password", "sizes", "right-aligned", "right-aligned-with-prefix", "squished-with-long-error"],
+
   "overview": {
     "purpose": "Inputs are the primary method for users to provide textual information. Well-designed inputs reduce errors, improve completion rates, and create confidence in the interface.",
     "principles": [

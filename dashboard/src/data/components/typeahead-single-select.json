@@ -1,0 +1,57 @@
+{
+  "id": "typeahead-single-select",
+  "name": "Typeahead Single Select",
+  "description": "A searchable dropdown for selecting a single value. Supports groups, leading icons, secondary labels, create-new options, and asynchronous loading.",
+  "category": "forms",
+  "status": "stable",
+  "version": "1.0.0",
+  "storybook": "?path=/docs/react-typeahead-single-select--documentation",
+  "storybook_stories": [
+    "default", "with-groups", "with-leading-icon", "with-long-options",
+    "secondary-label-demo", "create-option-demo", "always-show-create-demo",
+    "disabled-options-demo", "form-states-demo", "loading-demo",
+    "simple-controlled-single"
+  ],
+  "usage": {
+    "do": [
+      "Use when the list of options exceeds 7 items",
+      "Use when users benefit from searching to find their option",
+      "Provide placeholder text describing the expected selection",
+      "Group related options for easier scanning"
+    ],
+    "dont": [
+      "Don't use for fewer than 5 options — use RadioGroup or Select",
+      "Don't use for multiple selections — use Typeahead Multi Select",
+      "Don't forget loading states for async data"
+    ]
+  },
+  "variants": [
+    {"name": "Default", "description": "Standard searchable select"},
+    {"name": "With Groups", "description": "Options organized by category"},
+    {"name": "With Leading Icon", "description": "Options with leading icons"},
+    {"name": "Creatable", "description": "Allows creating new options inline"}
+  ],
+  "props": [
+    {"name": "options", "type": "Option[]", "required": true, "description": "Array of selectable options"},
+    {"name": "value", "type": "string", "description": "Currently selected value"},
+    {"name": "onChange", "type": "(value: string) => void", "description": "Callback when selection changes"},
+    {"name": "placeholder", "type": "string", "description": "Placeholder text when empty"},
+    {"name": "label", "type": "string", "description": "Field label"},
+    {"name": "disabled", "type": "boolean", "default": "false", "description": "Disable the select"},
+    {"name": "loading", "type": "boolean", "default": "false", "description": "Show loading indicator"},
+    {"name": "creatable", "type": "boolean", "default": "false", "description": "Allow creating new options"},
+    {"name": "onCreateOption", "type": "(value: string) => void", "description": "Callback when creating a new option"},
+    {"name": "error", "type": "string", "description": "Error message to display"}
+  ],
+  "tokens": {
+    "colors": ["--color-surface-primary", "--color-text-primary", "--color-border-default", "--color-border-focus", "--color-action-primary-default"],
+    "spacing": ["--space-100", "--space-150", "--space-200"],
+    "shape": ["--radius-md", "--shadow-lg"]
+  },
+  "accessibility": [
+    {"guideline": "Use role=\"combobox\" with aria-expanded and aria-controls", "wcag": "4.1.2"},
+    {"guideline": "Support arrow key navigation through options", "wcag": "2.1.1"},
+    {"guideline": "Announce selected option and result count to screen readers", "wcag": "4.1.3"},
+    {"guideline": "Associate label with the input field", "wcag": "1.3.1"}
+  ]
+}

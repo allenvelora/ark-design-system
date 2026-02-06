@@ -1,0 +1,51 @@
+{
+  "id": "popover",
+  "name": "Popover",
+  "description": "A floating container for rich, interactive content anchored to a trigger element. Supports forms, settings panels, and detailed information displays.",
+  "category": "data-display",
+  "status": "stable",
+  "version": "1.0.0",
+  "storybook": "?path=/docs/react-popover--documentation",
+  "storybook_stories": [
+    "default", "with-arrow", "placements", "theme-variants",
+    "distance-and-skidding", "with-form-content", "settings-example", "custom-max-width"
+  ],
+  "usage": {
+    "do": [
+      "Use for rich content that doesn't warrant a full modal",
+      "Include interactive elements like forms and buttons",
+      "Provide a clear way to dismiss the popover",
+      "Position intelligently to avoid viewport overflow"
+    ],
+    "dont": [
+      "Don't use for simple text hints — use Tooltip instead",
+      "Don't put critical actions exclusively inside popovers",
+      "Don't make popovers too large — use a Drawer or Modal instead"
+    ]
+  },
+  "variants": [
+    {"name": "Default", "description": "Standard popover without arrow"},
+    {"name": "With Arrow", "description": "Popover with connecting arrow to trigger"},
+    {"name": "Theme Variants", "description": "Light and dark themed popovers"}
+  ],
+  "props": [
+    {"name": "children", "type": "ReactNode", "required": true, "description": "Trigger element"},
+    {"name": "content", "type": "ReactNode", "required": true, "description": "Popover content"},
+    {"name": "placement", "type": "Placement", "default": "\"bottom\"", "description": "Preferred placement relative to trigger"},
+    {"name": "showArrow", "type": "boolean", "default": "false", "description": "Show connecting arrow"},
+    {"name": "distance", "type": "number", "default": "8", "description": "Distance from trigger element"},
+    {"name": "maxWidth", "type": "string", "default": "\"320px\"", "description": "Maximum width of the popover"},
+    {"name": "onOpenChange", "type": "(open: boolean) => void", "description": "Callback when open state changes"}
+  ],
+  "tokens": {
+    "colors": ["--color-surface-primary", "--color-surface-overlay", "--color-text-primary", "--color-border-default"],
+    "spacing": ["--space-200", "--space-300"],
+    "shape": ["--radius-lg", "--shadow-lg"]
+  },
+  "accessibility": [
+    {"guideline": "Use aria-haspopup to indicate trigger has popup", "wcag": "4.1.2"},
+    {"guideline": "Support Escape key to dismiss", "wcag": "2.1.2"},
+    {"guideline": "Manage focus within interactive popovers", "wcag": "2.4.3"},
+    {"guideline": "Ensure sufficient color contrast in all themes", "wcag": "1.4.3"}
+  ]
+}

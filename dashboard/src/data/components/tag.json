@@ -1,0 +1,63 @@
+{
+  "id": "tag",
+  "name": "Tag",
+  "description": "A compact label for categorization, filtering, and status indication. Supports multiple appearances, sizes, removable behavior, pill shapes, and segmented layouts.",
+  "category": "feedback",
+  "status": "stable",
+  "version": "1.0.0",
+  "storybook": "?path=/docs/react-tag--documentation",
+  "storybook_stories": [
+    "all-variants", "all-sizes", "appearance-variants", "pill-variants",
+    "removable-variants", "interactive-example", "segmented-tag",
+    "segmented-tag-all-variants", "segmented-tag-pill",
+    "segmented-tag-different-groups", "segmented-tag-without-group",
+    "custom-remove-icon-example"
+  ],
+  "usage": {
+    "do": [
+      "Use to label, categorize, or indicate status of items",
+      "Use removable tags for filter chips and multi-select displays",
+      "Use segmented tags when grouping related labels",
+      "Keep tag labels short and descriptive"
+    ],
+    "dont": [
+      "Don't use tags as primary action buttons",
+      "Don't use too many tags on a single item (aim for < 5)",
+      "Don't use tags for navigation — use Links or Tabs"
+    ]
+  },
+  "variants": [
+    {"name": "Default", "description": "Standard tag with subtle background"},
+    {"name": "Primary", "description": "Primary brand color tag"},
+    {"name": "Success", "description": "Positive/success status tag"},
+    {"name": "Warning", "description": "Warning/caution status tag"},
+    {"name": "Danger", "description": "Error/destructive status tag"},
+    {"name": "Pill", "description": "Fully rounded tag shape"},
+    {"name": "Removable", "description": "Tag with close/remove button"},
+    {"name": "Segmented", "description": "Multi-part tag with group label"}
+  ],
+  "sizes": [
+    {"name": "sm", "value": "24px", "description": "Small compact tag"},
+    {"name": "md", "value": "28px", "description": "Default tag size"},
+    {"name": "lg", "value": "32px", "description": "Large tag for emphasis"}
+  ],
+  "props": [
+    {"name": "children", "type": "ReactNode", "required": true, "description": "Tag label content"},
+    {"name": "variant", "type": "\"default\" | \"primary\" | \"success\" | \"warning\" | \"danger\"", "default": "\"default\"", "description": "Color variant"},
+    {"name": "size", "type": "\"sm\" | \"md\" | \"lg\"", "default": "\"md\"", "description": "Tag size"},
+    {"name": "pill", "type": "boolean", "default": "false", "description": "Use fully rounded shape"},
+    {"name": "removable", "type": "boolean", "default": "false", "description": "Show remove button"},
+    {"name": "onRemove", "type": "() => void", "description": "Callback when remove button is clicked"},
+    {"name": "onClick", "type": "() => void", "description": "Callback for interactive tags"}
+  ],
+  "tokens": {
+    "colors": ["--color-surface-secondary", "--color-text-primary", "--color-feedback-success-bg", "--color-feedback-warning-bg", "--color-feedback-error-bg"],
+    "spacing": ["--space-50", "--space-100", "--space-150"],
+    "shape": ["--radius-sm", "--radius-full"]
+  },
+  "accessibility": [
+    {"guideline": "Removable tags should have an accessible remove button label", "wcag": "4.1.2"},
+    {"guideline": "Interactive tags should be keyboard accessible", "wcag": "2.1.1"},
+    {"guideline": "Ensure sufficient color contrast for all variants", "wcag": "1.4.3"}
+  ]
+}

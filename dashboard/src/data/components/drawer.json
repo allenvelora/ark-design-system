@@ -1,0 +1,55 @@
+{
+  "id": "drawer",
+  "name": "Drawer",
+  "description": "A panel that slides in from the edge of the screen, overlaying content. Used for secondary tasks, navigation, or detail panels without leaving the current page.",
+  "category": "layout",
+  "status": "stable",
+  "version": "1.0.0",
+  "storybook": "?path=/docs/react-drawer--documentation",
+  "storybook_stories": [
+    "default", "with-close-button", "with-sides", "no-header-or-footer", "no-scale-background"
+  ],
+  "usage": {
+    "do": [
+      "Use for secondary tasks like editing details or filters",
+      "Provide a clear close mechanism (button or outside click)",
+      "Use consistent placement (left for nav, right for details)",
+      "Include a header with context about the drawer content"
+    ],
+    "dont": [
+      "Don't use for critical flows that require full attention — use a page instead",
+      "Don't stack multiple drawers simultaneously",
+      "Don't put complex multi-step forms in drawers"
+    ]
+  },
+  "variants": [
+    {"name": "Default", "description": "Standard right-side drawer"},
+    {"name": "Left Side", "description": "Slides in from the left edge"},
+    {"name": "Right Side", "description": "Slides in from the right edge"},
+    {"name": "No Header/Footer", "description": "Custom layout without standard chrome"},
+    {"name": "No Scale Background", "description": "Background stays at full scale"}
+  ],
+  "props": [
+    {"name": "open", "type": "boolean", "required": true, "description": "Controls visibility of the drawer"},
+    {"name": "onClose", "type": "() => void", "required": true, "description": "Callback when the drawer should close"},
+    {"name": "side", "type": "\"left\" | \"right\"", "default": "\"right\"", "description": "Which edge the drawer slides from"},
+    {"name": "title", "type": "string", "description": "Header title text"},
+    {"name": "children", "type": "ReactNode", "required": true, "description": "Drawer body content"},
+    {"name": "footer", "type": "ReactNode", "description": "Footer content (typically action buttons)"},
+    {"name": "showClose", "type": "boolean", "default": "true", "description": "Show the close button in the header"},
+    {"name": "scaleBackground", "type": "boolean", "default": "true", "description": "Scale the background when drawer opens"}
+  ],
+  "tokens": {
+    "colors": ["--color-surface-primary", "--color-surface-overlay", "--color-text-primary", "--color-border-default"],
+    "spacing": ["--space-200", "--space-300", "--space-400"],
+    "shape": ["--radius-lg", "--shadow-xl"],
+    "animation": ["--duration-200", "--ease-out"]
+  },
+  "accessibility": [
+    {"guideline": "Trap focus within the drawer when open", "wcag": "2.4.3"},
+    {"guideline": "Escape key should close the drawer", "wcag": "2.1.2"},
+    {"guideline": "Use role=\"dialog\" with aria-modal=\"true\"", "wcag": "4.1.2"},
+    {"guideline": "Return focus to trigger element when closed", "wcag": "2.4.3"},
+    {"guideline": "Announce drawer opening to screen readers", "wcag": "4.1.3"}
+  ]
+}

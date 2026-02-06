@@ -1,0 +1,56 @@
+{
+  "id": "icon",
+  "name": "Icon",
+  "description": "Scalable vector icons supporting multiple families, variants, duotone rendering, auto-sizing, and accessible labels.",
+  "category": "data-display",
+  "status": "stable",
+  "version": "1.0.0",
+  "storybook": "?path=/docs/react-icon--documentation",
+  "storybook_stories": [
+    "documentation", "sizing", "colors", "families-and-variants", "duotone",
+    "swap-duotone-opacity", "labels", "auto-width"
+  ],
+  "usage": {
+    "do": [
+      "Use icons to reinforce meaning alongside text",
+      "Provide accessible labels for standalone icons",
+      "Use consistent icon sizes relative to surrounding text",
+      "Use duotone variants for emphasis in key areas"
+    ],
+    "dont": [
+      "Don't use icons alone without labels for critical actions",
+      "Don't mix icon families inconsistently within the same context",
+      "Don't use overly decorative icons that reduce clarity"
+    ]
+  },
+  "variants": [
+    {"name": "Solid", "description": "Filled icon style for primary emphasis"},
+    {"name": "Regular", "description": "Outlined icon style for general use"},
+    {"name": "Light", "description": "Thin line icon style for subtle UI"},
+    {"name": "Duotone", "description": "Two-tone icon with adjustable opacity layers"}
+  ],
+  "sizes": [
+    {"name": "xs", "value": "12px", "description": "Extra small for inline use"},
+    {"name": "sm", "value": "16px", "description": "Small default size"},
+    {"name": "md", "value": "20px", "description": "Medium for standard UI"},
+    {"name": "lg", "value": "24px", "description": "Large for headers and emphasis"},
+    {"name": "xl", "value": "32px", "description": "Extra large for hero areas"}
+  ],
+  "props": [
+    {"name": "name", "type": "string", "required": true, "description": "Icon name from the icon library"},
+    {"name": "size", "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"", "default": "\"md\"", "description": "Icon size"},
+    {"name": "family", "type": "\"solid\" | \"regular\" | \"light\" | \"duotone\"", "default": "\"regular\"", "description": "Icon family/variant"},
+    {"name": "color", "type": "string", "description": "Icon color (inherits from parent by default)"},
+    {"name": "label", "type": "string", "description": "Accessible label for screen readers"},
+    {"name": "autoWidth", "type": "boolean", "default": "false", "description": "Auto-adjust width based on icon content"}
+  ],
+  "tokens": {
+    "colors": ["--color-text-primary", "--color-text-secondary", "--color-text-muted"],
+    "spacing": ["--space-50", "--space-100"]
+  },
+  "accessibility": [
+    {"guideline": "Decorative icons should have aria-hidden=\"true\"", "wcag": "1.1.1"},
+    {"guideline": "Informational icons must have an accessible label", "wcag": "1.1.1"},
+    {"guideline": "Icon color should not be the sole means of conveying information", "wcag": "1.4.1"}
+  ]
+}

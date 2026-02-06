@@ -1,0 +1,54 @@
+{
+  "id": "dropdown",
+  "name": "Dropdown",
+  "description": "A menu of actions or options triggered by a button. Supports icons, labels, dividers, submenus, checkable items, and destructive actions.",
+  "category": "actions",
+  "status": "stable",
+  "version": "1.0.0",
+  "storybook": "?path=/docs/react-dropdown--documentation",
+  "storybook_stories": [
+    "default", "with-icons", "with-labels-and-dividers", "checkable-items",
+    "destructive-items", "disabled-items", "submenus", "with-details",
+    "placement", "distance", "offset", "getting-selected-item"
+  ],
+  "usage": {
+    "do": [
+      "Use for contextual actions on a single item",
+      "Group related actions with labels and dividers",
+      "Use destructive styling for irreversible actions",
+      "Provide clear, concise labels for each action"
+    ],
+    "dont": [
+      "Don't use for navigation — use a nav menu instead",
+      "Don't nest more than two levels of submenus",
+      "Don't put too many items in a single dropdown (aim for < 12)"
+    ]
+  },
+  "variants": [
+    {"name": "Default", "description": "Standard dropdown menu"},
+    {"name": "With Icons", "description": "Menu items with leading icons"},
+    {"name": "Checkable", "description": "Items with check/radio selection state"},
+    {"name": "Destructive", "description": "Includes destructive (red) action items"},
+    {"name": "With Submenus", "description": "Nested menu items for deeper hierarchy"}
+  ],
+  "props": [
+    {"name": "children", "type": "ReactNode", "required": true, "description": "Trigger element for the dropdown"},
+    {"name": "items", "type": "DropdownItem[]", "required": true, "description": "Array of menu items to display"},
+    {"name": "placement", "type": "Placement", "default": "\"bottom-start\"", "description": "Preferred placement of the dropdown"},
+    {"name": "distance", "type": "number", "default": "4", "description": "Distance from the trigger element"},
+    {"name": "offset", "type": "number", "default": "0", "description": "Skidding offset along the trigger edge"},
+    {"name": "onSelect", "type": "(item: DropdownItem) => void", "description": "Callback when an item is selected"},
+    {"name": "disabled", "type": "boolean", "default": "false", "description": "Disables the dropdown trigger"}
+  ],
+  "tokens": {
+    "colors": ["--color-surface-primary", "--color-surface-hover", "--color-text-primary", "--color-text-danger", "--color-border-default"],
+    "spacing": ["--space-100", "--space-150", "--space-200"],
+    "shape": ["--radius-md", "--shadow-lg"]
+  },
+  "accessibility": [
+    {"guideline": "Use role=\"menu\" and role=\"menuitem\" for proper semantics", "wcag": "4.1.2"},
+    {"guideline": "Support keyboard navigation with arrow keys", "wcag": "2.1.1"},
+    {"guideline": "Escape key should close the dropdown", "wcag": "2.1.2"},
+    {"guideline": "Focus should return to the trigger when closed", "wcag": "2.4.3"}
+  ]
+}
