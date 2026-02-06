@@ -160,9 +160,7 @@ const storybookStoryIds: Record<string, string> = {
                       <div class="preview-storybook">
                         <iframe
                           src={`${STORYBOOK_BASE}?id=${storybookStoryIds[component.id]}&viewMode=story&shortcuts=false&singleStory=true`}
-                          loading="lazy"
                           title={`${component.name} preview`}
-                          sandbox="allow-scripts allow-same-origin"
                           data-storybook-id={storybookStoryIds[component.id]}
                         />
                         <div class="preview-overlay"></div>
